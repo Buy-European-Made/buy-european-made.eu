@@ -21,14 +21,66 @@ Core features:
 - [Website](#website)
 
 
-### Development
+### Local development environment
 
-1. First [clone the repo](#clone) if you have not done so already
-1. `cd my-project && cp .env.example .env` to copy the example environment variables
-1. `pnpm install && pnpm dev` to install dependencies and start the dev server
-1. open `http://localhost:3000` to open the app in your browser
+#### Prerequisites
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+- NodeJS
+- pnpm (`npm i -g pnpm`).
+
+You should also have a PostgreSQL database running on your machine or somewhere accessible.
+
+
+#### Setup
+
+Copy the example .env file:
+```sh
+cp ./.env.example .env
+```
+In `.env`, make sure to modify the `DATABASE_URI` variables to point to your
+PostgreSQL DB. A postgreSQL connection string looks like this:
+`postgresql://[user[:password]@][host][:port][/dbname][?param1=value1&param2=value2]`
+
+Install the NPM dependencies:
+
+```
+pnpm install
+```
+
+And run the development server for the application:
+```sh
+pnpm dev
+```
+The application will be available at `http://localhost:3000` in your browser, it
+may take a few seconds for the app to render the first time.
+
+
+### Docker development environment
+
+#### Prerequisites
+
+- docker with docker compose
+
+
+#### Setup
+
+You can use the provided example .env file as is:
+```sh
+cp ./.env.example .env
+```
+
+You can spin up the Docker development stack with the following command:
+```sh
+docker compose up -d
+```
+
+- `docker compose ps` will show you the running containers.
+- `docker compose logs -f` will show you the logs.
+
+This will start:
+- a NodeJS container that will hot reload the application on change.
+- a postgresql database for the application to store its data.
+
 
 ## How it works
 
