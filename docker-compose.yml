@@ -11,21 +11,20 @@ services:
     working_dir: /home/node/app/
     command: sh -c "corepack enable pnpm && pnpm install && pnpm dev"
     depends_on:
-      - mongo
+      - postgres
     env_file:
       - .env
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - '27017:27017'
-    command:
-      - --storageEngine=wiredTiger
+  postgres:
+    container_name: postgres_cms
+    image: postgres:15.6
     volumes:
-      - data:/data/db
-    logging:
-      driver: none
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: cms
+      POSTGRES_USER: cms
+      POSTGRES_PASSWORD: cms
 
 volumes:
-  data:
   node_modules:
+  postgres:
