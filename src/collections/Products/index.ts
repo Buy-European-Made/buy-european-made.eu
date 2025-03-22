@@ -12,7 +12,7 @@ export const Products: CollectionConfig = {
   },
   fields: [
     {
-      name: 'Name',
+      name: 'name',
       type: 'text',
     },
     {

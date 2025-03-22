@@ -20,7 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
           />
         }
         <br/>
-        Name: {product.Name}
+        Name: {product.name}
         <br/>
         Description: {product.description ?? "No description"}
         <br/>

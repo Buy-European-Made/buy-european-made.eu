@@ -744,7 +744,7 @@ export interface ProductsList {
  */
 export interface Product {
   id: number;
-  Name?: string | null;
+  name?: string | null;
   description?: string | null;
   link?: string | null;
   tags?: (number | Category)[] | null;
@@ -1336,7 +1336,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "products_select".
  */
 export interface ProductsSelect<T extends boolean = true> {
-  Name?: T;
+  name?: T;
   description?: T;
   link?: T;
   tags?: T;
