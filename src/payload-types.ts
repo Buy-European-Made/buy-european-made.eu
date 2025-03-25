@@ -115,7 +115,34 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: null;
+  locale:
+    | 'sq_AL'
+    | 'bg_BG'
+    | 'hr_HR'
+    | 'cs_CZ'
+    | 'da_DK'
+    | 'en_GB'
+    | 'et_EE'
+    | 'fi_FI'
+    | 'fr_FR'
+    | 'de_DE'
+    | 'el_GR'
+    | 'hu_HU'
+    | 'is_IS'
+    | 'it_IT'
+    | 'lv_LV'
+    | 'lt_LT'
+    | 'mk_MK'
+    | 'mt_MT'
+    | 'no_NO'
+    | 'pl_PL'
+    | 'pt_PT'
+    | 'ro_RO'
+    | 'sr_RS'
+    | 'sl_SI'
+    | 'es_ES'
+    | 'sv_SE'
+    | 'uk_UA';
   user: User & {
     collection: 'users';
   };
