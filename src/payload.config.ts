@@ -24,6 +24,120 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  localization: {
+    // https://saimana.com/list-of-country-locale-code/
+    locales: [
+      {
+        label: 'Albanian',
+        code: 'sq_AL',
+      },
+      {
+        label: 'Bulgarian',
+        code: 'bg_BG',
+      },
+      {
+        label: 'Croatian',
+        code: 'hr_HR',
+      },
+      {
+        label: 'Czech',
+        code: 'cs_CZ',
+      },
+      {
+        label: 'Danish',
+        code: 'da_DK',
+      },
+      {
+        label: 'English',
+        code: 'en_GB',
+      },
+      {
+        label: 'Estonian',
+        code: 'et_EE',
+      },
+      {
+        label: 'Finish',
+        code: 'fi_FI',
+      },
+      {
+        label: 'French',
+        code: 'fr_FR',
+      },
+      {
+        label: 'German',
+        code: 'de_DE',
+      },
+      {
+        label: 'Greek',
+        code: 'el_GR',
+      },
+      {
+        label: 'Hungarian',
+        code: 'hu_HU',
+      },
+      {
+        label: 'Icelandic',
+        code: 'is_IS',
+      },
+      {
+        label: 'Italian',
+        code: 'it_IT',
+      },
+      {
+        label: 'Latvian',
+        code: 'lv_LV',
+      },
+      {
+        label: 'Lithuanian',
+        code: 'lt_LT',
+      },
+      {
+        label: 'Macedonian',
+        code: 'mk_MK',
+      },
+      {
+        label: 'Malta',
+        code: 'mt_MT',
+      },
+      {
+        label: 'Norwegian',
+        code: 'no_NO',
+      },
+      {
+        label: 'Polish',
+        code: 'pl_PL',
+      },
+      {
+        label: 'Portugese',
+        code: 'pt_PT',
+      },
+      {
+        label: 'Romanian',
+        code: 'ro_RO',
+      },
+      {
+        label: 'Serbian',
+        code: 'sr_RS',
+      },
+      {
+        label: 'Slovenian',
+        code: 'sl_SI',
+      },
+      {
+        label: 'Spanish',
+        code: 'es_ES',
+      },
+      {
+        label: 'Swedish',
+        code: 'sv_SE',
+      },
+      {
+        label: 'Ukrainian',
+        code: 'uk_UA',
+      },
+    ],
+    defaultLocale: 'en_GB',
+  },
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
