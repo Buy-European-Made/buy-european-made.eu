@@ -71,7 +71,7 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
-    products: Product;
+    'eu-products': EuProduct;
     'replaced-products': ReplacedProduct;
     redirects: Redirect;
     forms: Form;
@@ -82,14 +82,18 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    'replaced-products': {
+      'replaced-by': 'eu-products';
+    };
+  };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
-    products: ProductsSelect<false> | ProductsSelect<true>;
+    'eu-products': EuProductsSelect<false> | EuProductsSelect<true>;
     'replaced-products': ReplacedProductsSelect<false> | ReplacedProductsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -740,14 +744,16 @@ export interface ProductsList {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products".
+ * via the `definition` "eu-products".
  */
-export interface Product {
+export interface EuProduct {
   id: string;
   name?: string | null;
   description?: string | null;
+  categories?: (string | Category)[] | null;
   link?: string | null;
   tags?: (string | Category)[] | null;
+  replaces?: (string | ReplacedProduct)[] | null;
   logo?: (string | null) | Media;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -761,10 +767,16 @@ export interface Product {
  */
 export interface ReplacedProduct {
   id: string;
-  Name?: string | null;
+  name?: string | null;
   description?: string | null;
   tags?: (string | Category)[] | null;
   logo?: (string | null) | Media;
+  categories?: (string | Category)[] | null;
+  'replaced-by'?: {
+    docs?: (string | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -961,8 +973,8 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
-        relationTo: 'products';
-        value: string | Product;
+        relationTo: 'eu-products';
+        value: string | EuProduct;
       } | null)
     | ({
         relationTo: 'replaced-products';
@@ -1336,13 +1348,15 @@ export interface UsersSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
+ * via the `definition` "eu-products_select".
  */
-export interface ProductsSelect<T extends boolean = true> {
+export interface EuProductsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  categories?: T;
   link?: T;
   tags?: T;
+  replaces?: T;
   logo?: T;
   slug?: T;
   slugLock?: T;
@@ -1355,10 +1369,12 @@ export interface ProductsSelect<T extends boolean = true> {
  * via the `definition` "replaced-products_select".
  */
 export interface ReplacedProductsSelect<T extends boolean = true> {
-  Name?: T;
+  name?: T;
   description?: T;
   tags?: T;
   logo?: T;
+  categories?: T;
+  'replaced-by'?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1737,8 +1753,8 @@ export interface TaskSchedulePublish {
           value: string | Post;
         } | null)
       | ({
-          relationTo: 'products';
-          value: string | Product;
+          relationTo: 'eu-products';
+          value: string | EuProduct;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

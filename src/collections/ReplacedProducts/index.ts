@@ -12,18 +12,13 @@ export const ReplacedProducts: CollectionConfig = {
   },
   fields: [
     {
-      name: 'Name',
+      name: 'name',
       type: 'text',
     },
     {
       name: 'description',
       type: 'text',
     },
-    // We probably don't want to link back to their websites.
-    // {
-    //   name: 'link',
-    //   type: 'text',
-    // },
     {
       name: 'tags',
       type: 'relationship',
@@ -35,6 +30,18 @@ export const ReplacedProducts: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
     },
+    {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true,
+    },
+    {
+      name: 'replaced-by',
+      type: 'join',
+      collection: 'eu-products',
+      on: 'replaces'
+    }
   ],
 }
 

@@ -6,16 +6,13 @@ import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
-
-import type { Product } from '@/payload-types'
-
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
 export async function generateStaticParams() {
   const payload = await getPayload({ config: configPromise })
   const products = await payload.find({
-    collection: 'products',
+    collection: 'eu-products',
     draft: false,
     limit: 1000,
     overrideAccess: false,
@@ -50,9 +47,13 @@ export default async function Product({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
           <h1>{product.name}</h1>
+          {product.replaces?.map((replacedProduct) => {
+            console.log(replacedProduct)
+            return <div> hey </div>
+          })}
         </div>
       </div>
-    </article>
+    </article >
   )
 }
 
@@ -69,7 +70,7 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
   const payload = await getPayload({ config: configPromise })
 
   const result = await payload.find({
-    collection: 'products',
+    collection: 'eu-products',
     draft,
     limit: 1,
     overrideAccess: draft,

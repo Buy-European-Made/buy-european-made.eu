@@ -11,7 +11,7 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
 import { Users } from './collections/Users'
-import { Products } from './collections/Products'
+import { EuProducts } from './collections/EuProducts'
 import { ReplacedProducts } from './collections/ReplacedProducts'
 
 import { Footer } from './Footer/config'
@@ -75,7 +75,7 @@ export default buildConfig({
     Media,
     Categories,
     Users,
-    Products,
+    EuProducts,
     ReplacedProducts,
   ],
   cors: [getServerSideURL()].filter(Boolean),

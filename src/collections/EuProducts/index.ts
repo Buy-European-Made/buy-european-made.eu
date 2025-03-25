@@ -3,23 +3,38 @@ import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { slugField } from '@/fields/slug'
 
-export const Products: CollectionConfig = {
-  slug: 'products',
+export const EuProducts: CollectionConfig = {
+  slug: 'eu-products',
+  labels: {
+    singular: "European Product",
+    plural: "European Products",
+  },
   access: {
     create: authenticated,
     delete: authenticated,
     read: authenticatedOrPublished,
     update: authenticated,
   },
+  admin: {
+    defaultColumns: [
+      'name',
+      'description'
+    ],
+  },
   fields: [
     {
       name: 'name',
       type: 'text',
-      label: 'Name'
     },
     {
       name: 'description',
       type: 'text',
+    },
+    {
+      name: 'categories',
+      type: 'relationship',
+      relationTo: 'categories',
+      hasMany: true
     },
     {
       name: 'link',
@@ -29,6 +44,12 @@ export const Products: CollectionConfig = {
       name: 'tags',
       type: 'relationship',
       relationTo: 'categories',
+      hasMany: true,
+    },
+    {
+      name: 'replaces',
+      type: 'relationship',
+      relationTo: 'replaced-products',
       hasMany: true,
     },
     {
