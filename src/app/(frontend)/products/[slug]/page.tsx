@@ -22,8 +22,8 @@ export async function generateStaticParams() {
     pagination: false,
   })
 
-  const params = products.docs.map(({ Name }) => {
-    return { Name }
+  const params = products.docs.map(({ name }) => {
+    return { Name: name }
   })
 
   return params
@@ -49,7 +49,7 @@ export default async function Product({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
-          <h1>{product.Name}</h1>
+          <h1>{product.name}</h1>
         </div>
       </div>
     </article>

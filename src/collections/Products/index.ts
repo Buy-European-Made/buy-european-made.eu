@@ -1,8 +1,8 @@
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '../../access/authenticated'
 import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
-
 import { slugField } from '@/fields/slug'
+
 export const Products: CollectionConfig = {
   slug: 'products',
   access: {
@@ -13,8 +13,9 @@ export const Products: CollectionConfig = {
   },
   fields: [
     {
-      name: 'Name',
+      name: 'name',
       type: 'text',
+      label: 'Name'
     },
     {
       name: 'description',
