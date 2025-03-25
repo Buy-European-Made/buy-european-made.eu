@@ -8,23 +8,24 @@ import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
+import { ReplacedProduct } from '@/payload-types'
 
-export async function generateStaticParams() {
-  const payload = await getPayload({ config: configPromise })
-  const products = await payload.find({
-    collection: 'eu-products',
-    draft: false,
-    limit: 1000,
-    overrideAccess: false,
-    pagination: false,
-  })
 
-  const params = products.docs.map(({ name }) => {
-    return { Name: name }
-  })
-
-  return params
-}
+//   const payload = await getPayload({ config: configPromise })
+//   const products = await payload.find({
+//     collection: 'eu-products',
+//     draft: false,
+//     limit: 1000,
+//     overrideAccess: false,
+//     pagination: false,
+//   })
+//
+//   const params = products.docs.map(({ name }) => {
+//     return { Name: name }
+//   })
+//
+//   return params
+// }
 
 type Args = {
   params: Promise<{
@@ -34,8 +35,20 @@ type Args = {
 export default async function Product({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = '' } = await paramsPromise
-  const url = '/products/' + slug
+  const url = '/eu-products/' + slug
   const product = await queryProductsByName({ slug })
+
+
+  const payload = await getPayload({ config: configPromise })
+  const relatedProds = await payload.find({
+    collection: 'replaced-products',
+    where: {
+      id: {
+        in: product?.replaces
+      }
+    }
+  })
+  console.log(relatedProds)
 
   if (!product) return <PayloadRedirects url={url} />
 
@@ -47,9 +60,9 @@ export default async function Product({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
           <h1>{product.name}</h1>
-          {product.replaces?.map((replacedProduct) => {
+          {relatedProds.docs?.map((replacedProduct) => {
             console.log(replacedProduct)
-            return <div> hey </div>
+            return <div key={replacedProduct.toString()}> {replacedProduct.name} </div>
           })}
         </div>
       </div>
@@ -59,9 +72,9 @@ export default async function Product({ params: paramsPromise }: Args) {
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
   const { slug = '' } = await paramsPromise
-  const post = await queryProductsByName({ slug })
+  const product = await queryProductsByName({ slug })
 
-  return generateMeta({ doc: post })
+  return generateMeta({ doc: product })
 }
 
 const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
@@ -76,11 +89,12 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
     overrideAccess: draft,
     pagination: false,
     where: {
-      Name: {
+      name: {
         equals: slug,
       },
     },
   })
 
+  console.log(result.docs)
   return result.docs?.[0] || null
 })

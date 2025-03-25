@@ -43,5 +43,14 @@ export const ReplacedProducts: CollectionConfig = {
       on: 'replaces'
     }
   ],
+  versions: {
+    drafts: {
+      autosave: {
+        interval: 100, // We set this interval for optimal live preview
+      },
+      schedulePublish: true,
+    },
+    maxPerDoc: 50,
+  },
 }
 
