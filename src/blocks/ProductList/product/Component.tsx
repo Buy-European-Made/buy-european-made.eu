@@ -15,12 +15,12 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
       <div className="max-w-[48rem]">
         { product.logo &&
           <Media
-            imgClassName='border border-border rounded-[0.8rem]'
+            imgClassName='h-32 w-32 border border-border rounded-[0.8rem]'
             resource={product.logo}
           />
         }
         <br/>
-        Name: {product.Name}
+        Name: {product.name}
         <br/>
         Description: {product.description ?? "No description"}
         <br/>
