@@ -40,11 +40,15 @@ export default async function Product({ params: paramsPromise }: Args) {
 
 
   const payload = await getPayload({ config: configPromise })
+  const relatedIds = product?.replaces?.map(replacedProd => {
+    return replacedProd.id
+  })
+  console.log(relatedIds)
   const relatedProds = await payload.find({
     collection: 'replaced-products',
     where: {
       id: {
-        in: product?.replaces
+        in: relatedIds
       }
     }
   })
@@ -81,6 +85,7 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
+  console.log("searching for", slug)
 
   const result = await payload.find({
     collection: 'eu-products',
@@ -89,12 +94,12 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
     overrideAccess: draft,
     pagination: false,
     where: {
-      name: {
+      slug: {
         equals: slug,
       },
     },
   })
 
-  console.log(result.docs)
+  console.log("found:", result.docs)
   return result.docs?.[0] || null
 })

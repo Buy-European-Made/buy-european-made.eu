@@ -10,6 +10,9 @@ export const ReplacedProducts: CollectionConfig = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
+  admin: {
+    useAsTitle: 'name'
+  },
   fields: [
     {
       name: 'name',
@@ -40,13 +43,13 @@ export const ReplacedProducts: CollectionConfig = {
       name: 'replaced-by',
       type: 'join',
       collection: 'eu-products',
-      on: 'replaces'
+      on: 'replaces',
     }
   ],
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 1000, // We set this interval for optimal live preview
       },
       schedulePublish: true,
     },

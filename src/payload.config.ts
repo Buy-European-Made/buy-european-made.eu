@@ -7,6 +7,7 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Tags } from './collections/Tags'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
@@ -186,6 +187,7 @@ export default buildConfig({
     Pages,
     Media,
     Categories,
+    Tags,
     Users,
     EuProducts,
     ReplacedProducts,

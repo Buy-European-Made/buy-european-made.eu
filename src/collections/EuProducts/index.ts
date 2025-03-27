@@ -43,7 +43,7 @@ export const EuProducts: CollectionConfig = {
     {
       name: 'tags',
       type: 'relationship',
-      relationTo: 'categories',
+      relationTo: 'tags',
       hasMany: true,
     },
     {
@@ -62,7 +62,7 @@ export const EuProducts: CollectionConfig = {
   versions: {
     drafts: {
       autosave: {
-        interval: 100, // We set this interval for optimal live preview
+        interval: 1000, // We set this interval for optimal live preview
       },
       schedulePublish: true,
     },
