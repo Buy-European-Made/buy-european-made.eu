@@ -11,16 +11,24 @@ export const Countries: CollectionConfig = {
     read: authenticatedOrPublished,
     update: authenticated,
   },
+  admin: {
+    useAsTitle: 'coutryName'
+  },
   fields: [
     {
       name: 'coutryName',
       type: 'text',
     },
     {
-      name: 'logo',
+      name: 'flag',
       type: 'upload',
       relationTo: 'media',
     },
+    {
+      name: 'productsProduced',
+      type: 'join',
+      collection: 'products',
+      on: 'producedIn'
+    }
   ],
 }
-

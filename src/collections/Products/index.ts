@@ -22,8 +22,7 @@ export const Products: CollectionConfig = {
     {
       name: 'link',
       type: 'text',
-    },
-    {
+    }, {
       name: 'tags',
       type: 'relationship',
       relationTo: 'categories',
@@ -34,6 +33,11 @@ export const Products: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
     },
+    {
+      name: 'producedIn',
+      type: 'relationship',
+      relationTo: 'countries'
+    }
   ],
 }
 

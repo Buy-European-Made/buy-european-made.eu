@@ -19,6 +19,7 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Countries } from './collections/Countries'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -188,6 +189,7 @@ export default buildConfig({
     Users,
     Products,
     ReplacedProducts,
+    Countries
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
