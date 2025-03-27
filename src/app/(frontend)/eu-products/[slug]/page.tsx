@@ -9,6 +9,7 @@ import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ReplacedProduct } from '@/payload-types'
+import { ReplacedProducts } from '@/collections/ReplacedProducts'
 
 
 //   const payload = await getPayload({ config: configPromise })
@@ -40,9 +41,12 @@ export default async function Product({ params: paramsPromise }: Args) {
 
 
   const payload = await getPayload({ config: configPromise })
-  const relatedIds = product?.replaces?.map(replacedProd => {
-    return replacedProd.id
-  })
+  const relatedIds = product?.replaces
+    ?.filter((replacedProd): replacedProd is ReplacedProduct => {
+      return typeof replacedProd !== 'string';
+    })
+    .map(replacedProd => replacedProd.id);
+
   console.log(relatedIds)
   const relatedProds = await payload.find({
     collection: 'replaced-products',
@@ -64,10 +68,13 @@ export default async function Product({ params: paramsPromise }: Args) {
       <div className="flex flex-col items-center gap-4 pt-8">
         <div className="container">
           <h1>{product.name}</h1>
-          {relatedProds.docs?.map((replacedProduct) => {
-            console.log(replacedProduct)
-            return <div key={replacedProduct.toString()}> {replacedProduct.name} </div>
-          })}
+          <p>this replaces the following products:</p>
+          <ul>
+            {/* here I would like to see some small prooducts cards */}
+            {relatedProds.docs?.map((replacedProduct) => {
+              return <li className='text-orange-100' key={replacedProduct.id}> {replacedProduct.name} </li>
+            })}
+          </ul>
         </div>
       </div>
     </article >
