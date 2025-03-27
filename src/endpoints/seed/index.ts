@@ -1,11 +1,19 @@
+import * as fs from 'fs'
+
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
 
 import { contactForm as contactFormData } from './contact-form'
+
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
+import { productsPage } from './products-page'
+
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
+import { gogLogoData } from './gogLogo'
+
+import { makeFritzProduct, makeGogProduct } from './products'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -14,6 +22,7 @@ const collections: CollectionSlug[] = [
   'forms',
   'form-submissions',
   'search',
+  'products',
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
 
@@ -76,7 +85,13 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding media...`)
 
-  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
+  const [
+    image1Buffer,
+    image2Buffer,
+    image3Buffer,
+    hero1Buffer,
+    gogLogoBuffer,
+  ] = await Promise.all([
     fetchFileByURL(
       'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
     ),
@@ -89,7 +104,18 @@ export const seed = async ({
     fetchFileByURL(
       'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
     ),
+
+    // GOG logo.
+    fetchFileByURL(
+      'https://upload.wikimedia.org/wikipedia/commons/d/de/GOG.com_Logo.png',
+    ),
   ])
+
+  const gogLogoDoc = await payload.create({
+    collection: 'media',
+    data: gogLogoData,
+    file: gogLogoBuffer,
+  })
 
   const [
     demoAuthor,
@@ -223,6 +249,19 @@ export const seed = async ({
     demoAuthorID = `"${demoAuthorID}"`
   }
 
+  payload.logger.info(`— Seeding products...`)
+
+  await Promise.all([
+    payload.create({
+      collection: 'products',
+      data: makeGogProduct(gogLogoDoc),
+    }),
+    payload.create({
+      collection: 'products',
+      data: makeFritzProduct(),
+    }),
+  ])
+
   payload.logger.info(`— Seeding contact form...`)
 
   const contactForm = await payload.create({
@@ -239,7 +278,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [_, contactPageDoc, productsPageDoc] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -249,6 +288,11 @@ export const seed = async ({
       collection: 'pages',
       depth: 0,
       data: contactPageData({ contactForm: contactForm }),
+    }),
+    payload.create({
+      collection: 'pages',
+      depth: 0,
+      data: productsPage({ heroImage: imageHomeDoc }),
     }),
   ])
 
@@ -265,7 +309,17 @@ export const seed = async ({
               label: 'Contact',
               reference: {
                 relationTo: 'pages',
-                value: contactPage.id,
+                value: contactPageDoc.id,
+              },
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Products',
+              reference: {
+                relationTo: 'pages',
+                value: productsPageDoc.id,
               },
             },
           },
@@ -326,3 +380,4 @@ async function fetchFileByURL(url: string): Promise<File> {
     size: data.byteLength,
   }
 }
+
