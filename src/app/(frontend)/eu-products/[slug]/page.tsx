@@ -9,24 +9,6 @@ import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { ReplacedProduct } from '@/payload-types'
-import { ReplacedProducts } from '@/collections/ReplacedProducts'
-
-
-//   const payload = await getPayload({ config: configPromise })
-//   const products = await payload.find({
-//     collection: 'eu-products',
-//     draft: false,
-//     limit: 1000,
-//     overrideAccess: false,
-//     pagination: false,
-//   })
-//
-//   const params = products.docs.map(({ name }) => {
-//     return { Name: name }
-//   })
-//
-//   return params
-// }
 
 type Args = {
   params: Promise<{
@@ -35,9 +17,11 @@ type Args = {
 }
 export default async function Product({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = '' } = await paramsPromise
-  const url = '/eu-products/' + slug
-  const product = await queryProductsByName({ slug })
+  const { slug: slug = '' } = await paramsPromise
+  const sanitizeSlug = (input: string) => input.replace(/[^a-z0-9-]/gi, '') //only letters,numbers and dashes
+  const sanitizedSlug = sanitizeSlug(slug)
+  const url = '/eu-products/' + sanitizedSlug
+  const product = await queryProductsByName({ slug: sanitizedSlug })
 
 
   const payload = await getPayload({ config: configPromise })
@@ -47,7 +31,6 @@ export default async function Product({ params: paramsPromise }: Args) {
     })
     .map(replacedProd => replacedProd.id);
 
-  console.log(relatedIds)
   const relatedProds = await payload.find({
     collection: 'replaced-products',
     where: {
@@ -56,13 +39,11 @@ export default async function Product({ params: paramsPromise }: Args) {
       }
     }
   })
-  console.log(relatedProds)
 
   if (!product) return <PayloadRedirects url={url} />
 
   return (
     <article className="pt-16 pb-16">
-      {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
       <div className="flex flex-col items-center gap-4 pt-8">
@@ -92,7 +73,6 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
-  console.log("searching for", slug)
 
   const result = await payload.find({
     collection: 'eu-products',
@@ -107,6 +87,5 @@ const queryProductsByName = cache(async ({ slug }: { slug: string }) => {
     },
   })
 
-  console.log("found:", result.docs)
   return result.docs?.[0] || null
 })

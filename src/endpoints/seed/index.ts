@@ -1,13 +1,8 @@
-import * as fs from 'fs'
-
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
-
 import { contactForm as contactFormData } from './contact-form'
-
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
 import { productsPage } from './products-page'
-
 import { image1 } from './image-1'
 import { image2 } from './image-2'
 import { imageHero1 } from './image-hero-1'
@@ -22,7 +17,7 @@ const collections: CollectionSlug[] = [
   'forms',
   'form-submissions',
   'search',
-  'products',
+  'eu-products',
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
 
@@ -253,11 +248,11 @@ export const seed = async ({
 
   await Promise.all([
     payload.create({
-      collection: 'products',
+      collection: 'eu-products',
       data: makeGogProduct(gogLogoDoc),
     }),
     payload.create({
-      collection: 'products',
+      collection: 'eu-products',
       data: makeFritzProduct(),
     }),
   ])
