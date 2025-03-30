@@ -195,7 +195,7 @@ export default buildConfig({
     EuProducts,
     ReplacedProducts,
     Companies,
-    Brands
+    Brands,
     Countries
   ],
   cors: [getServerSideURL()].filter(Boolean),

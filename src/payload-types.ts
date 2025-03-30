@@ -76,6 +76,7 @@ export interface Config {
     'replaced-products': ReplacedProduct;
     companies: Company;
     brands: Brand;
+    countries: Country;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -92,6 +93,9 @@ export interface Config {
       produces: 'eu-products';
       ownedBy: 'companies';
     };
+    countries: {
+      producedProducts: 'eu-products';
+    };
   };
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
@@ -104,6 +108,7 @@ export interface Config {
     'replaced-products': ReplacedProductsSelect<false> | ReplacedProductsSelect<true>;
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
+    countries: CountriesSelect<false> | CountriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -717,6 +722,8 @@ export interface EuProduct {
   subcategories?: (number | Subcategory)[] | null;
   tags?: (number | Tag)[] | null;
   replaces?: (number | ReplacedProduct)[] | null;
+  producedIn?: (number | null) | Country;
+  availableIn?: (number | Country)[] | null;
   link?: string | null;
   logo?: (number | null) | Media;
   producedBy?: (number | null) | Brand;
@@ -742,6 +749,25 @@ export interface ReplacedProduct {
     hasNextPage?: boolean;
     totalDocs?: number;
   };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name?: string | null;
+  producedProducts?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  flag?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -957,6 +983,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'brands';
         value: number | Brand;
+      } | null)
+    | ({
+        relationTo: 'countries';
+        value: number | Country;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1307,6 +1337,8 @@ export interface EuProductsSelect<T extends boolean = true> {
   subcategories?: T;
   tags?: T;
   replaces?: T;
+  producedIn?: T;
+  availableIn?: T;
   link?: T;
   logo?: T;
   producedBy?: T;
@@ -1355,6 +1387,20 @@ export interface BrandsSelect<T extends boolean = true> {
   ownedBy?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries_select".
+ */
+export interface CountriesSelect<T extends boolean = true> {
+  name?: T;
+  producedProducts?: T;
+  flag?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1697,6 +1743,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'replaced-products';
           value: number | ReplacedProduct;
+        } | null)
+      | ({
+          relationTo: 'countries';
+          value: number | Country;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
