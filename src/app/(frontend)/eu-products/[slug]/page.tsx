@@ -3,13 +3,12 @@ import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { getPayload } from 'payload'
+import { BasePayload, getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { Category, ReplacedProduct } from '@/payload-types'
-import { Categories } from '@/collections/Categories'
+import { Tag, Category, EuProduct, ReplacedProduct } from '@/payload-types'
 
 type Args = {
   params: Promise<{
@@ -25,26 +24,13 @@ export default async function Product({ params: paramsPromise }: Args) {
   const product = await queryProductsByName({ slug: sanitizedSlug })
 
 
-  const payload = await getPayload({ config: configPromise })
-  const relatedIds = product?.replaces
-    ?.filter((replacedProd): replacedProd is ReplacedProduct => {
-      return typeof replacedProd !== 'string';
-    })
-    .map(replacedProd => replacedProd.id);
-
-  const relatedProds = await payload.find({
-    collection: 'replaced-products',
-    where: {
-      id: {
-        in: relatedIds
-      }
-    }
-  })
-
-  const categories = product?.categories?.filter((c): c is Category => {
-    return typeof c !== 'string'
-  }).map(c => c.title)
   if (!product) return <PayloadRedirects url={url} />
+
+  const payload = await getPayload({ config: configPromise })
+  const relatedProds = await getRelatedProducts(product, payload)
+  const categories = getCategories(product)
+  const subcategories = getSubcategories(product)
+  const tags = getTags(product)
 
   return (
     <article className="pt-16 pb-16">
@@ -69,7 +55,7 @@ export default async function Product({ params: paramsPromise }: Args) {
           <div className="flex flex-col">
             <span className="text-gray-500">Alternative to</span>
             <div className="flex">
-              {relatedProds.docs
+              {relatedProds
                 .map((alternative, index) => (
                   <span
                     key={index}
@@ -93,6 +79,35 @@ export default async function Product({ params: paramsPromise }: Args) {
                 </span>
               ))}
             </div>
+
+          </div>
+          <div className="flex flex-col">
+            <span className="text-gray-500">Subcategories:</span>
+            <div className="flex">
+              {subcategories?.map((subc: string, index: number) => (
+                <span
+                  key={index}
+                  className="px-2 py-1 bg-green-100 text-green-700 rounded mr-2"
+                >
+                  {subc}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <span className="text-gray-500">Tags:</span>
+            <div className="flex">
+              {tags?.map((tag, index) => (
+                <span
+                  key={index}
+                  className="px-2 py-1 bg-violet-100 text-violet-700 rounded mr-2"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+
           </div>
           <div className='flex'>
             <button className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
@@ -103,6 +118,43 @@ export default async function Product({ params: paramsPromise }: Args) {
       </div>
     </article >
   )
+}
+
+function getCategories(product: EuProduct | null) {
+  return product?.categories?.filter((c): c is Category => {
+    return typeof c !== 'string'
+  }).map(c => c.name)
+}
+
+function getSubcategories(product: EuProduct) {
+  return product?.subcategories?.filter((subc): subc is Tag => {
+    return typeof subc !== 'string'
+  }).map((subc: Subcategory) => subc.name)
+}
+
+
+function getTags(product: EuProduct) {
+  return product?.tags?.filter((t): t is Tag => {
+    return typeof t !== 'string'
+  }).map(t => t.name)
+}
+
+async function getRelatedProducts(product: EuProduct, payload: BasePayload) {
+  const relatedIds = product?.replaces
+    ?.filter((replacedProd): replacedProd is ReplacedProduct => {
+      return typeof replacedProd !== 'string'
+    })
+    .map(replacedProd => replacedProd.id)
+
+  const relatedProds = await payload.find({
+    collection: 'replaced-products',
+    where: {
+      id: {
+        in: relatedIds
+      }
+    }
+  })
+  return relatedProds.docs
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {

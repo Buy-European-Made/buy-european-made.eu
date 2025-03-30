@@ -13,14 +13,13 @@ import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
 import { EuProducts } from './collections/EuProducts'
 import { ReplacedProducts } from './collections/ReplacedProducts'
-
+import { Subcategories } from './collections/Subcategories'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
-import { Subcategories } from './collections/Subcategories'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
