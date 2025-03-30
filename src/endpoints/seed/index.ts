@@ -16,7 +16,6 @@ const collections: CollectionSlug[] = [
   'pages',
   'forms',
   'form-submissions',
-  'search',
   'eu-products',
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
@@ -154,7 +153,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Technology',
+        name: 'Technology',
         breadcrumbs: [
           {
             label: 'Technology',
@@ -167,7 +166,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'News',
+        name: 'News',
         breadcrumbs: [
           {
             label: 'News',
@@ -180,7 +179,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Finance',
+        name: 'Finance',
         breadcrumbs: [
           {
             label: 'Finance',
@@ -192,7 +191,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Design',
+        name: 'Design',
         breadcrumbs: [
           {
             label: 'Design',
@@ -205,7 +204,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Software',
+        name: 'Software',
         breadcrumbs: [
           {
             label: 'Software',
@@ -218,7 +217,7 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Engineering',
+        name: 'Engineering',
         breadcrumbs: [
           {
             label: 'Engineering',
