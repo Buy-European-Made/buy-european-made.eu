@@ -13,16 +13,6 @@ export const productsPage: (args: ProductsArgs) => RequiredDataFromCollectionSlu
     _status: 'published',
     hero: {
       type: 'highImpact',
-      links: [
-        {
-          link: {
-            type: 'custom',
-            appearance: 'default',
-            label: 'Search for alternatives',
-            url: '/posts',
-          },
-        },
-      ],
       media: heroImage.id,
       richText: {
         root: {
