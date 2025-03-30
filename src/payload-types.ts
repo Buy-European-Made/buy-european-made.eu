@@ -74,6 +74,8 @@ export interface Config {
     users: User;
     'eu-products': EuProduct;
     'replaced-products': ReplacedProduct;
+    companies: Company;
+    brands: Brand;
     countries: Country;
     redirects: Redirect;
     forms: Form;
@@ -86,6 +88,10 @@ export interface Config {
   collectionsJoins: {
     'replaced-products': {
       'replaced-by': 'eu-products';
+    };
+    brands: {
+      produces: 'eu-products';
+      ownedBy: 'companies';
     };
     countries: {
       producedProducts: 'eu-products';
@@ -100,6 +106,8 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     'eu-products': EuProductsSelect<false> | EuProductsSelect<true>;
     'replaced-products': ReplacedProductsSelect<false> | ReplacedProductsSelect<true>;
+    companies: CompaniesSelect<false> | CompaniesSelect<true>;
+    brands: BrandsSelect<false> | BrandsSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -718,6 +726,7 @@ export interface EuProduct {
   availableIn?: (number | Country)[] | null;
   link?: string | null;
   logo?: (number | null) | Media;
+  producedBy?: (number | null) | Brand;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -762,6 +771,41 @@ export interface Country {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands".
+ */
+export interface Brand {
+  id: number;
+  name: string;
+  link?: string | null;
+  produces?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  ownedBy?: {
+    docs?: (number | Company)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies".
+ */
+export interface Company {
+  id: number;
+  name: string;
+  link?: string | null;
+  ownBrands?: (number | Brand)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -931,6 +975,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'replaced-products';
         value: number | ReplacedProduct;
+      } | null)
+    | ({
+        relationTo: 'companies';
+        value: number | Company;
+      } | null)
+    | ({
+        relationTo: 'brands';
+        value: number | Brand;
       } | null)
     | ({
         relationTo: 'countries';
@@ -1289,6 +1341,7 @@ export interface EuProductsSelect<T extends boolean = true> {
   availableIn?: T;
   link?: T;
   logo?: T;
+  producedBy?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1309,6 +1362,31 @@ export interface ReplacedProductsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "companies_select".
+ */
+export interface CompaniesSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  ownBrands?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "brands_select".
+ */
+export interface BrandsSelect<T extends boolean = true> {
+  name?: T;
+  link?: T;
+  produces?: T;
+  ownedBy?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

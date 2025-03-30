@@ -82,6 +82,11 @@ export const EuProducts: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
     },
+    {
+      name: 'producedBy',
+      type: 'relationship',
+      relationTo: 'brands',
+    },
     ...slugField(),
   ],
   versions: {
