@@ -7,12 +7,13 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { Tags } from './collections/Tags'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Users } from './collections/Users'
-import { Products } from './collections/Products'
+import { EuProducts } from './collections/EuProducts'
 import { ReplacedProducts } from './collections/ReplacedProducts'
-
+import { Subcategories } from './collections/Subcategories'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 
@@ -185,8 +186,10 @@ export default buildConfig({
     Pages,
     Media,
     Categories,
+    Subcategories,
+    Tags,
     Users,
-    Products,
+    EuProducts,
     ReplacedProducts,
   ],
   cors: [getServerSideURL()].filter(Boolean),
