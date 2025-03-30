@@ -14,6 +14,7 @@ import { Users } from './collections/Users'
 import { EuProducts } from './collections/EuProducts'
 import { ReplacedProducts } from './collections/ReplacedProducts'
 import { Subcategories } from './collections/Subcategories'
+import { Countries } from './collections/Countries'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 
@@ -191,6 +192,7 @@ export default buildConfig({
     Users,
     EuProducts,
     ReplacedProducts,
+    Countries
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
