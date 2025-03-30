@@ -7,9 +7,9 @@ type Overrides = {
   checkboxOverrides?: Partial<CheckboxField>
 }
 
-type Slug = (fieldToUse?: string, overrides?: Overrides) => [TextField, CheckboxField]
+type Slug = (fieldToUse: string, overrides?: Overrides) => [TextField, CheckboxField]
 
-export const slugField: Slug = (fieldToUse = 'name', overrides = {}) => {
+export const slugField: Slug = (fieldToUse, overrides = {}) => {
   const { slugOverrides, checkboxOverrides } = overrides
 
   const checkBoxField: CheckboxField = {

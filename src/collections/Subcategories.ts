@@ -23,6 +23,6 @@ export const Subcategories: CollectionConfig = {
       required: true,
       localized: true,
     },
-    ...slugField(),
+    ...slugField('name'),
   ],
 }

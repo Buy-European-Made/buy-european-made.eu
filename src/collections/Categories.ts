@@ -21,6 +21,6 @@ export const Categories: CollectionConfig = {
       required: true,
       localized: true,
     },
-    ...slugField(),
+    ...slugField('name'),
   ],
 }
