@@ -8,9 +8,9 @@ import { ProductCard } from './product/Component'
 export const ProductsListBlock: React.FC = async () => {
 
   const payload = await getPayload({ config })
-  const findResult = await payload.find({ collection: 'products' })
+  const findResult = await payload.find({ collection: 'eu-products' })
 
-  if(findResult.docs.length > 0) {
+  if (findResult.docs.length > 0) {
     return (
       <ul>
         {
