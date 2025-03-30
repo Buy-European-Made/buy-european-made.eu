@@ -20,6 +20,7 @@ export const EuProducts: CollectionConfig = {
       'name',
       'description'
     ],
+    useAsTitle: 'name',
   },
   fields: [
     {
@@ -53,6 +54,24 @@ export const EuProducts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'replaced-products',
       hasMany: true,
+      filterOptions: ({ siblingData }) => {
+        return {
+          categories: {
+            in: siblingData.categories
+          }
+        }
+      }
+    },
+    {
+      name: 'producedIn',
+      type: 'relationship',
+      relationTo: 'countries',
+    },
+    {
+      name: 'availableIn',
+      type: 'relationship',
+      relationTo: 'countries',
+      hasMany: true
     },
     {
       name: 'link',
