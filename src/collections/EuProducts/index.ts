@@ -37,8 +37,10 @@ export const EuProducts: CollectionConfig = {
       hasMany: true
     },
     {
-      name: 'link',
-      type: 'text',
+      name: 'subcategories',
+      type: 'relationship',
+      relationTo: 'subcategories',
+      hasMany: true
     },
     {
       name: 'tags',
@@ -51,6 +53,10 @@ export const EuProducts: CollectionConfig = {
       type: 'relationship',
       relationTo: 'replaced-products',
       hasMany: true,
+    },
+    {
+      name: 'link',
+      type: 'text',
     },
     {
       name: 'logo',
