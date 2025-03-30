@@ -21,6 +21,6 @@ export const Tags: CollectionConfig = {
       required: true,
       localized: true,
     },
-    ...slugField(),
+    ...slugField('name'),
   ],
 }
