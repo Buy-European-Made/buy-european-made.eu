@@ -29,7 +29,8 @@ export const Brands: CollectionConfig = {
       name: 'produces',
       type: 'join',
       collection: 'eu-products',
-      on: 'producedBy'
+      on: 'producedBy',
+      maxDepth: 2
     },
     {
       name: 'ownedBy',

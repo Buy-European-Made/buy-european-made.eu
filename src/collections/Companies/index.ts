@@ -30,7 +30,7 @@ export const Companies: CollectionConfig = {
       name: 'ownBrands',
       type: 'relationship',
       relationTo: 'brands',
-      hasMany: true
+      hasMany: true,
     },
     ...slugField(),
   ],

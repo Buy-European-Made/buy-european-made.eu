@@ -66,7 +66,7 @@ export const EuProducts: CollectionConfig = {
     {
       name: 'producedBy',
       type: 'relationship',
-      relationTo: 'brands'
+      relationTo: 'brands',
     },
     ...slugField(),
   ],
