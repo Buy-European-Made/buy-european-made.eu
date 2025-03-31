@@ -23,6 +23,18 @@ export const Subcategories: CollectionConfig = {
       required: true,
       localized: true,
     },
+    {
+      name: 'mainCategory',
+      type: 'relationship',
+      relationTo: 'categories',
+      required: true,
+    },
+    {
+      name: 'products',
+      type: 'join',
+      collection: 'eu-products',
+      on: 'subcategories'
+    },
     ...slugField('name'),
   ],
 }
