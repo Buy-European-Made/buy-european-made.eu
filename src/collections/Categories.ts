@@ -21,6 +21,14 @@ export const Categories: CollectionConfig = {
       required: true,
       localized: true,
     },
+    {
+      name: 'subcategories',
+      type: 'join',
+      collection: 'subcategories',
+      on: 'mainCategory',
+      required: true,
+      localized: true,
+    },
     ...slugField('name'),
   ],
 }

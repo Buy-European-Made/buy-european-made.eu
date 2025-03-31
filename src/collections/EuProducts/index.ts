@@ -28,7 +28,6 @@ export const EuProducts: CollectionConfig = {
       tabs: [
         {
           label: 'General',
-          description: 'General information about the product',
           fields: [
 
             {
@@ -38,19 +37,6 @@ export const EuProducts: CollectionConfig = {
             {
               name: 'description',
               type: 'text',
-            },
-            {
-              name: 'replaces',
-              type: 'relationship',
-              relationTo: 'replaced-products',
-              hasMany: true,
-              filterOptions: ({ siblingData }) => {
-                return {
-                  categories: {
-                    in: siblingData.categories
-                  }
-                }
-              }
             },
             {
               name: 'producedBy',
@@ -69,7 +55,7 @@ export const EuProducts: CollectionConfig = {
           ]
         },
         {
-          label: 'Categories and tags',
+          label: 'Product details',
           fields: [
             {
               name: 'categories',
@@ -82,10 +68,23 @@ export const EuProducts: CollectionConfig = {
               type: 'relationship',
               relationTo: 'subcategories',
               hasMany: true,
-              filterOptions: ({ data, siblingData }) => {
+              filterOptions: ({ siblingData }) => {
                 return {
-                  'data.categories': {
-                    equals: 'siblingData.mainCategory'
+                  mainCategory: {
+                    in: siblingData.categories
+                  }
+                }
+              },
+            },
+            {
+              name: 'replaces',
+              type: 'relationship',
+              relationTo: 'replaced-products',
+              hasMany: true,
+              filterOptions: ({ siblingData }) => {
+                return {
+                  categories: {
+                    in: siblingData.categories
                   }
                 }
               }

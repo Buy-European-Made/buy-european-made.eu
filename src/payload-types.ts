@@ -86,6 +86,12 @@ export interface Config {
     'payload-migrations': PayloadMigration;
   };
   collectionsJoins: {
+    categories: {
+      subcategories: 'subcategories';
+    };
+    subcategories: {
+      products: 'eu-products';
+    };
     'replaced-products': {
       'replaced-by': 'eu-products';
     };
@@ -654,6 +660,11 @@ export interface ProductsList {
 export interface Category {
   id: number;
   name: string;
+  subcategories: {
+    docs?: (number | Subcategory)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   slug?: string | null;
   slugLock?: boolean | null;
   parent?: (number | null) | Category;
@@ -675,40 +686,16 @@ export interface Category {
 export interface Subcategory {
   id: number;
   name: string;
+  mainCategory: number | Category;
+  products?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "tags".
- */
-export interface Tag {
-  id: number;
-  name: string;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -718,54 +705,15 @@ export interface EuProduct {
   id: number;
   name?: string | null;
   description?: string | null;
-  categories?: (number | Category)[] | null;
-  subcategories?: (number | Subcategory)[] | null;
-  tags?: (number | Tag)[] | null;
-  replaces?: (number | ReplacedProduct)[] | null;
-  producedIn?: (number | null) | Country;
-  availableIn?: (number | Country)[] | null;
+  producedBy?: (number | null) | Brand;
   link?: string | null;
   logo?: (number | null) | Media;
-  producedBy?: (number | null) | Brand;
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "replaced-products".
- */
-export interface ReplacedProduct {
-  id: number;
-  name?: string | null;
-  description?: string | null;
-  tags?: (number | Category)[] | null;
-  logo?: (number | null) | Media;
   categories?: (number | Category)[] | null;
-  'replaced-by'?: {
-    docs?: (number | EuProduct)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "countries".
- */
-export interface Country {
-  id: number;
-  name?: string | null;
-  producedProducts?: {
-    docs?: (number | EuProduct)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  flag?: string | null;
+  subcategories?: (number | Subcategory)[] | null;
+  replaces?: (number | ReplacedProduct)[] | null;
+  tags?: (number | Tag)[] | null;
+  producedIn?: (number | null) | Country;
+  availableIn?: (number | Country)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -806,6 +754,75 @@ export interface Company {
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "replaced-products".
+ */
+export interface ReplacedProduct {
+  id: number;
+  name?: string | null;
+  description?: string | null;
+  tags?: (number | Category)[] | null;
+  logo?: (number | null) | Media;
+  categories?: (number | Category)[] | null;
+  'replaced-by'?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countries".
+ */
+export interface Country {
+  id: number;
+  name?: string | null;
+  producedProducts?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  flag?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1274,6 +1291,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
+  subcategories?: T;
   slug?: T;
   slugLock?: T;
   parent?: T;
@@ -1294,6 +1312,8 @@ export interface CategoriesSelect<T extends boolean = true> {
  */
 export interface SubcategoriesSelect<T extends boolean = true> {
   name?: T;
+  mainCategory?: T;
+  products?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
@@ -1333,15 +1353,15 @@ export interface UsersSelect<T extends boolean = true> {
 export interface EuProductsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
-  categories?: T;
-  subcategories?: T;
-  tags?: T;
-  replaces?: T;
-  producedIn?: T;
-  availableIn?: T;
+  producedBy?: T;
   link?: T;
   logo?: T;
-  producedBy?: T;
+  categories?: T;
+  subcategories?: T;
+  replaces?: T;
+  tags?: T;
+  producedIn?: T;
+  availableIn?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;
