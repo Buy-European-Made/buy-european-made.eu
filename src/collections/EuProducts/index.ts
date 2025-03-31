@@ -24,68 +24,98 @@ export const EuProducts: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
-    },
-    {
-      name: 'description',
-      type: 'text',
-    },
-    {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
-      hasMany: true
-    },
-    {
-      name: 'subcategories',
-      type: 'relationship',
-      relationTo: 'subcategories',
-      hasMany: true
-    },
-    {
-      name: 'tags',
-      type: 'relationship',
-      relationTo: 'tags',
-      hasMany: true,
-    },
-    {
-      name: 'replaces',
-      type: 'relationship',
-      relationTo: 'replaced-products',
-      hasMany: true,
-      filterOptions: ({ siblingData }) => {
-        return {
-          categories: {
-            in: siblingData.categories
-          }
+      type: 'tabs',
+      tabs: [
+        {
+          label: 'General',
+          description: 'General information about the product',
+          fields: [
+
+            {
+              name: 'name',
+              type: 'text',
+            },
+            {
+              name: 'description',
+              type: 'text',
+            },
+            {
+              name: 'replaces',
+              type: 'relationship',
+              relationTo: 'replaced-products',
+              hasMany: true,
+              filterOptions: ({ siblingData }) => {
+                return {
+                  categories: {
+                    in: siblingData.categories
+                  }
+                }
+              }
+            },
+            {
+              name: 'producedBy',
+              type: 'relationship',
+              relationTo: 'brands',
+            },
+            {
+              name: 'link',
+              type: 'text',
+            },
+            {
+              name: 'logo',
+              type: 'upload',
+              relationTo: 'media',
+            },
+          ]
+        },
+        {
+          label: 'Categories and tags',
+          fields: [
+            {
+              name: 'categories',
+              type: 'relationship',
+              relationTo: 'categories',
+              hasMany: true
+            },
+            {
+              name: 'subcategories',
+              type: 'relationship',
+              relationTo: 'subcategories',
+              hasMany: true,
+              filterOptions: ({ data, siblingData }) => {
+                return {
+                  'data.categories': {
+                    equals: 'siblingData.mainCategory'
+                  }
+                }
+              }
+            },
+            {
+              name: 'tags',
+              type: 'relationship',
+              relationTo: 'tags',
+              hasMany: true,
+            },
+          ]
+        },
+        {
+          label: 'Geographical information',
+          fields: [
+
+            {
+              name: 'producedIn',
+              type: 'relationship',
+              relationTo: 'countries',
+            },
+            {
+              name: 'availableIn',
+              type: 'relationship',
+              relationTo: 'countries',
+              hasMany: true
+            },
+          ]
         }
-      }
-    },
-    {
-      name: 'producedIn',
-      type: 'relationship',
-      relationTo: 'countries',
-    },
-    {
-      name: 'availableIn',
-      type: 'relationship',
-      relationTo: 'countries',
-      hasMany: true
-    },
-    {
-      name: 'link',
-      type: 'text',
-    },
-    {
-      name: 'logo',
-      type: 'upload',
-      relationTo: 'media',
-    },
-    {
-      name: 'producedBy',
-      type: 'relationship',
-      relationTo: 'brands',
+      ]
     },
     ...slugField('name'),
   ],
