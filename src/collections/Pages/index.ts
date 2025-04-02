@@ -8,6 +8,7 @@ import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { ProductsListBlock } from '@/blocks/ProductList/config'
+import { FAQ } from '../../blocks/FAQ/config'
 
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
@@ -83,6 +84,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 MediaBlock,
                 FormBlock,
                 ProductsListBlock,
+                FAQ
               ],
               required: true,
               admin: {
