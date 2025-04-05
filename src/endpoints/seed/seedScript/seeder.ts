@@ -26,7 +26,7 @@ const deduReplacedProducts = [...new Set(replacedProducts.flat())]
 console.log('Found replaced products:')
 console.log(deduReplacedProducts)
 
-import type { CollectionSlug, Payload, PayloadRequest, File } from 'payload'
+import type { CollectionSlug, Payload, PayloadRequest, File, BasePayload } from 'payload'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -94,16 +94,53 @@ export const mySeed = async ({
   //   },
   // })
 
+  payload.logger.info(`— Seeding categories..`)
+  const categoryMap = await seedCategories(payload, dbData)
+
+  payload.logger.info(`— Seeding countries..`)
+  const countryMap = await seedCountries(payload, dbData)
+
+  payload.logger.info(`— Seeding products...`)
+
+  const prodPromises = dbData.map((product: ImportProduct) => {
+    console.log('creating product:', product)
+    const categoryIndex: number = categoryMap.get(product.categories)!
+    const producedIn: number[] = []
+    if (product.producedIn?.includes(',')) {
+      product.producedIn.split(',').forEach((s: string) => producedIn.push(countryMap.get(s)!))
+    } else {
+      producedIn.push(countryMap.get(product.producedIn)!)
+    }
+
+    return payload.create({
+      collection: 'eu-products',
+      data: {
+        name: product.name,
+        categories: [categoryIndex],
+        producedIn: producedIn,
+        description: product.description,
+      },
+    })
+  })
+  const prodResult = await Promise.all(prodPromises)
+  console.log(prodResult)
+
+  payload.logger.info('Seeded database successfully!')
+}
+
+async function seedCategories(
+  payload: BasePayload,
+  dbData: ImportProduct[],
+): Promise<Map<string, number>> {
   const categories: string[] = dbData.map((product: ImportProduct) => {
     return product.categories
   })
   const deduCategories = [...new Set(categories)]
-  console.log('Found categories:')
-  console.log(deduCategories)
 
   const categoryMap: Map<string, number> = new Map<string, number>()
   const categoriesPromises = deduCategories.map((cat, index) => {
     categoryMap.set(cat, index)
+    // TODO can we remove the ID?
     const result = payload.create({
       collection: 'categories',
       data: { id: index, name: cat },
@@ -115,10 +152,15 @@ export const mySeed = async ({
     categoryMap.set(c.name, c.id)
   })
   console.log('Category map: ', categoryMap)
+  return categoryMap
+}
 
-  payload.logger.info(`— Seeding countries..`)
-
+async function seedCountries(
+  payload: BasePayload,
+  dbData: ImportProduct[],
+): Promise<Map<string, number>> {
   const countryMap: Map<string, number> = new Map()
+
   const countries: string[] = []
   dbData.forEach((product: ImportProduct) => {
     const producedIn: string = product.producedIn
@@ -144,34 +186,7 @@ export const mySeed = async ({
     countryMap.set(c.name, c.id)
   })
   console.log('Countries map: ', countryMap)
-
-  payload.logger.info(`— Seeding products...`)
-
-  const prodPromises = dbData.map((product: ImportProduct) => {
-    console.log('creating product:', product)
-    const categoryIndex: number =
-      categoryMap.get(product.categories) || categoryMap.get('Miscellaneous')
-    const producedIn: number[] = []
-    if (product.producedIn?.includes(',')) {
-      product.producedIn.split(',').forEach((s: string) => producedIn.push(countryMap.get(s) || 0))
-    } else {
-      producedIn.push(countryMap.get(product.producedIn) || 0)
-    }
-
-    return payload.create({
-      collection: 'eu-products',
-      data: {
-        name: product.name,
-        categories: [categoryIndex],
-        producedIn: producedIn,
-        description: product.description,
-      },
-    })
-  })
-  const prodResult = await Promise.all(prodPromises)
-  console.log(prodResult)
-
-  payload.logger.info('Seeded database successfully!')
+  return countryMap
 }
 
 async function fetchFileByURL(url: string): Promise<File> {
