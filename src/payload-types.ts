@@ -667,15 +667,6 @@ export interface Category {
   };
   slug?: string | null;
   slugLock?: boolean | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -712,7 +703,7 @@ export interface EuProduct {
   subcategories?: (number | Subcategory)[] | null;
   replaces?: (number | ReplacedProduct)[] | null;
   tags?: (number | Tag)[] | null;
-  producedIn?: (number | null) | Country;
+  producedIn?: (number | Country)[] | null;
   availableIn?: (number | Country)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -1294,15 +1285,6 @@ export interface CategoriesSelect<T extends boolean = true> {
   subcategories?: T;
   slug?: T;
   slugLock?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
