@@ -132,12 +132,12 @@ async function seedCategories(
   payload: BasePayload,
   dbData: ImportProduct[],
 ): Promise<Map<string, number>> {
+  // get all existing categories and deduplicate
   const categories: string[] = dbData.map((product: ImportProduct) => {
     return product.categories
   })
   const deduCategories = [...new Set(categories)]
 
-  const categoryMap: Map<string, number> = new Map<string, number>()
   const categoriesPromises = deduCategories.map((cat, index) => {
     categoryMap.set(cat, index)
     // TODO can we remove the ID?
@@ -148,6 +148,9 @@ async function seedCategories(
     return result
   })
   const catRes = await Promise.all(categoriesPromises)
+
+  // create a map: category: id
+  const categoryMap: Map<string, number> = new Map<string, number>()
   catRes.forEach((c: Category) => {
     categoryMap.set(c.name, c.id)
   })
@@ -161,6 +164,7 @@ async function seedCountries(
 ): Promise<Map<string, number>> {
   const countryMap: Map<string, number> = new Map()
 
+  // get all countries included in the existing products and deduplicate
   const countries: string[] = []
   dbData.forEach((product: ImportProduct) => {
     const producedIn: string = product.producedIn
@@ -170,10 +174,8 @@ async function seedCountries(
     }
     countries.push(producedIn)
   })
-
   const deduCountries = [...new Set(countries.flat())]
-  console.log('Found countries:')
-  console.log(deduCountries)
+
   const countriesPromises = deduCountries.map((country, index) => {
     const result = payload.create({
       collection: 'countries',
@@ -182,6 +184,8 @@ async function seedCountries(
     return result
   })
   const countryRes = await Promise.all(countriesPromises)
+
+  // crate a map of type: "country": id
   countryRes.forEach((c: Country) => {
     countryMap.set(c.name, c.id)
   })
