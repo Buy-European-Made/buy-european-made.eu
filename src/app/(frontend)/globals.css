@@ -101,3 +101,18 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+
+/* global for tabCard scroll */
+.tab-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.tab-container::-webkit-scrollbar-thumb {
+  background: white;
+  border-radius: 4px;
+}
+
+.tab-container::-webkit-scrollbar-track {
+  background: transparent;
+}

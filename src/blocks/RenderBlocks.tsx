@@ -11,6 +11,7 @@ import { FAQBlock } from './FAQ/Component'
 import { TeamBlock } from './Team/Component'
 import { BannerBlock } from './Banner/Component'
 import { StatsBlock } from './Stats/Component'
+import { TabCards } from './TabCards/Component'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -24,6 +25,7 @@ const blockComponents = {
   // TODO: remove the whole block component if not used
   banner: BannerBlock,
   stats: StatsBlock,
+  tabCards: TabCards
 }
 
 export const RenderBlocks: React.FC<{
