@@ -239,7 +239,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock | TabCards)[];
   meta?: {
     title?: string | null;
     /**
@@ -714,6 +714,51 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards".
+ */
+export interface TabCards {
+  color?: ('eu-yellow' | 'eu-blue') | null;
+  columns?:
+    | {
+        title?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        text?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tabCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1159,6 +1204,7 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         productsList?: T | ProductsListSelect<T>;
         faq?: T | FAQBlockSelect<T>;
+        tabCards?: T | TabCardsSelect<T>;
       };
   meta?:
     | T
@@ -1263,6 +1309,22 @@ export interface FAQBlockSelect<T extends boolean = true> {
     | {
         question?: T;
         answer?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards_select".
+ */
+export interface TabCardsSelect<T extends boolean = true> {
+  color?: T;
+  columns?:
+    | T
+    | {
+        title?: T;
+        text?: T;
         id?: T;
       };
   id?: T;

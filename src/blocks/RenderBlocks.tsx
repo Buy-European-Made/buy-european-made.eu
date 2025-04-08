@@ -8,6 +8,7 @@ import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ProductsListBlock } from './ProductList/Component'
 import { FAQBlock } from './FAQ/Component'
+import { TabCards } from './TabCards/Component'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -16,7 +17,8 @@ const blockComponents = {
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
   productsList: ProductsListBlock,
-  faq: FAQBlock
+  faq: FAQBlock,
+  tabCards: TabCards
 }
 
 export const RenderBlocks: React.FC<{
