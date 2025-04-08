@@ -16,13 +16,13 @@ const Accordion: React.FC = ({ question, answer, isOpen, onToggle }) => {
 
   return (
     <>
-      <div className="max-w-3xl m-auto">
+      <div className="m-auto">
         <div
-          className="p-4 cursor-pointer flex justify-between bg-slate-100"
+          className="p-4 cursor-pointer flex items-center justify-between bg-slate-100"
           onClick={onToggle}
         >
           <RichText className="m-0" data={question} />
-          {isOpen ? <p>-</p> : <p>+</p>}
+          <p className="text-eu-yellow font-bold text-lg">{isOpen ? "-" : "+"}</p>
         </div>
         <div
           className="overflow-hidden transition-max-height duration-300 ease-in-out"
