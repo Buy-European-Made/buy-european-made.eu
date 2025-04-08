@@ -677,7 +677,7 @@ export interface Category {
 export interface Subcategory {
   id: number;
   name: string;
-  mainCategory: number | Category;
+  mainCategory: (number | Category)[];
   products?: {
     docs?: (number | EuProduct)[];
     hasNextPage?: boolean;

@@ -11,12 +11,13 @@ export const ReplacedProducts: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    useAsTitle: 'name'
+    useAsTitle: 'name',
   },
   fields: [
     {
       name: 'name',
       type: 'text',
+      unique: true,
     },
     {
       name: 'description',
@@ -44,7 +45,7 @@ export const ReplacedProducts: CollectionConfig = {
       type: 'join',
       collection: 'eu-products',
       on: 'replaces',
-    }
+    },
   ],
   versions: {
     drafts: {
@@ -56,4 +57,3 @@ export const ReplacedProducts: CollectionConfig = {
     maxPerDoc: 50,
   },
 }
-
