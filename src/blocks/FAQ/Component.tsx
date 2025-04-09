@@ -14,8 +14,8 @@ export const FAQBlock: React.FC<FAQBlockProps>= ({title, columns}) => {
   };
 
   return (
-    <div className="container">
-      <RichText className="m-0" data={title} />
+    <div className="container max-w-4xl">
+      <RichText className="max-w-[100%] text-center py-4" data={title} />
       {columns.map((item, index) => (
         <Accordion 
           key={index} 
