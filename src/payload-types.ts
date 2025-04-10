@@ -202,7 +202,7 @@ export interface Page {
   id: number;
   title: string;
   hero: {
-    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact' | 'inputHero';
     richText?: {
       root: {
         type: string;
@@ -239,7 +239,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock | HeroBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -714,31 +714,6 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBlock".
- */
-export interface HeroBlock {
-  title?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  imageUrl?: (number | null) | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'hero';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1184,7 +1159,6 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         productsList?: T | ProductsListSelect<T>;
         faq?: T | FAQBlockSelect<T>;
-        hero?: T | HeroBlockSelect<T>;
       };
   meta?:
     | T
@@ -1291,16 +1265,6 @@ export interface FAQBlockSelect<T extends boolean = true> {
         answer?: T;
         id?: T;
       };
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "HeroBlock_select".
- */
-export interface HeroBlockSelect<T extends boolean = true> {
-  title?: T;
-  imageUrl?: T;
   id?: T;
   blockName?: T;
 }
