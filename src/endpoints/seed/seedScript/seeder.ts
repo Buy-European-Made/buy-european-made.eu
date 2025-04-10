@@ -102,12 +102,13 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
   });
 
 
+  console.log("..creating logos..")
   const logosPromises = [...logos.keys()].map(async (logo) => {
     let file;
     try {
       file = await fetchFileByURL(logo, 5)
     } catch (error) {
-      console.error("Unable to fetch url: ", logo)
+      console.error(`Unable to fetch url ${logo} after all retries.`)
       return
     }
     return payload.create({
@@ -136,6 +137,7 @@ async function seedCategories(
     categories.add(product.categories)
   })
 
+  console.log("..creating categories..")
   const categoriesPromises = [...categories].map((cat) => {
     return payload.create({
       collection: 'categories',
@@ -180,8 +182,9 @@ async function seedSubcategories(
     }
   })
 
-  console.log('Subcategory map: ', mapSubcategoryCategory)
+  console.log('SubcategoryToCategory map: ', mapSubcategoryCategory)
 
+  console.log('..creating subcategories..')
   const categoriesPromises = [...subcategories].map((subcat: string) => {
     const mainCategories: Set<number | null> =
       mapSubcategoryCategory.get(subcat) === undefined
@@ -225,6 +228,7 @@ async function seedCountries(
     countries.add(producedIn)
   })
 
+  console.log('..creating countries..')
   const countriesPromises = [...countries].map((country) => {
     return payload.create({
       collection: 'countries',
@@ -252,6 +256,8 @@ async function seedReplacedProducts(
   let replaces: Set<string>
   const createdProducts: string[] = []
   const replacedProdPromise: Promise<ReplacedProduct>[] = []
+
+  console.log('...creating replaced-products...')
   dbData.forEach((prod: ImportProduct) => {
     replaces = new Set()
     if (prod.replaces.includes(',')) {
@@ -280,8 +286,8 @@ async function seedReplacedProducts(
   })
 
   const prodResult = (await Promise.all(replacedProdPromise)).filter(el => el !== undefined)
-  prodResult.forEach((r: ReplacedProduct | null) => {
-    replacedProductMap.set(r.name!, r.id)
+  prodResult.forEach((r: ReplacedProduct) => {
+    replacedProductMap.set(r.name, r.id)
   })
   console.log('ReplacedProducts map: ', replacedProductMap)
   return replacedProductMap
@@ -296,6 +302,8 @@ async function seedEuProducts(
   countryMap: Map<string, number>,
   replacedProdMap: Map<string, number>,
 ) {
+
+  console.log('...creating eu-products...')
   const prodPromises = dbData.map((product: ImportProduct) => {
     //logo
     const logoIndex: number | undefined = logoMap.get(product.logo)
@@ -355,12 +363,10 @@ async function fetchFileByURL(url: string, retries: number = 3, delay: number = 
       });
 
       if (!res.ok) {
-        console.log(`Failed to fetch file from ${url}, status: ${res.status}, retries left: ${retries - attempt - 1}`);
         if (attempt < retries - 1) {
           await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
           continue; // Skip to the next iteration of the loop
         }
-        throw new Error(`${url} cannot be downloaded`);
       }
 
       const data = await res.arrayBuffer();
@@ -372,12 +378,10 @@ async function fetchFileByURL(url: string, retries: number = 3, delay: number = 
         size: data.byteLength,
       };
     } catch (error) {
-      console.error(`Error fetching file from ${url}:`, error);
       if (attempt < retries - 1) {
         await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
         continue; // Skip to the next iteration of the loop
       }
-      throw new Error(`${url} cannot be downloaded after ${retries} attempts`);
     }
   }
   throw new Error(`${url} cannot be downloaded after ${retries} attempts`);
