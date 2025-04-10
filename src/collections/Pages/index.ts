@@ -23,6 +23,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { HeroBlock } from '@/blocks/Hero/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -84,7 +85,8 @@ export const Pages: CollectionConfig<'pages'> = {
                 MediaBlock,
                 FormBlock,
                 ProductsListBlock,
-                FAQ
+                FAQ,
+                HeroBlock
               ],
               required: true,
               admin: {
