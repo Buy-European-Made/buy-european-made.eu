@@ -77,7 +77,7 @@ export const EuProducts: CollectionConfig = {
               type: 'relationship',
               relationTo: 'replaced-products',
               hasMany: true,
-              /*               filterOptions: ({ siblingData }) => {
+              /* filterOptions: ({ siblingData }) => {
                 return {
                   categories: {
                     in: siblingData.categories,

@@ -1,7 +1,7 @@
-import { Category, Country, ReplacedProduct, Subcategory } from '@/payload-types'
+import { Category, Country, Media, ReplacedProduct, Subcategory } from '@/payload-types'
 import dbData from './db.json' with { type: 'json' }
 
-type ImportProduct = {
+export type ImportProduct = {
   name: string
   link: string
   categories: string
@@ -12,6 +12,7 @@ type ImportProduct = {
   summaryShort: string
   logo: string
 }
+
 // TODO replace list that are deduplicated with set directly
 // TODO remove tsnode, it is not needed anymore
 console.log('seeding started')
@@ -32,6 +33,7 @@ const collections: CollectionSlug[] = [
   'eu-products',
   'replaced-products',
   'countries',
+  'media'
 ]
 
 // const globals: GlobalSlug[] = ['header', 'footer']
@@ -93,6 +95,9 @@ export const mySeed = async ({
   //   },
   // })
 
+  payload.logger.info(`— Seeding logos..`)
+  const logoMap = await seedLogos(payload, dbData)
+
   payload.logger.info(`— Seeding categories..`)
   const categoryMap = await seedCategories(payload, dbData)
 
@@ -105,24 +110,53 @@ export const mySeed = async ({
   payload.logger.info(`— Seeding replaced products..`)
   const replacedProdMap = await seedReplacedProducts(payload, dbData, categoryMap)
 
-  payload.logger.info(`— Seeding products...`)
-  await seedEuProducts(payload, dbData, categoryMap, subcategoryMap, countryMap, replacedProdMap)
+  payload.logger.info(`— Seeding eu-products...`)
+  await seedEuProducts(payload, dbData, logoMap, categoryMap, subcategoryMap, countryMap, replacedProdMap)
 
   payload.logger.info('Seeded database successfully!')
+}
+
+async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
+  const logos: Map<string, number | undefined> = new Map()
+  dbData.forEach((element: ImportProduct) => {
+    logos.set(element.logo, undefined)
+  });
+
+  const logosPromises = [...logos.keys()].map(async (logo) => {
+    let file;
+    try {
+      file = await fetchFileByURL(logo)
+    } catch {
+      console.error("Unable to fetch url: ", logo)
+      return
+    }
+    return payload.create({
+      collection: 'media',
+      data: { alt: logo },
+      file: file
+    })
+  })
+  const logosRes = await Promise.all(logosPromises)
+
+  // console.log("LogoRes", logosRes)
+  // create a map: category: id
+  logosRes.filter((m: Media | undefined): m is Media => m !== undefined && typeof m.alt === 'string').forEach((m: Media) => {
+    logos.set(m.alt, m.id)
+  })
+  console.log('Logos map: ', logos)
+  return logos
 }
 
 async function seedCategories(
   payload: BasePayload,
   dbData: ImportProduct[],
 ): Promise<Map<string, number>> {
-  // get all existing categories and deduplicate
   const categories = new Set()
   dbData.forEach((product: ImportProduct) => {
     categories.add(product.categories)
   })
 
   const categoriesPromises = [...categories].map((cat) => {
-    // TODO can we remove the ID?
     return payload.create({
       collection: 'categories',
       data: { name: cat },
@@ -275,12 +309,15 @@ async function seedReplacedProducts(
 async function seedEuProducts(
   payload: BasePayload,
   dbData: ImportProduct[],
+  logoMap: Map<string, number | undefined>,
   categoryMap: Map<string, number>,
   subcategoryMap: Map<string, number>,
   countryMap: Map<string, number>,
   replacedProdMap: Map<string, number>,
 ) {
   const prodPromises = dbData.map((product: ImportProduct) => {
+    //logo
+    const logoIndex: number | undefined = logoMap.get(product.logo)
     // category
     const categoryIndex: number | undefined = categoryMap.get(product.categories)
     const categoryIds = categoryIndex !== undefined ? [categoryIndex] : null
@@ -320,7 +357,8 @@ async function seedEuProducts(
         availableIn: producedIn, // this is just for testing, this value is not present in the current db
         description: product.description,
         replaces: replacedProds,
-      },
+        logo: logoIndex,
+      }
     })
   })
   await Promise.all(prodPromises)
