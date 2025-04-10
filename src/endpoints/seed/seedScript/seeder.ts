@@ -358,6 +358,7 @@ async function seedEuProducts(
         description: product.description,
         replaces: replacedProds,
         logo: logoIndex,
+        link: product.link
       }
     })
   })
