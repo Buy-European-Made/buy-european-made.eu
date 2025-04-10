@@ -1,7 +1,7 @@
 import { Category, Country, Media, ReplacedProduct, Subcategory } from '@/payload-types'
 import dbData from './db.json' with { type: 'json' }
 
-export type ImportProduct = {
+type ImportProduct = {
   name: string
   link: string
   categories: string
@@ -95,6 +95,7 @@ export const mySeed = async ({
   //   },
   // })
 
+  // some logos fail to be fetched
   payload.logger.info(`— Seeding logos..`)
   const logoMap = await seedLogos(payload, dbData)
 
@@ -104,6 +105,7 @@ export const mySeed = async ({
   payload.logger.info(`— Seeding subcategories..`)
   const subcategoryMap = await seedSubcategories(payload, dbData, categoryMap)
 
+  // TODO there are products for which producedIn == ""
   payload.logger.info(`— Seeding countries..`)
   const countryMap = await seedCountries(payload, dbData)
 
@@ -122,8 +124,11 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
     logos.set(element.logo, undefined)
   });
 
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   const logosPromises = [...logos.keys()].map(async (logo) => {
     let file;
+    sleep(500)
     try {
       file = await fetchFileByURL(logo)
     } catch {
