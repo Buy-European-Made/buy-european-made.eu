@@ -13,8 +13,6 @@ type ImportProduct = {
   logo: string
 }
 
-// TODO replace list that are deduplicated with set directly
-// TODO remove tsnode, it is not needed anymore
 console.log('seeding started')
 
 let replacedProducts: string[] = []
@@ -36,13 +34,7 @@ const collections: CollectionSlug[] = [
   'media'
 ]
 
-// const globals: GlobalSlug[] = ['header', 'footer']
-//
-// // Next.js revalidation errors are normal when seeding the database without a server running
-// // i.e. running `yarn seed` locally instead of using the admin UI within an active app
-// // The app is not running to revalidate the pages and so the API routes are not available
-// // These error messages can be ignored: `Error hitting revalidate route for...`
-export const mySeed = async ({
+export const seed = async ({
   payload,
   req,
 }: {
@@ -57,22 +49,6 @@ export const mySeed = async ({
   // the custom `/api/seed` endpoint does not
   payload.logger.info(`— Clearing collections and globals...`)
 
-  // clear the database
-  // await Promise.all(
-  //   globals.map((global) =>
-  //     payload.updateGlobal({
-  //       slug: global,
-  //       data: {
-  //         navItems: [],
-  //       },
-  //       depth: 0,
-  //       context: {
-  //         disableRevalidate: true,
-  //       },
-  //     }),
-  //   ),
-  // )
-
   await Promise.all(
     collections.map((collection) => payload.db.deleteMany({ collection, req, where: {} })),
   )
@@ -83,6 +59,7 @@ export const mySeed = async ({
       .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
   )
 
+  // TODO: work on the user table as well
   // payload.logger.info(`— Seeding demo author and user...`)
 
   // await payload.delete({
@@ -95,7 +72,7 @@ export const mySeed = async ({
   //   },
   // })
 
-  // some logos fail to be fetched
+  // TODO: check if we can skip the sets and use the final map directly
   payload.logger.info(`— Seeding logos..`)
   const logoMap = await seedLogos(payload, dbData)
 
@@ -124,14 +101,12 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
     logos.set(element.logo, undefined)
   });
 
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
   const logosPromises = [...logos.keys()].map(async (logo) => {
     let file;
-    sleep(500)
     try {
-      file = await fetchFileByURL(logo)
-    } catch {
+      file = await fetchFileByURL(logo, 5)
+    } catch (error) {
       console.error("Unable to fetch url: ", logo)
       return
     }
@@ -141,12 +116,12 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
       file: file
     })
   })
-  const logosRes = await Promise.all(logosPromises)
+  const logosRes = (await Promise.all(logosPromises)).filter((el) => el !== undefined)
 
-  // console.log("LogoRes", logosRes)
-  // create a map: category: id
-  logosRes.filter((m: Media | undefined): m is Media => m !== undefined && typeof m.alt === 'string').forEach((m: Media) => {
-    logos.set(m.alt, m.id)
+  logosRes.forEach((m: Media) => {
+    if (typeof m.alt === 'string') {
+      logos.set(m.alt, m.id)
+    }
   })
   console.log('Logos map: ', logos)
   return logos
@@ -156,7 +131,7 @@ async function seedCategories(
   payload: BasePayload,
   dbData: ImportProduct[],
 ): Promise<Map<string, number>> {
-  const categories = new Set()
+  const categories: Set<string> = new Set()
   dbData.forEach((product: ImportProduct) => {
     categories.add(product.categories)
   })
@@ -167,7 +142,7 @@ async function seedCategories(
       data: { name: cat },
     })
   })
-  const catRes = await Promise.all(categoriesPromises)
+  const catRes = (await Promise.all(categoriesPromises)).filter((el) => el !== undefined)
 
   // create a map: category: id
   const categoryMap: Map<string, number> = new Map()
@@ -240,7 +215,7 @@ async function seedCountries(
   const countryMap: Map<string, number> = new Map()
 
   // get all countries included in the existing products and deduplicate
-  const countries = new Set()
+  const countries: Set<string> = new Set()
   dbData.forEach((product: ImportProduct) => {
     const producedIn: string = product.producedIn
     if (producedIn?.includes(',')) {
@@ -256,11 +231,13 @@ async function seedCountries(
       data: { name: country },
     })
   })
-  const countryRes = await Promise.all(countriesPromises)
+  const countryRes = (await Promise.all(countriesPromises)).filter(el => el !== undefined)
 
   // crate a map of type: "country": id
   countryRes.forEach((c: Country) => {
-    countryMap.set(c.name, c.id)
+    if (typeof c.name === 'string') {
+      countryMap.set(c.name, c.id)
+    }
   })
   console.log('Countries map: ', countryMap)
   return countryMap
@@ -302,9 +279,8 @@ async function seedReplacedProducts(
     })
   })
 
-  const prodResult = await Promise.all(replacedProdPromise)
+  const prodResult = (await Promise.all(replacedProdPromise)).filter(el => el !== undefined)
   prodResult.forEach((r: ReplacedProduct | null) => {
-    if (r === null || r === undefined) return
     replacedProductMap.set(r.name!, r.id)
   })
   console.log('ReplacedProducts map: ', replacedProductMap)
@@ -370,22 +346,39 @@ async function seedEuProducts(
   await Promise.all(prodPromises)
 }
 
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
+async function fetchFileByURL(url: string, retries: number = 3, delay: number = 1000): Promise<File> {
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        credentials: 'include',
+        method: 'GET',
+      });
 
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
+      if (!res.ok) {
+        console.log(`Failed to fetch file from ${url}, status: ${res.status}, retries left: ${retries - attempt - 1}`);
+        if (attempt < retries - 1) {
+          await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
+          continue; // Skip to the next iteration of the loop
+        }
+        throw new Error(`${url} cannot be downloaded`);
+      }
+
+      const data = await res.arrayBuffer();
+
+      return {
+        name: url.split('/').pop() || `file-${Date.now()}`,
+        data: Buffer.from(data),
+        mimetype: `image/${url.split('.').pop()}`,
+        size: data.byteLength,
+      };
+    } catch (error) {
+      console.error(`Error fetching file from ${url}:`, error);
+      if (attempt < retries - 1) {
+        await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
+        continue; // Skip to the next iteration of the loop
+      }
+      throw new Error(`${url} cannot be downloaded after ${retries} attempts`);
+    }
   }
-
-  const data = await res.arrayBuffer()
-
-  return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
-    data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
-    size: data.byteLength,
-  }
+  throw new Error(`${url} cannot be downloaded after ${retries} attempts`);
 }
