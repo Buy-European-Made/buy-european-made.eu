@@ -745,7 +745,7 @@ export interface Category {
 export interface Subcategory {
   id: number;
   name: string;
-  mainCategory: number | Category;
+  mainCategory: (number | Category)[];
   products?: {
     docs?: (number | EuProduct)[];
     hasNextPage?: boolean;
@@ -771,7 +771,7 @@ export interface EuProduct {
   subcategories?: (number | Subcategory)[] | null;
   replaces?: (number | ReplacedProduct)[] | null;
   tags?: (number | Tag)[] | null;
-  producedIn?: (number | null) | Country;
+  producedIn?: (number | Country)[] | null;
   availableIn?: (number | Country)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
