@@ -21,7 +21,7 @@ const Accordion: React.FC = ({ question, answer, isOpen, onToggle }) => {
           className="p-4 cursor-pointer flex items-center justify-between bg-slate-100"
           onClick={onToggle}
         >
-          <RichText className="m-0" data={question} />
+          <RichText className="m-0 text-black" data={question} />
           <p className="text-eu-yellow font-bold text-lg">{isOpen ? "-" : "+"}</p>
         </div>
         <div
