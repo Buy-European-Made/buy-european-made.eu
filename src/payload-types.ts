@@ -719,7 +719,7 @@ export interface FAQBlock {
 export interface Category {
   id: number;
   name: string;
-  subcategories: {
+  subcategories?: {
     docs?: (number | Subcategory)[];
     hasNextPage?: boolean;
     totalDocs?: number;

@@ -1,5 +1,6 @@
+import type { CollectionSlug, Payload, PayloadRequest, File, BasePayload } from 'payload'
 import { Category, Country, Media, ReplacedProduct, Subcategory } from '@/payload-types'
-import dbData from './db.json' with { type: 'json' }
+import data from './db.json' with { type: 'json' }
 
 type ImportProduct = {
   name: string
@@ -8,22 +9,11 @@ type ImportProduct = {
   replaces: string
   subcategory: string
   producedIn: string
+  companyRegistrationCountry: string
   description: string
   summaryShort: string
   logo: string
 }
-
-console.log('seeding started')
-
-let replacedProducts: string[] = []
-replacedProducts = dbData.map((product: ImportProduct) => {
-  if (product.replaces?.includes(',')) {
-    replacedProducts = [...product.replaces?.split(','), ...replacedProducts]
-  }
-  return product.replaces || ''
-})
-
-import type { CollectionSlug, Payload, PayloadRequest, File, BasePayload } from 'payload'
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -42,6 +32,8 @@ export const seed = async ({
   req: PayloadRequest
 }): Promise<void> => {
   payload.logger.info('Seeding database...')
+
+  const dbData: ImportProduct[] = data as ImportProduct[]
 
   // we need to clear the media directory before seeding
   // as well as the collections and globals
@@ -226,10 +218,17 @@ async function seedCountries(
       return
     }
     countries.add(producedIn)
+
+    const companyRegistrationCountry: string = product.companyRegistrationCountry
+    if (companyRegistrationCountry?.includes(',')) {
+      companyRegistrationCountry?.split(',').forEach((el) => countries.add(el))
+      return
+    }
+    countries.add(companyRegistrationCountry)
   })
 
   console.log('..creating countries..')
-  const countriesPromises = [...countries].map((country) => {
+  const countriesPromises = [...countries].filter((c: string) => c.trim() !== '').map((country) => {
     return payload.create({
       collection: 'countries',
       data: { name: country },
@@ -287,6 +286,9 @@ async function seedReplacedProducts(
 
   const prodResult = (await Promise.all(replacedProdPromise)).filter(el => el !== undefined)
   prodResult.forEach((r: ReplacedProduct) => {
+    if (r.name === undefined || r.name === null) {
+      throw new Error(`Got empty name for: ${r} `)
+    }
     replacedProductMap.set(r.name, r.id)
   })
   console.log('ReplacedProducts map: ', replacedProductMap)
@@ -305,8 +307,10 @@ async function seedEuProducts(
 
   console.log('...creating eu-products...')
   const prodPromises = dbData.map((product: ImportProduct) => {
+
     //logo
     const logoIndex: number | undefined = logoMap.get(product.logo)
+
     // category
     const categoryIndex: number | undefined = categoryMap.get(product.categories)
     const categoryIds = categoryIndex !== undefined ? [categoryIndex] : null
@@ -318,10 +322,16 @@ async function seedEuProducts(
     // produced in
     const producedIn: number[] = []
     if (product.producedIn?.includes(',')) {
-      product.producedIn.split(',').forEach((s: string) => producedIn.push(countryMap.get(s)!))
+      product.producedIn.split(',').filter((c: string) => c.trim() !== '').forEach((s: string) => producedIn.push(countryMap.get(s)!))
     } else {
-      producedIn.push(countryMap.get(product.producedIn)!)
+      if (product.producedIn.trim() === "") {
+        console.log(`product ${product.name} has an empty producedIn field, using companyRegistrationCountry of ${product.companyRegistrationCountry}`)
+        producedIn.push(countryMap.get(product.companyRegistrationCountry)!)
+      } else {
+        producedIn.push(countryMap.get(product.producedIn)!)
+      }
     }
+
     // replaced product
     const replacedProds: number[] = []
     if (product.replaces?.includes(',')) {
@@ -335,6 +345,7 @@ async function seedEuProducts(
       const foundElement = replacedProdMap.get(product.replaces)
       if (foundElement) replacedProds.push(foundElement)
     }
+
 
     return payload.create({
       collection: 'eu-products',
