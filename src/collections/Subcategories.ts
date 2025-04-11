@@ -28,6 +28,7 @@ export const Subcategories: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories',
       required: true,
+      hasMany: true
     },
     {
       name: 'products',
