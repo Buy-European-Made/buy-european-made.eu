@@ -239,7 +239,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock | TeamBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -714,6 +714,26 @@ export interface FAQBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlock".
+ */
+export interface TeamBlock {
+  title: string;
+  subtitle?: string | null;
+  members?:
+    | {
+        image: number | Media;
+        name: string;
+        title: string;
+        quote?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'team';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1159,6 +1179,7 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?: T | FormBlockSelect<T>;
         productsList?: T | ProductsListSelect<T>;
         faq?: T | FAQBlockSelect<T>;
+        team?: T | TeamBlockSelect<T>;
       };
   meta?:
     | T
@@ -1263,6 +1284,25 @@ export interface FAQBlockSelect<T extends boolean = true> {
     | {
         question?: T;
         answer?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TeamBlock_select".
+ */
+export interface TeamBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  members?:
+    | T
+    | {
+        image?: T;
+        name?: T;
+        title?: T;
+        quote?: T;
         id?: T;
       };
   id?: T;

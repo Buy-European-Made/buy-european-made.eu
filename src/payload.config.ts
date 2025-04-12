@@ -196,7 +196,7 @@ export default buildConfig({
     ReplacedProducts,
     Companies,
     Brands,
-    Countries
+    Countries,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
