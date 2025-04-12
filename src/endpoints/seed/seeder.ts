@@ -105,7 +105,7 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
     }
     return payload.create({
       collection: 'media',
-      data: { alt: logo },
+      data: { alt: logo, width: 34, height: 34 },
       file: file
     })
   })
