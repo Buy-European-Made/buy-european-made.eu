@@ -9,6 +9,7 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { ProductsListBlock } from './ProductList/Component'
 import { FAQBlock } from './FAQ/Component'
 import { TeamBlock } from './Team/Component'
+import { StatsBlock } from './Stats/Component'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -19,6 +20,7 @@ const blockComponents = {
   productsList: ProductsListBlock,
   faq: FAQBlock,
   team: TeamBlock,
+  stats: StatsBlock,
 }
 
 export const RenderBlocks: React.FC<{

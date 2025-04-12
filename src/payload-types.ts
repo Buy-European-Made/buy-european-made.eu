@@ -239,7 +239,16 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | FormBlock | ProductsList | FAQBlock | TeamBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | FormBlock
+    | ProductsList
+    | FAQBlock
+    | TeamBlock
+    | StatsBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -734,6 +743,42 @@ export interface TeamBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  title: string;
+  subtitle?: string | null;
+  stats?:
+    | {
+        icon:
+          | 'Activity'
+          | 'AlertCircle'
+          | 'Award'
+          | 'BarChart'
+          | 'CheckCircle'
+          | 'DollarSign'
+          | 'Euro'
+          | 'Heart'
+          | 'Home'
+          | 'Map'
+          | 'ShoppingBag'
+          | 'Star'
+          | 'ThumbsUp'
+          | 'Trophy'
+          | 'Users';
+        number: number;
+        suffix?: string | null;
+        label: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1180,6 +1225,7 @@ export interface PagesSelect<T extends boolean = true> {
         productsList?: T | ProductsListSelect<T>;
         faq?: T | FAQBlockSelect<T>;
         team?: T | TeamBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1303,6 +1349,26 @@ export interface TeamBlockSelect<T extends boolean = true> {
         name?: T;
         title?: T;
         quote?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  stats?:
+    | T
+    | {
+        icon?: T;
+        number?: T;
+        suffix?: T;
+        label?: T;
+        description?: T;
         id?: T;
       };
   id?: T;
