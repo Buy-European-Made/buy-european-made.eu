@@ -35,6 +35,7 @@ export const TabCards: Block = {
         {
           name: 'text',
           type: 'richText',
+          maxLength: 20,
           editor: lexicalEditor({
             features: ({ rootFeatures }) => {
               return [
