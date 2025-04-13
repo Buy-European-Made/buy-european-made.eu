@@ -6,6 +6,7 @@ import { Media } from '@/components/Media'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
 import { H1, H2, H3, H4 } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
+import { Link } from '@payloadcms/ui';
 
 interface ProductCardProps {
   product: EuProduct;
@@ -25,7 +26,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                 imgClassName='w-10 h-10 border border-border rounded-full'
                 resource={product.logo}
               />
-              <H2 className='ml-2 pb-0'>
+              <H2 className='mx-2 pb-0 flex-wrap'>
                 {product.name}
               </H2>
             </div>
@@ -42,13 +43,13 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
           </div>
         </CardHeader>
 
-
         <div className='flex flex-col justify-between h-full gap-2'>
           <CardDescription className='text-ellipsis overflow-hidden h-fit p-6' >
             {product.description}
           </CardDescription>
           <div className='flex flex-col'>
             <CardContent className='flex flex-col justify-end text-xs gap-2'>
+
               {hasCategory && (
                 <div>
                   <div className='flex items-center'>
@@ -110,18 +111,20 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
               )}
             </CardContent>
             <CardFooter className='flex gap-4 mt-3'>
-              <Button>
-                More details
-              </Button>
-
-              <Button className='border-2 border-gray-800 text-gray-800 bg-transparent dark:text-white dark:border-white'>
-                Visit website
-              </Button>
+              <Link target='_blank' href={`/eu-products/${product.slug}`} >
+                <Button >
+                  More Details
+                </Button>
+              </Link>
+              {product.link &&
+                <Link target='_blank' href={product.link}>
+                  <Button variant={'outline'} className='border-white'>
+                    Visit website
+                  </Button>
+                </Link>
+              }
             </CardFooter>
-
           </div>
-
-
         </div>
       </Card >
 
