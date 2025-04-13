@@ -30,6 +30,10 @@ export const TabCards: Block = {
       fields:[ 
         {
           name: 'title',
+          type: 'text',
+        },
+        {
+          name: 'text',
           type: 'richText',
           editor: lexicalEditor({
             features: ({ rootFeatures }) => {
@@ -41,10 +45,6 @@ export const TabCards: Block = {
               ]
             },
           }),
-        },
-        {
-          name: 'text',
-          type: 'richText',
         },
       ]
     },

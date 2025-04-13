@@ -20,9 +20,9 @@ export const TabCards: React.FC<TabCardsProps> = ({ columns, color }) => {
             <div 
               key={index} 
               onClick={() => changeTabText(index)}
-              className={`whitespace-nowrap flex-1 py-3 text-center cursor-pointer ${activeTab===index?"border-t-4 border-"+color:"transparent hover:border-blue-200"}`}
+              className={`whitespace-nowrap flex-1 p-3 text-center cursor-pointer border-t-4  ${activeTab===index?"border-"+color:"border-transparent hover:border-blue-200"}`}
             >
-              <RichText className="m-0 max-w-[100%] dark:text-black" data={item.title} />
+              <h2 className="m-0 max-w-[100%] dark:text-black">{item.title} </h2>
             </div>
           ))}
         </div>
