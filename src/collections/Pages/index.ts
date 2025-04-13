@@ -24,6 +24,7 @@ import {
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
 import { Team } from '@/blocks/Team/config'
+import { Banner } from '@/blocks/Banner/config'
 import { Stats } from '@/blocks/Stats/config'
 
 export const Pages: CollectionConfig<'pages'> = {
@@ -88,6 +89,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 ProductsListBlock,
                 FAQ,
                 Team,
+                Banner,
                 Stats,
               ],
               required: true,

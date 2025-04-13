@@ -247,6 +247,7 @@ export interface Page {
     | ProductsList
     | FAQBlock
     | TeamBlock
+    | BannerBlock
     | StatsBlock
   )[];
   meta?: {
@@ -655,7 +656,7 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Products list".
+ * via the `definition` "ProductsList".
  */
 export interface ProductsList {
   id?: string | null;
@@ -740,6 +741,31 @@ export interface TeamBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'team';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock".
+ */
+export interface BannerBlock {
+  style: 'info' | 'warning' | 'error' | 'success';
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'banner';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1226,6 +1252,7 @@ export interface PagesSelect<T extends boolean = true> {
         productsList?: T | ProductsListSelect<T>;
         faq?: T | FAQBlockSelect<T>;
         team?: T | TeamBlockSelect<T>;
+        banner?: T | BannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
       };
   meta?:
@@ -1314,11 +1341,11 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "Products list_select".
+ * via the `definition` "ProductsList_select".
  */
-export interface ProductsListSelect {
-  id?: boolean;
-  blockName?: boolean;
+export interface ProductsListSelect<T extends boolean = true> {
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1352,6 +1379,16 @@ export interface TeamBlockSelect<T extends boolean = true> {
         quote?: T;
         id?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerBlock_select".
+ */
+export interface BannerBlockSelect<T extends boolean = true> {
+  style?: T;
+  content?: T;
   id?: T;
   blockName?: T;
 }

@@ -1,7 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
-import { slugField } from '@/fields/slug'
 
 export const Brands: CollectionConfig = {
   slug: 'brands',
@@ -23,20 +22,20 @@ export const Brands: CollectionConfig = {
     },
     {
       name: 'link',
-      type: 'text'
+      type: 'text',
     },
     {
       name: 'produces',
       type: 'join',
       collection: 'eu-products',
       on: 'producedBy',
-      maxDepth: 2
+      maxDepth: 2,
     },
     {
       name: 'ownedBy',
       type: 'join',
       collection: 'companies',
-      on: 'ownBrands'
-    }
+      on: 'ownBrands',
+    },
   ],
 }
