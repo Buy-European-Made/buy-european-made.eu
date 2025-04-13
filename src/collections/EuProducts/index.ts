@@ -77,13 +77,13 @@ export const EuProducts: CollectionConfig = {
               type: 'relationship',
               relationTo: 'replaced-products',
               hasMany: true,
-              filterOptions: (options) => {
-                return {
-                  categories: {
-                    in: (options.siblingData as { categories: string[] }).categories,
-                  },
-                }
-              },
+              // filterOptions: ({ siblingData }) => {
+              //   return {
+              //     categories: {
+              //       in: siblingData.categories
+              //     }
+              //   }
+              // }
             },
             {
               name: 'tags',
@@ -100,6 +100,7 @@ export const EuProducts: CollectionConfig = {
               name: 'producedIn',
               type: 'relationship',
               relationTo: 'countries',
+              hasMany: true,
             },
             {
               name: 'availableIn',

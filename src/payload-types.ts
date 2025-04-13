@@ -248,6 +248,7 @@ export interface Page {
     | FAQBlock
     | TeamBlock
     | BannerBlock
+    | StatsBlock
   )[];
   meta?: {
     title?: string | null;
@@ -768,12 +769,49 @@ export interface BannerBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  title: string;
+  subtitle?: string | null;
+  stats?:
+    | {
+        icon:
+          | 'Activity'
+          | 'AlertCircle'
+          | 'Award'
+          | 'BarChart'
+          | 'CheckCircle'
+          | 'DollarSign'
+          | 'Euro'
+          | 'Heart'
+          | 'Home'
+          | 'Map'
+          | 'ShoppingBag'
+          | 'Star'
+          | 'ThumbsUp'
+          | 'Trophy'
+          | 'Users';
+        statType: 'dynamic' | 'custom';
+        number?: number | null;
+        suffix?: string | null;
+        label: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
   id: number;
   name: string;
-  subcategories: {
+  subcategories?: {
     docs?: (number | Subcategory)[];
     hasNextPage?: boolean;
     totalDocs?: number;
@@ -799,7 +837,7 @@ export interface Category {
 export interface Subcategory {
   id: number;
   name: string;
-  mainCategory: number | Category;
+  mainCategory: (number | Category)[];
   products?: {
     docs?: (number | EuProduct)[];
     hasNextPage?: boolean;
@@ -825,7 +863,7 @@ export interface EuProduct {
   subcategories?: (number | Subcategory)[] | null;
   replaces?: (number | ReplacedProduct)[] | null;
   tags?: (number | Tag)[] | null;
-  producedIn?: (number | null) | Country;
+  producedIn?: (number | Country)[] | null;
   availableIn?: (number | Country)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
@@ -1215,6 +1253,7 @@ export interface PagesSelect<T extends boolean = true> {
         faq?: T | FAQBlockSelect<T>;
         team?: T | TeamBlockSelect<T>;
         banner?: T | BannerBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1350,6 +1389,27 @@ export interface TeamBlockSelect<T extends boolean = true> {
 export interface BannerBlockSelect<T extends boolean = true> {
   style?: T;
   content?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  stats?:
+    | T
+    | {
+        icon?: T;
+        statType?: T;
+        number?: T;
+        suffix?: T;
+        label?: T;
+        description?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }

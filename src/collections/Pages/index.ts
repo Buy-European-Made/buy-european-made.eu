@@ -25,6 +25,7 @@ import {
 } from '@payloadcms/plugin-seo/fields'
 import { Team } from '@/blocks/Team/config'
 import { Banner } from '@/blocks/Banner/config'
+import { Stats } from '@/blocks/Stats/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -89,6 +90,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 FAQ,
                 Team,
                 Banner,
+                Stats,
               ],
               required: true,
               admin: {
