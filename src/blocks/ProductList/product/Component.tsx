@@ -4,7 +4,7 @@ import type { Category, Country, EuProduct, ReplacedProduct, Subcategory } from 
 
 import { Media } from '@/components/Media'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/components/ui/card';
-import { H1, H2, H3, H4 } from '@/components/ui/typography';
+import { H2, H4 } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
 import { Link } from '@payloadcms/ui';
 
@@ -23,8 +23,9 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
           <div className='flex flex-col md:flex-row justify-between'>
             <div className='flex items-center justify-center'>
               <Media
-                imgClassName='w-10 h-10 border border-border rounded-full'
+                imgClassName='w-12 h-12 border border-border rounded-full'
                 resource={product.logo}
+                alt={`${product.name} logo`}
               />
               <H2 className='mx-2 pb-0 flex-wrap'>
                 {product.name}
@@ -79,7 +80,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.subcategories?.map((subcategory: Subcategory | number) => {
                       if (subcategory !== undefined && typeof subcategory !== 'number') {
                         return (
-                          <p key={subcategory.id} className='text-yellow-500 font-medium border-2 border-yellow-500 p-1 rounded'>
+                          <p key={subcategory.id} className='text-yellow-600 font-medium border-2 border-yellow-600 p-1 rounded'>
                             {subcategory.name}
                           </p>
                         );
