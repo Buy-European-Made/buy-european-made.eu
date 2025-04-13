@@ -1,26 +1,10 @@
 import type { StatsBlock as StatsBlockProps } from 'src/payload-types'
 import React from 'react'
 import { Paragraph, H3, H4, Muted } from '@/components/ui/typography'
-import * as LucideIcons from 'lucide-react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Icon } from '@/components/Icon'
 
 type Props = StatsBlockProps
-
-interface LucideIconProps {
-  iconName: string
-  className?: string
-}
-
-export const LucideIcon: React.FC<LucideIconProps> = ({ iconName, className = '' }) => {
-  const icons = LucideIcons as unknown as Record<string, React.FC<{ className?: string }>>
-  const IconComponent = icons[iconName]
-
-  if (IconComponent) {
-    return <IconComponent className={className} />
-  }
-
-  return null
-}
 
 export const StatsBlock: React.FC<Props> = ({ title, subtitle, stats }) => {
   return (
@@ -46,7 +30,7 @@ export const StatsBlock: React.FC<Props> = ({ title, subtitle, stats }) => {
               <div className="flex flex-col items-center">
                 {stat.icon && (
                   <div className="rounded-xl p-3 bg-primary/10 ring-1 ring-primary/20 mb-4">
-                    <LucideIcon iconName={stat.icon} className="w-7 h-7 text-primary" />
+                    <Icon iconName={stat.icon} className="w-7 h-7 text-primary" />
                   </div>
                 )}
                 <div className="text-4xl font-bold tracking-tight">
