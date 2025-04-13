@@ -4,9 +4,7 @@ import config from '@payload-config'
 
 import { ProductCard } from './product/Component'
 
-
 export const ProductsListBlock: React.FC = async () => {
-
   const payload = await getPayload({ config })
   const findResult = await payload.find({ collection: 'eu-products', limit: 100 })
 
@@ -24,7 +22,6 @@ export const ProductsListBlock: React.FC = async () => {
       </div>
     )
   } else {
-    return "No products"
+    return 'No products'
   }
 }
-

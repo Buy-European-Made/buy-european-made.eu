@@ -21,7 +21,7 @@ const collections: CollectionSlug[] = [
   'eu-products',
   'replaced-products',
   'countries',
-  'media'
+  'media',
 ]
 
 export const seed = async ({
@@ -82,7 +82,15 @@ export const seed = async ({
   const replacedProdMap = await seedReplacedProducts(payload, dbData, categoryMap)
 
   payload.logger.info(`— Seeding eu-products...`)
-  await seedEuProducts(payload, dbData, logoMap, categoryMap, subcategoryMap, countryMap, replacedProdMap)
+  await seedEuProducts(
+    payload,
+    dbData,
+    logoMap,
+    categoryMap,
+    subcategoryMap,
+    countryMap,
+    replacedProdMap,
+  )
 
   payload.logger.info('Seeded database successfully!')
 }
@@ -91,22 +99,21 @@ async function seedLogos(payload: BasePayload, dbData: ImportProduct[]) {
   const logos: Map<string, number | undefined> = new Map()
   dbData.forEach((element: ImportProduct) => {
     logos.set(element.logo, undefined)
-  });
+  })
 
-
-  console.log("..creating logos..")
+  console.log('..creating logos..')
   const logosPromises = [...logos.keys()].map(async (logo) => {
-    let file;
+    let file
     try {
       file = await fetchFileByURL(logo, 5)
-    } catch (error) {
+    } catch (_error) {
       console.error(`Unable to fetch url ${logo} after all retries.`)
       return
     }
     return payload.create({
       collection: 'media',
       data: { alt: logo, width: 34, height: 34 },
-      file: file
+      file: file,
     })
   })
   const logosRes = (await Promise.all(logosPromises)).filter((el) => el !== undefined)
@@ -129,7 +136,7 @@ async function seedCategories(
     categories.add(product.categories)
   })
 
-  console.log("..creating categories..")
+  console.log('..creating categories..')
   const categoriesPromises = [...categories].map((cat) => {
     return payload.create({
       collection: 'categories',
@@ -228,13 +235,15 @@ async function seedCountries(
   })
 
   console.log('..creating countries..')
-  const countriesPromises = [...countries].filter((c: string) => c.trim() !== '').map((country) => {
-    return payload.create({
-      collection: 'countries',
-      data: { name: country },
+  const countriesPromises = [...countries]
+    .filter((c: string) => c.trim() !== '')
+    .map((country) => {
+      return payload.create({
+        collection: 'countries',
+        data: { name: country },
+      })
     })
-  })
-  const countryRes = (await Promise.all(countriesPromises)).filter(el => el !== undefined)
+  const countryRes = (await Promise.all(countriesPromises)).filter((el) => el !== undefined)
 
   // crate a map of type: "country": id
   countryRes.forEach((c: Country) => {
@@ -284,7 +293,7 @@ async function seedReplacedProducts(
     })
   })
 
-  const prodResult = (await Promise.all(replacedProdPromise)).filter(el => el !== undefined)
+  const prodResult = (await Promise.all(replacedProdPromise)).filter((el) => el !== undefined)
   prodResult.forEach((r: ReplacedProduct) => {
     if (r.name === undefined || r.name === null) {
       throw new Error(`Got empty name for: ${r} `)
@@ -304,10 +313,8 @@ async function seedEuProducts(
   countryMap: Map<string, number>,
   replacedProdMap: Map<string, number>,
 ) {
-
   console.log('...creating eu-products...')
   const prodPromises = dbData.map((product: ImportProduct) => {
-
     //logo
     const logoIndex: number | undefined = logoMap.get(product.logo)
 
@@ -322,10 +329,15 @@ async function seedEuProducts(
     // produced in
     const producedIn: number[] = []
     if (product.producedIn?.includes(',')) {
-      product.producedIn.split(',').filter((c: string) => c.trim() !== '').forEach((s: string) => producedIn.push(countryMap.get(s)!))
+      product.producedIn
+        .split(',')
+        .filter((c: string) => c.trim() !== '')
+        .forEach((s: string) => producedIn.push(countryMap.get(s)!))
     } else {
-      if (product.producedIn.trim() === "") {
-        console.log(`product ${product.name} has an empty producedIn field, using companyRegistrationCountry of ${product.companyRegistrationCountry}`)
+      if (product.producedIn.trim() === '') {
+        console.log(
+          `product ${product.name} has an empty producedIn field, using companyRegistrationCountry of ${product.companyRegistrationCountry}`,
+        )
         producedIn.push(countryMap.get(product.companyRegistrationCountry)!)
       } else {
         producedIn.push(countryMap.get(product.producedIn)!)
@@ -346,7 +358,6 @@ async function seedEuProducts(
       if (foundElement) replacedProds.push(foundElement)
     }
 
-
     return payload.create({
       collection: 'eu-products',
       data: {
@@ -358,42 +369,46 @@ async function seedEuProducts(
         description: product.description,
         replaces: replacedProds,
         logo: logoIndex,
-        link: product.link
-      }
+        link: product.link,
+      },
     })
   })
   await Promise.all(prodPromises)
 }
 
-async function fetchFileByURL(url: string, retries: number = 3, delay: number = 1000): Promise<File> {
+async function fetchFileByURL(
+  url: string,
+  retries: number = 3,
+  delay: number = 1000,
+): Promise<File> {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const res = await fetch(url, {
         credentials: 'include',
         method: 'GET',
-      });
+      })
 
       if (!res.ok) {
         if (attempt < retries - 1) {
-          await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
-          continue; // Skip to the next iteration of the loop
+          await new Promise((resolve) => setTimeout(resolve, delay)) // Wait before retrying
+          continue // Skip to the next iteration of the loop
         }
       }
 
-      const data = await res.arrayBuffer();
+      const data = await res.arrayBuffer()
 
       return {
         name: url.split('/').pop() || `file-${Date.now()}`,
         data: Buffer.from(data),
         mimetype: `image/${url.split('.').pop()}`,
         size: data.byteLength,
-      };
-    } catch (error) {
+      }
+    } catch (_error) {
       if (attempt < retries - 1) {
-        await new Promise(resolve => setTimeout(resolve, delay)); // Wait before retrying
-        continue; // Skip to the next iteration of the loop
+        await new Promise((resolve) => setTimeout(resolve, delay)) // Wait before retrying
+        continue // Skip to the next iteration of the loop
       }
     }
   }
-  throw new Error(`${url} cannot be downloaded after ${retries} attempts`);
+  throw new Error(`${url} cannot be downloaded after ${retries} attempts`)
 }

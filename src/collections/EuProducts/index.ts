@@ -6,8 +6,8 @@ import { slugField } from '@/fields/slug'
 export const EuProducts: CollectionConfig = {
   slug: 'eu-products',
   labels: {
-    singular: "European Product",
-    plural: "European Products",
+    singular: 'European Product',
+    plural: 'European Products',
   },
   access: {
     create: authenticated,
@@ -16,10 +16,7 @@ export const EuProducts: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: [
-      'name',
-      'description'
-    ],
+    defaultColumns: ['name', 'description'],
     useAsTitle: 'name',
   },
   fields: [
@@ -29,7 +26,6 @@ export const EuProducts: CollectionConfig = {
         {
           label: 'General',
           fields: [
-
             {
               name: 'name',
               type: 'text',
@@ -52,7 +48,7 @@ export const EuProducts: CollectionConfig = {
               type: 'upload',
               relationTo: 'media',
             },
-          ]
+          ],
         },
         {
           label: 'Product details',
@@ -61,18 +57,18 @@ export const EuProducts: CollectionConfig = {
               name: 'categories',
               type: 'relationship',
               relationTo: 'categories',
-              hasMany: true
+              hasMany: true,
             },
             {
               name: 'subcategories',
               type: 'relationship',
               relationTo: 'subcategories',
               hasMany: true,
-              filterOptions: ({ siblingData }) => {
+              filterOptions: (options) => {
                 return {
                   mainCategory: {
-                    in: siblingData.categories
-                  }
+                    in: (options.siblingData as { categories: string[] }).categories,
+                  },
                 }
               },
             },
@@ -95,27 +91,26 @@ export const EuProducts: CollectionConfig = {
               relationTo: 'tags',
               hasMany: true,
             },
-          ]
+          ],
         },
         {
           label: 'Geographical information',
           fields: [
-
             {
               name: 'producedIn',
               type: 'relationship',
               relationTo: 'countries',
-              hasMany: true
+              hasMany: true,
             },
             {
               name: 'availableIn',
               type: 'relationship',
               relationTo: 'countries',
-              hasMany: true
+              hasMany: true,
             },
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     },
     ...slugField('name'),
   ],
@@ -129,4 +124,3 @@ export const EuProducts: CollectionConfig = {
     maxPerDoc: 50,
   },
 }
-
