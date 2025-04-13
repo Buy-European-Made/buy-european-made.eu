@@ -766,7 +766,8 @@ export interface StatsBlock {
           | 'ThumbsUp'
           | 'Trophy'
           | 'Users';
-        number: number;
+        statType: 'dynamic' | 'custom';
+        number?: number | null;
         suffix?: string | null;
         label: string;
         description: string;
@@ -1365,6 +1366,7 @@ export interface StatsBlockSelect<T extends boolean = true> {
     | T
     | {
         icon?: T;
+        statType?: T;
         number?: T;
         suffix?: T;
         label?: T;

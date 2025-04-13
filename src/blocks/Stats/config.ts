@@ -48,11 +48,30 @@ export const Stats: Block = {
             { label: 'Users', value: 'Users' },
           ],
         },
+        // Radio button to choose between dynamic and custom stat value
+        {
+          name: 'statType',
+          type: 'radio',
+          options: [
+            {
+              label: 'Dynamic (use product count)',
+              value: 'dynamic',
+            },
+            {
+              label: 'Custom',
+              value: 'custom',
+            },
+          ],
+          defaultValue: 'custom',
+          required: true,
+        },
         {
           name: 'number',
           type: 'number',
-          label: 'Number',
-          required: true,
+          label: 'Value',
+          admin: {
+            condition: (_, siblingData) => siblingData.statType === 'custom',
+          },
         },
         {
           name: 'suffix',
