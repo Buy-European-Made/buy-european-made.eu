@@ -79,13 +79,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding media...`)
 
-  const [
-    image1Buffer,
-    image2Buffer,
-    image3Buffer,
-    hero1Buffer,
-    gogLogoBuffer,
-  ] = await Promise.all([
+  const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer, gogLogoBuffer] = await Promise.all([
     fetchFileByURL(
       'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
     ),
@@ -100,9 +94,7 @@ export const seed = async ({
     ),
 
     // GOG logo.
-    fetchFileByURL(
-      'https://upload.wikimedia.org/wikipedia/commons/d/de/GOG.com_Logo.png',
-    ),
+    fetchFileByURL('https://upload.wikimedia.org/wikipedia/commons/d/de/GOG.com_Logo.png'),
   ])
 
   const gogLogoDoc = await payload.create({
@@ -111,16 +103,7 @@ export const seed = async ({
     file: gogLogoBuffer,
   })
 
-  const [
-    demoAuthor,
-    image1Doc,
-    image2Doc,
-    image3Doc,
-    imageHomeDoc,
-    technologyCategory,
-    newsCategory,
-    financeCategory,
-  ] = await Promise.all([
+  const [demoAuthor, image1Doc, image2Doc, image3Doc, imageHomeDoc] = await Promise.all([
     payload.create({
       collection: 'users',
       data: {
@@ -154,6 +137,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'Technology',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'Technology',
@@ -167,6 +155,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'News',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'News',
@@ -180,6 +173,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'Finance',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'Finance',
@@ -192,6 +190,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'Design',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'Design',
@@ -205,6 +208,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'Software',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'Software',
@@ -218,6 +226,11 @@ export const seed = async ({
       collection: 'categories',
       data: {
         name: 'Engineering',
+        subcategories: {
+          docs: [],
+          hasNextPage: false,
+          totalDocs: 0,
+        },
         breadcrumbs: [
           {
             label: 'Engineering',
@@ -236,10 +249,16 @@ export const seed = async ({
   let imageHomeID: number | string = imageHomeDoc.id
 
   if (payload.db.defaultIDType === 'text') {
+    // TODO: figure out if these are needed if we're not using them
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     image1ID = `"${image1Doc.id}"`
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     image2ID = `"${image2Doc.id}"`
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     image3ID = `"${image3Doc.id}"`
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     imageHomeID = `"${imageHomeDoc.id}"`
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     demoAuthorID = `"${demoAuthorID}"`
   }
 
@@ -267,6 +286,7 @@ export const seed = async ({
   let contactFormID: number | string = contactForm.id
 
   if (payload.db.defaultIDType === 'text') {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     contactFormID = `"${contactFormID}"`
   }
 
@@ -374,4 +394,3 @@ async function fetchFileByURL(url: string): Promise<File> {
     size: data.byteLength,
   }
 }
-

@@ -1,18 +1,24 @@
-"use client"
+'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
 
-import RichText from '@/components/RichText';
+import RichText from '@/components/RichText'
+import { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
-const Accordion: React.FC = ({ question, answer, isOpen, onToggle }) => {
-  const contentRef = useRef(null);
-  const [contentHeight, setContentHeight] = useState(0);
+const Accordion: React.FC<{
+  question: SerializedEditorState
+  answer: SerializedEditorState
+  isOpen: boolean
+  onToggle: () => void
+}> = ({ question, answer, isOpen, onToggle }) => {
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = useState(0)
 
   useEffect(() => {
     if (contentRef.current) {
-      setContentHeight(contentRef.current.scrollHeight);
+      setContentHeight(contentRef.current.scrollHeight)
     }
-  }, [answer]);
+  }, [answer])
 
   return (
     <>
@@ -22,7 +28,7 @@ const Accordion: React.FC = ({ question, answer, isOpen, onToggle }) => {
           onClick={onToggle}
         >
           <RichText className="m-0 text-black" data={question} />
-          <p className="text-eu-yellow font-bold text-lg">{isOpen ? "-" : "+"}</p>
+          <p className="text-eu-yellow font-bold text-lg">{isOpen ? '-' : '+'}</p>
         </div>
         <div
           className="overflow-hidden transition-max-height duration-300 ease-in-out"
@@ -34,7 +40,7 @@ const Accordion: React.FC = ({ question, answer, isOpen, onToggle }) => {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 export default Accordion

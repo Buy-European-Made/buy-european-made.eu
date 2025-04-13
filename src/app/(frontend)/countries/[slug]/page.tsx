@@ -26,15 +26,14 @@ export default async function Product({ params: paramsPromise }: Args) {
 
   const producedProducts = getProducedProducts(country)
 
-
   return (
     <article className="pt-16 pb-16">
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
       {producedProducts?.map((product) => {
-        return <span>{product}</span>
+        return <span key={product}>{product}</span>
       })}
-    </article >
+    </article>
   )
 }
 
@@ -49,12 +48,12 @@ function getProducedProducts(country: Country) {
   console.log(country)
   console.log(country.producedProducts?.docs)
 
-  return country?.producedProducts?.docs?.filter((prod): prod is EuProduct => {
-    return typeof prod !== 'string'
-  }).map((prod: EuProduct) => prod.name)
+  return country?.producedProducts?.docs
+    ?.filter((prod): prod is EuProduct => {
+      return typeof prod !== 'string'
+    })
+    .map((prod: EuProduct) => prod.name)
 }
-
-
 
 const queryCountryByName = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()

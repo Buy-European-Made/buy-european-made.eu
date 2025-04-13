@@ -1,14 +1,14 @@
-import type { Product } from '@/payload-types'
+import type { EuProduct } from '@/payload-types'
 import type { Media } from '@/payload-types'
 
-const makeFritzProduct = (): Omit<Product, 'createdAt' | 'id' | 'updatedAt'> => {
+const makeFritzProduct = (): Omit<EuProduct, 'createdAt' | 'id' | 'updatedAt'> => {
   return {
     name: 'Fritz Cola',
     description: 'Lorem ipsum',
   }
 }
 
-const makeGogProduct = (logo?: Media): Omit<Product, 'createdAt' | 'id' | 'updatedAt'> => {
+const makeGogProduct = (logo?: Media): Omit<EuProduct, 'createdAt' | 'id' | 'updatedAt'> => {
   return {
     logo: logo,
     name: 'GOG',
@@ -16,8 +16,4 @@ const makeGogProduct = (logo?: Media): Omit<Product, 'createdAt' | 'id' | 'updat
   }
 }
 
-export {
-  makeFritzProduct,
-  makeGogProduct,
-}
-
+export { makeFritzProduct, makeGogProduct }

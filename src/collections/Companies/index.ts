@@ -1,4 +1,3 @@
-
 import type { CollectionConfig } from 'payload'
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
@@ -24,7 +23,7 @@ export const Companies: CollectionConfig = {
     },
     {
       name: 'link',
-      type: 'text'
+      type: 'text',
     },
     {
       name: 'ownBrands',
@@ -32,6 +31,6 @@ export const Companies: CollectionConfig = {
       relationTo: 'brands',
       hasMany: true,
     },
-    ...slugField(),
+    ...slugField('name'),
   ],
 }
