@@ -2,4 +2,4 @@ echo "🔍 Running ESLint ..."
 pnpm lint
 
 echo "🎨 Formatting code with Prettier..."
-pnpm format
+pnpm format:check
