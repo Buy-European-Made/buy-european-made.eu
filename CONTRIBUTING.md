@@ -5,6 +5,7 @@ started.
 
 <!--toc:start-->
 
+- [Contributing to the project](#contributing-to-the-project)
 - [Contributing guidelines](#contributing-guidelines)
 - [Base template](#base-template)
 - [Development environment](#development-environment)
@@ -18,7 +19,9 @@ started.
 - [How to Payload](#how-to-payload)
   - [Creating a collection](#creating-a-collection)
   - [Creating a block](#creating-a-block)
-  <!--toc:end-->
+- [Git-Hooks](#git-hooks)
+
+<!--toc:end-->
 
 # Contributing guidelines
 
@@ -142,3 +145,15 @@ You can also define predefined routes / pages for a given collection by adding t
    neighbors), you need both the `config` and the `Component` files.
 1. Import the config and add it to the `./src/blocks/RenderBlocks.tsx` file.
 1. Import the Component and add it to the pages collection.
+
+# Git-Hooks
+
+We use [Husky](https://typicode.github.io/husky/#/) to manage git hooks.
+
+The following hooks are available:
+
+- `pre-commit`: Runs `pnpm lint-staged` to check the code formatting and linting on staged files.
+  - lint-staged config can be found in `package.json`
+- `pre-push`: Runs `pnpm lint` and `pnpm format:check` to check the code formatting and linting on all files.
+
+Skip the hooks by running `git commit --no-verify` or `git push --no-verify`.
