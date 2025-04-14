@@ -15,8 +15,6 @@ module.exports = {
         disallow: '/admin/*',
       },
     ],
-    additionalSitemaps: [
-      `${SITE_URL}/pages-sitemap.xml`,
-    ],
+    additionalSitemaps: [`${SITE_URL}/pages-sitemap.xml`],
   },
 }

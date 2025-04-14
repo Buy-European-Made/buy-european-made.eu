@@ -25,9 +25,9 @@ export const FAQ: Block = {
       }),
     },
     {
-      name: "columns",
-      type: "array",
-      fields:[ 
+      name: 'columns',
+      type: 'array',
+      fields: [
         {
           name: 'question',
           type: 'richText',
@@ -36,7 +36,7 @@ export const FAQ: Block = {
           name: 'answer',
           type: 'richText',
         },
-      ]
-    }
+      ],
+    },
   ],
 }
