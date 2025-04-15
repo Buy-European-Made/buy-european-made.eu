@@ -24,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
           <div className='flex flex-col xl:flex-row justify-between'>
             <div className='flex items-center justify-center'>
               <Media
-                imgClassName='w-12 h-12 border border-border rounded-full'
+                imgClassName='w-full h-auto min-w-12 dark:border-white rounded-full'
                 resource={product.logo}
                 alt={`${product.name} logo`}
               />
