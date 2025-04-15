@@ -22,18 +22,18 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
       <Card className='h-full flex flex-col'>
         <CardHeader>
           <div className='flex flex-col xl:flex-row justify-between'>
-            <div className='flex items-center min-w-0 justify-center'>
+            <div className='flex items-center justify-center'>
               <Media
                 imgClassName='w-full h-auto min-w-12 rounded-full dark:border dark:border-white dark:bg-white'
                 resource={product.logo}
                 alt={`${product.name} logo`}
               />
-              <H2 className='mx-2 pb-0 flex-wrap'>
+              <H2 className='mx-3 pb-0'>
                 {product.name}
               </H2>
             </div>
-            <div className='flex items-center justify-center text-center '>
-              <H4 className='pb-0'>
+            <div className='flex items-center justify-center text-center'>
+              <H4>
                 {product.producedIn?.map((c: Country | number) => {
                   if (typeof c !== 'number') {
                     return <p key={c.id}>{c.name}</p>
@@ -46,7 +46,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
         </CardHeader>
 
         <div className='flex flex-col justify-between h-full gap-2'>
-          <CardDescription className='text-ellipsis overflow-hidden h-fit p-6' >
+          <CardDescription className='line-clamp-6 h-fit m-6'>
             {product.description}
           </CardDescription>
           <div className='flex flex-col'>
