@@ -15,7 +15,6 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
         outline: "text-foreground",
-        monocolorOutline: "text-foreground"
       },
     },
     defaultVariants: {
@@ -33,7 +32,6 @@ export interface BadgeProps
 function Badge({ className, variant, color, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }),
-      variant === "monocolorOutline" && color ? `border-${color} text-${color}` : "",
       className)} {...props} />
   )
 }

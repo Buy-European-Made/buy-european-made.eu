@@ -24,7 +24,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
           <div className='flex flex-col xl:flex-row justify-between'>
             <div className='flex items-center justify-center'>
               <Media
-                imgClassName='w-full h-auto min-w-12 dark:border-white rounded-full'
+                imgClassName='w-full h-auto rounded-full dark:border dark:border-white dark:bg-white'
                 resource={product.logo}
                 alt={`${product.name} logo`}
               />
@@ -61,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.categories?.map((category: Category | number) => {
                       if (category !== undefined && typeof category !== 'number') {
                         return (
-                          <Badge key={category.id} variant={'monocolorOutline'} color={'blue-500'}>
+                          <Badge key={category.id} variant={'outline'} className={'text-blue-500 border-blue-500'}>
                             {category.name}
                           </Badge>
                         );
@@ -81,7 +81,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.subcategories?.map((subcategory: Subcategory | number) => {
                       if (subcategory !== undefined && typeof subcategory !== 'number') {
                         return (
-                          <Badge key={subcategory.id} variant={'monocolorOutline'} color='yellow-600'>
+                          <Badge key={subcategory.id} variant={'outline'} className={'text-yellow-500 border-yellow-500'}>
                             {subcategory.name}
                           </Badge>
                         );
@@ -101,7 +101,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.replaces?.map((replacedProduct: ReplacedProduct | number) => {
                       if (replacedProduct !== undefined && typeof replacedProduct !== 'number') {
                         return (
-                          <Badge key={replacedProduct.id} variant={'monocolorOutline'} color={'gray-300'} >
+                          <Badge key={replacedProduct.id} variant={'outline'} className='text-gray-400 border-gray-400'>
                             {replacedProduct.name}
                           </Badge>
                         );
