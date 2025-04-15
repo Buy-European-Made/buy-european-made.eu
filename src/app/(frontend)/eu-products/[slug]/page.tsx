@@ -2,12 +2,11 @@ import type { Metadata } from 'next'
 
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
-import { BasePayload, getPayload } from 'payload'
+import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import React, { cache } from 'react'
 import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
-import { Tag, Category, EuProduct, ReplacedProduct } from '@/payload-types'
 import { ProductCard } from '@/blocks/ProductList/product/Component'
 
 type Args = {
@@ -17,7 +16,6 @@ type Args = {
 }
 export default async function Product({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  console.log("isEnabled", draft)
   const { slug: slug = '' } = await paramsPromise
   const sanitizeSlug = (input: string) => input.replace(/[^a-z0-9-]/gi, '') //only letters,numbers and dashes
   const sanitizedSlug = sanitizeSlug(slug)
