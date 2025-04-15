@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader } from '@/co
 import { H2, H4 } from '@/components/ui/typography';
 import { Button } from '@/components/ui/button';
 import { Link } from '@payloadcms/ui';
+import { Badge } from '@/components/ui/badge';
 
 interface ProductCardProps {
   product: EuProduct;
@@ -20,7 +21,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
     <>
       <Card className='h-full flex flex-col'>
         <CardHeader>
-          <div className='flex flex-col md:flex-row justify-between'>
+          <div className='flex flex-col xl:flex-row justify-between'>
             <div className='flex items-center justify-center'>
               <Media
                 imgClassName='w-12 h-12 border border-border rounded-full'
@@ -52,7 +53,7 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
             <CardContent className='flex flex-col justify-end text-xs gap-2'>
 
               {hasCategory && (
-                <div>
+                <>
                   <div className='flex items-center'>
                     <p className='font-semibold text-gray-800 dark:text-gray-300'>Category:</p>
                   </div>
@@ -60,19 +61,19 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.categories?.map((category: Category | number) => {
                       if (category !== undefined && typeof category !== 'number') {
                         return (
-                          <p key={category.id} className='text-blue-500 font-medium border-2 border-blue-500 p-1 rounded'>
+                          <Badge key={category.id} variant={'monocolorOutline'} color={'blue-500'}>
                             {category.name}
-                          </p>
+                          </Badge>
                         );
                       }
                       return null;
                     })}
                   </div>
-                </div>
+                </>
               )}
 
               {hasSubcategory && (
-                <div>
+                <>
                   <div className='flex items-center'>
                     <p className='font-semibold text-gray-800 dark:text-gray-300'>Subcategory:</p>
                   </div>
@@ -80,19 +81,19 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.subcategories?.map((subcategory: Subcategory | number) => {
                       if (subcategory !== undefined && typeof subcategory !== 'number') {
                         return (
-                          <p key={subcategory.id} className='text-yellow-600 font-medium border-2 border-yellow-600 p-1 rounded'>
+                          <Badge key={subcategory.id} variant={'monocolorOutline'} color='yellow-600'>
                             {subcategory.name}
-                          </p>
+                          </Badge>
                         );
                       }
                       return null;
                     })}
                   </div>
-                </div>
+                </>
               )}
 
               {replacesProducts && (
-                <div>
+                <>
                   <div className='flex items-center'>
                     <p className='font-semibold text-gray-800 dark:text-gray-300'>Replaces:</p>
                   </div>
@@ -100,29 +101,25 @@ export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
                     {product.replaces?.map((replacedProduct: ReplacedProduct | number) => {
                       if (replacedProduct !== undefined && typeof replacedProduct !== 'number') {
                         return (
-                          <p key={replacedProduct.id} className='text-gray-500 font-medium border-2 border-gray-500 p-1 rounded'>
+                          <Badge key={replacedProduct.id} variant={'monocolorOutline'} color={'gray-300'} >
                             {replacedProduct.name}
-                          </p>
+                          </Badge>
                         );
                       }
                       return null;
                     })}
                   </div>
-                </div>
+                </>
               )}
             </CardContent>
             <CardFooter className='flex gap-4 mt-3'>
-              <Link target='_blank' href={`/eu-products/${product.slug}`} >
-                <Button >
-                  More Details
-                </Button>
-              </Link>
+              <Button asChild >
+                <Link target='_blank' href={`/eu-products/${product.slug}`}>More Details</Link>
+              </Button>
               {product.link &&
-                <Link target='_blank' href={product.link}>
-                  <Button variant={'outline'} className='border-white'>
-                    Visit website
-                  </Button>
-                </Link>
+                <Button variant={'outline'} className='border-white'>
+                  <Link target='_blank' href={product.link}>Visit website</Link>
+                </Button>
               }
             </CardFooter>
           </div>
