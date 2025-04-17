@@ -36,6 +36,7 @@ export const Media: CollectionConfig = {
           return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
         },
       }),
+      localized: true,
     },
   ],
   upload: {
