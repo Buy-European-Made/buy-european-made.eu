@@ -1,44 +1,69 @@
 
-import { EuProduct, HighlightBlock as HighlightBlockProps } from '@/payload-types'
+import { Category, EuProduct, HighlightBlock as HighlightBlockProps } from '@/payload-types'
 import React from 'react'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel"
-
-import { Card, CardContent } from '@/components/ui/card'
-import { H3 } from '@/components/ui/typography'
 import { getPayload } from 'payload'
 import config from '@payload-config'
-import { HighlightElementsComponent } from './elements/Component'
+import { HighlightedElement, HighlightElementsComponent } from './elements/Component'
 
 type Props = HighlightBlockProps
 
-export const HighlightBlock: React.FC<Props> = async ({ title, collection, productArray, categoriesArray }) => {
-  console.log(title, collection, productArray, categoriesArray)
-  const ids: number[] = productArray?.filter(el => el !== null && el !== undefined).map(product => {
-    // console.log(product)
-    const found = typeof product === 'number' ? product : product.product
-    // console.log("found", found)
-    return found
-  })
-  // console.log("Found ids", ids)
-  const payload = await getPayload({ config })
-  const findResult = await payload.find({
-    collection: collection,
-    where: {
-      id: {
-        in: ids
+
+export const HighlightBlock: React.FC<Props> = async ({ title, collection, size, productArray, categoriesArray, articlesArray }) => {
+  // here I want to created a unified type like: HighlightedElement that contains name, image, link
+  // i can grab the info and map each type to the newly created  type
+  // this type then gets passed to the component which is going to be type agnostic
+  let inputElements: HighlightedElement[] = []
+  if (collection === 'eu-products' && productArray) {
+    const ids = productArray?.map(product => {
+      if (product === null || product === undefined) return null
+      return typeof product === 'number' ? product : product.product
+    }).filter(el => typeof el === 'number')
+    const payload = await getPayload({ config })
+    const findResult = await payload.find({
+      collection: collection,
+      where: {
+        id: {
+          in: ids
+        }
       }
-    }
-  })
-  // console.log("Found docs:", findResult.docs)
+    })
+    inputElements = findResult.docs
+      .filter((el): el is EuProduct => el.name != null && el.logo != null && el.logo.url !== null && el.link != null)
+      .map((el) => ({
+        name: el.name,
+        image: typeof el.logo === 'number' ? null : el.logo?.url,
+        link: el.link,
+        summary: el.description
+      }))
+  }
+  if (collection === 'articles' && articlesArray) {
+    console.log(articlesArray)
+    inputElements = articlesArray.filter((el) => typeof el !== 'number').map(el => ({
+      name: el.articles?.name ?? "Name not found",
+      summary: el.articles?.shortSummary,
+      image: typeof el.articles === 'number' ? null : el.articles?.heroPicture?.url,
+      link: el?.articles.link
+    }))
+  }
+
+  if (collection === 'categories' && categoriesArray) {
+    console.log(categoriesArray)
+    inputElements = categoriesArray.map(el => ({
+      name: el.categories?.name ?? "Name not found",
+      image: null,
+      summary: 'Category description',
+      link: 'https://www.google.com'
+    }))
+  }
+
+  console.log(inputElements)
+
   return (
-    <div className='border-3 border-red-300' >
-      <HighlightElementsComponent collection={collection} title={title} array={findResult.docs} />
-    </div>
+    <>
+      {
+        inputElements.length !== 0 &&
+        <HighlightElementsComponent title={title} array={inputElements} size={size} />
+      }
+    </>
   )
 }

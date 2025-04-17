@@ -25,6 +25,16 @@ export const HighlightBlock: Block = {
       ]
     },
     {
+      name: 'size',
+      type: 'radio',
+      label: 'Select block size',
+      required: true,
+      options: [
+        { label: 'Medium', value: 'medium' },
+        { label: 'Large', value: 'large' },
+      ]
+    },
+    {
       type: 'collapsible',
       label: 'Selected Elements',
       fields: [
@@ -51,7 +61,7 @@ export const HighlightBlock: Block = {
           type: 'array',
           name: 'categoriesArray',
           label: 'Select Categories',
-          minRows: 1,
+          minRows: 3,
           maxRows: 5,
           admin: {
             condition: (_, siblingData) => siblingData.collection === 'categories',
@@ -70,7 +80,7 @@ export const HighlightBlock: Block = {
           type: 'array',
           name: 'articlesArray',
           label: 'Select Articles',
-          minRows: 1,
+          minRows: 3,
           maxRows: 5,
           admin: {
             condition: (_, siblingData) => siblingData.collection === 'articles',

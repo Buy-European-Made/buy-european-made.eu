@@ -814,6 +814,7 @@ export interface StatsBlock {
 export interface HighlightBlock {
   title: string;
   collection: 'eu-products' | 'categories' | 'articles';
+  size: 'medium' | 'large';
   productArray?:
     | {
         product?: (number | null) | EuProduct;
@@ -996,7 +997,7 @@ export interface Country {
 export interface Article {
   id: number;
   name: string;
-  shortSummary: string[];
+  shortSummary: string;
   heroPicture?: (number | null) | Media;
   link: string;
   slug?: string | null;
@@ -1472,6 +1473,7 @@ export interface StatsBlockSelect<T extends boolean = true> {
 export interface HighlightBlockSelect<T extends boolean = true> {
   title?: T;
   collection?: T;
+  size?: T;
   productArray?:
     | T
     | {

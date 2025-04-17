@@ -29,7 +29,6 @@ export const Articles: CollectionConfig = {
       name: 'shortSummary',
       type: 'text',
       required: true,
-      hasMany: true
     },
     {
       name: 'heroPicture',
@@ -37,7 +36,6 @@ export const Articles: CollectionConfig = {
       relationTo: 'media',
     },
     {
-
       name: 'link',
       type: 'text',
       required: true
