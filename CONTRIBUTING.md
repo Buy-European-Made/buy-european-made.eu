@@ -4,6 +4,7 @@ If you want to work on the project, here are the information you need to get
 started.
 
 <!--toc:start-->
+
 - [Contributing guidelines](#contributing-guidelines)
 - [Base template](#base-template)
 - [Development environment](#development-environment)
@@ -17,26 +18,24 @@ started.
 - [How to Payload](#how-to-payload)
   - [Creating a collection](#creating-a-collection)
   - [Creating a block](#creating-a-block)
-<!--toc:end-->
-
+- [Git-Hooks](#git-hooks)
+  - [Troubleshhoting Husky errors](#troubleshhoting-husky-errors)
+  <!--toc:end-->
 
 # Contributing guidelines
 
 Please follow the guidelines published at
 https://github.com/Buy-European-Made/.github-private/blob/main/profile/README.md
 
-
 # Base template
 
 This project is based upon the [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website).
 You can find their documentation [here](https://payloadcms.com/docs/getting-started/what-is-payload).
 
-
 # Development environment
 
 Here are the instructions for quickly setting up a development environment.
 The [docker compose development environment](#docker-development-environment) is the easiest.
-
 
 ## Local development environment
 
@@ -48,10 +47,10 @@ The [docker compose development environment](#docker-development-environment) is
 You should also have a [PostgreSQL](https://www.postgresql.org) database running
 on your machine or somewhere accessible.
 
-
 ### Local setup
 
 Copy the example .env file:
+
 ```sh
 cp ./.env.example .env
 ```
@@ -61,15 +60,16 @@ PostgreSQL DB. A postgreSQL connection string looks like this:
 `postgresql://[user[:password]@][host][:port][/dbname][?param1=value1&param2=value2]`
 
 Install the NPM dependencies:
+
 ```
 pnpm install
 ```
 
 And run the development server for the application:
+
 ```sh
 pnpm dev
 ```
-
 
 ## Docker development environment
 
@@ -77,15 +77,16 @@ pnpm dev
 
 - [Docker](https://docs.docker.com) with docker compose.
 
-
 ### Docker setup
 
 You can use the provided example .env file as is:
+
 ```sh
 cp ./.env.example .env
 ```
 
 You can spin up the Docker development stack with the following command:
+
 ```sh
 docker compose up -d
 ```
@@ -94,13 +95,14 @@ docker compose up -d
 - `docker compose logs -f` will show you the logs.
 
 This will start:
+
 - a NodeJS container that will hot reload the application on change.
 - a [PostgreSQL](https://www.postgresql.org) database for the application to store its data.
-
 
 ## Go to the web page
 
 The application will be available in your browser at:
+
 - [localhost:3000](http://localhost:3000) for the end user website.
 - [localhost:3000/admin](http://localhost:3000/admin) for the CMS administration UI.
 
@@ -111,15 +113,16 @@ application is still building the page, or legitimately bugged.
 
 For the docker logs simply run `docker compose logs -f`.
 
-
 # How to Payload
 
 Here's a quick explanation of how Payload works:
+
 - Collections are group of "things", and each collection has its own table in the DB.
 - Documents are items in a collection (row in a table).
 - Fields are columns in a document (cell in a row).
 
 So typically you would create collections for each important "entity" in your DB, for us it's:
+
 - Categories.
 - Subcategories.
 - Products.
@@ -128,14 +131,12 @@ So typically you would create collections for each important "entity" in your DB
 The `Pages` collection is a little special as it's where CMS users can create pages for the website's end users.
 You mostly build pages from "blocks".
 
-You can also define predefined routes / pages for a given collection by adding them to [./src/app/(frontend)/](./src/app/(frontend)).
-
+You can also define predefined routes / pages for a given collection by adding them to [./src/app/(frontend)/](<./src/app/(frontend)>).
 
 ## Creating a collection
 
 1. Make a collection in [./src/collections](./src/collections).
 1. Import it and add it to the payload configuration in [./src/payload.config.ts](./src/payload.config.ts).
-
 
 ## Creating a block
 
@@ -144,3 +145,26 @@ You can also define predefined routes / pages for a given collection by adding t
 1. Import the config and add it to the `./src/blocks/RenderBlocks.tsx` file.
 1. Import the Component and add it to the pages collection.
 
+# Git-Hooks
+
+We use [Husky](https://typicode.github.io/husky/#/) to manage git hooks.
+
+The following hooks are available:
+
+- `pre-commit`: Runs `pnpm lint-staged` to check the code formatting and linting on staged files.
+  - lint-staged config can be found in `package.json`
+- `pre-push`: Runs `pnpm lint` and `pnpm format:check` to check the code formatting and linting on all files.
+
+Skip the hooks by running `git commit --no-verify` or `git push --no-verify`.
+
+## Troubleshhoting Husky errors
+
+If Husly is complaining about "empty commits": this means you have made "code
+style" changes which were completely erased by the linting process, ultimately
+resulting in an empty commit.
+
+If Husky is complaining about file permissions. Try running the following in the root of your project:
+
+```sh
+sudo chown -R --reference=. .next .pnpm-store node_modules
+```

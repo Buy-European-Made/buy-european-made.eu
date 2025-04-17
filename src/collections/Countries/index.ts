@@ -1,4 +1,3 @@
-
 import type { CollectionConfig } from 'payload'
 import { authenticated } from '@/access/authenticated'
 import { authenticatedOrPublished } from '@/access/authenticatedOrPublished'
@@ -7,8 +6,8 @@ import { slugField } from '@/fields/slug'
 export const Countries: CollectionConfig = {
   slug: 'countries',
   labels: {
-    singular: "Country",
-    plural: "Countries",
+    singular: 'Country',
+    plural: 'Countries',
   },
   access: {
     create: authenticated,
@@ -17,10 +16,8 @@ export const Countries: CollectionConfig = {
     update: authenticated,
   },
   admin: {
-    defaultColumns: [
-      'name',
-    ],
-    useAsTitle: 'name'
+    defaultColumns: ['name'],
+    useAsTitle: 'name',
   },
   fields: [
     {
@@ -31,13 +28,13 @@ export const Countries: CollectionConfig = {
       name: 'producedProducts',
       type: 'join',
       collection: 'eu-products',
-      on: 'producedIn'
+      on: 'producedIn',
     },
     {
       name: 'flag',
       type: 'text',
     },
-    ...slugField('name',),
+    ...slugField('name'),
   ],
   versions: {
     drafts: {
@@ -49,4 +46,3 @@ export const Countries: CollectionConfig = {
     maxPerDoc: 50,
   },
 }
-

@@ -11,4 +11,6 @@
 **/temp
 **/docs/**
 tsconfig.json
+pnpm-lock.yaml
+.husky
 
