@@ -9,6 +9,10 @@ import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { ProductsListBlock } from '@/blocks/ProductList/config'
 import { FAQ } from '../../blocks/FAQ/config'
+import { Team } from '@/blocks/Team/config'
+import { Banner } from '@/blocks/Banner/config'
+import { Stats } from '@/blocks/Stats/config'
+import { HighlightBlock } from '@/blocks/HighlightBlock/config'
 
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
@@ -23,9 +27,6 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
-import { Team } from '@/blocks/Team/config'
-import { Banner } from '@/blocks/Banner/config'
-import { Stats } from '@/blocks/Stats/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -91,6 +92,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Team,
                 Banner,
                 Stats,
+                HighlightBlock
               ],
               required: true,
               admin: {

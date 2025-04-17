@@ -249,6 +249,7 @@ export interface Page {
     | TeamBlock
     | BannerBlock
     | StatsBlock
+    | HighlightBlock
   )[];
   meta?: {
     title?: string | null;
@@ -806,47 +807,26 @@ export interface StatsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
+ * via the `definition` "highlightBlock".
  */
-export interface Category {
-  id: number;
-  name: string;
-  subcategories?: {
-    docs?: (number | Subcategory)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  slug?: string | null;
-  slugLock?: boolean | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
+export interface HighlightBlock {
+  title: string;
+  collection: 'eu-products' | 'categories';
+  productArray?:
     | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
+        product?: (number | null) | EuProduct;
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subcategories".
- */
-export interface Subcategory {
-  id: number;
-  name: string;
-  mainCategory: (number | Category)[];
-  products?: {
-    docs?: (number | EuProduct)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  categoriesArray?:
+    | {
+        categories?: (number | null) | Category;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'highlightBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -901,6 +881,50 @@ export interface Company {
   name: string;
   link?: string | null;
   ownBrands?: (number | Brand)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  subcategories?: {
+    docs?: (number | Subcategory)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  slug?: string | null;
+  slugLock?: boolean | null;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subcategories".
+ */
+export interface Subcategory {
+  id: number;
+  name: string;
+  mainCategory: (number | Category)[];
+  products?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -1254,6 +1278,7 @@ export interface PagesSelect<T extends boolean = true> {
         team?: T | TeamBlockSelect<T>;
         banner?: T | BannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
+        highlightBlock?: T | HighlightBlockSelect<T>;
       };
   meta?:
     | T
@@ -1408,6 +1433,28 @@ export interface StatsBlockSelect<T extends boolean = true> {
         suffix?: T;
         label?: T;
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlightBlock_select".
+ */
+export interface HighlightBlockSelect<T extends boolean = true> {
+  title?: T;
+  collection?: T;
+  productArray?:
+    | T
+    | {
+        product?: T;
+        id?: T;
+      };
+  categoriesArray?:
+    | T
+    | {
+        categories?: T;
         id?: T;
       };
   id?: T;
