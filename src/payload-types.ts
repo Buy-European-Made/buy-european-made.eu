@@ -129,10 +129,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    countryPage: CountryPage;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    countryPage: CountryPageSelect<false> | CountryPageSelect<true>;
   };
   locale:
     | 'sq_AL'
@@ -951,7 +953,7 @@ export interface Country {
     totalDocs?: number;
   };
   flag?: string | null;
-  slug?: string | null;
+  slug: string;
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1920,6 +1922,36 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countryPage".
+ */
+export interface CountryPage {
+  id: number;
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | FormBlock
+    | ProductsList
+    | FAQBlock
+    | TeamBlock
+    | BannerBlock
+    | StatsBlock
+    | CountryDescription
+  )[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Country description".
+ */
+export interface CountryDescription {
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'countryDescription';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -1963,6 +1995,37 @@ export interface FooterSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "countryPage_select".
+ */
+export interface CountryPageSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        cta?: T | CallToActionBlockSelect<T>;
+        content?: T | ContentBlockSelect<T>;
+        mediaBlock?: T | MediaBlockSelect<T>;
+        formBlock?: T | FormBlockSelect<T>;
+        productsList?: T | ProductsListSelect<T>;
+        faq?: T | FAQBlockSelect<T>;
+        team?: T | TeamBlockSelect<T>;
+        banner?: T | BannerBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
+        countryDescription?: T | CountryDescriptionSelect<T>;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Country description_select".
+ */
+export interface CountryDescriptionSelect {
+  id?: boolean;
+  blockName?: boolean;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -17,6 +17,7 @@ import { Subcategories } from './collections/Subcategories'
 import { Countries } from './collections/Countries'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
+import { CountryPage } from './Globals/CountryPage/config'
 
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
@@ -199,7 +200,7 @@ export default buildConfig({
     Countries,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, CountryPage],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

@@ -34,7 +34,7 @@ export const Countries: CollectionConfig = {
       name: 'flag',
       type: 'text',
     },
-    ...slugField('name'),
+    ...slugField('name', { slugOverrides: { required: true } }),
   ],
   versions: {
     drafts: {
