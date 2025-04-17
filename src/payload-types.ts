@@ -77,6 +77,7 @@ export interface Config {
     companies: Company;
     brands: Brand;
     countries: Country;
+    articles: Article;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -115,6 +116,7 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -811,7 +813,7 @@ export interface StatsBlock {
  */
 export interface HighlightBlock {
   title: string;
-  collection: 'eu-products' | 'categories';
+  collection: 'eu-products' | 'categories' | 'articles';
   productArray?:
     | {
         product?: (number | null) | EuProduct;
@@ -821,6 +823,12 @@ export interface HighlightBlock {
   categoriesArray?:
     | {
         categories?: (number | null) | Category;
+        id?: string | null;
+      }[]
+    | null;
+  articlesArray?:
+    | {
+        articles?: (number | null) | Article;
         id?: string | null;
       }[]
     | null;
@@ -980,6 +988,21 @@ export interface Country {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  name: string;
+  shortSummary: string[];
+  heroPicture?: (number | null) | Media;
+  link: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1179,6 +1202,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'countries';
         value: number | Country;
+      } | null)
+    | ({
+        relationTo: 'articles';
+        value: number | Article;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1457,6 +1484,12 @@ export interface HighlightBlockSelect<T extends boolean = true> {
         categories?: T;
         id?: T;
       };
+  articlesArray?:
+    | T
+    | {
+        articles?: T;
+        id?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1689,6 +1722,20 @@ export interface CountriesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  name?: T;
+  shortSummary?: T;
+  heroPicture?: T;
+  link?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

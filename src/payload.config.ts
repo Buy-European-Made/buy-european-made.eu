@@ -23,6 +23,7 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Companies } from './collections/Companies'
 import { Brands } from './collections/Brands'
+import { Articles } from './collections/Articles'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -197,6 +198,7 @@ export default buildConfig({
     Companies,
     Brands,
     Countries,
+    Articles,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
