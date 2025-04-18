@@ -249,6 +249,7 @@ export interface Page {
     | TeamBlock
     | BannerBlock
     | StatsBlock
+    | TabCards
   )[];
   meta?: {
     title?: string | null;
@@ -806,6 +807,37 @@ export interface StatsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards".
+ */
+export interface TabCards {
+  color?: ('eu-yellow' | 'eu-blue') | null;
+  columns?:
+    | {
+        title?: string | null;
+        text?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tabCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1254,6 +1286,7 @@ export interface PagesSelect<T extends boolean = true> {
         team?: T | TeamBlockSelect<T>;
         banner?: T | BannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
+        tabCards?: T | TabCardsSelect<T>;
       };
   meta?:
     | T
@@ -1408,6 +1441,22 @@ export interface StatsBlockSelect<T extends boolean = true> {
         suffix?: T;
         label?: T;
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards_select".
+ */
+export interface TabCardsSelect<T extends boolean = true> {
+  color?: T;
+  columns?:
+    | T
+    | {
+        title?: T;
+        text?: T;
         id?: T;
       };
   id?: T;
