@@ -92,7 +92,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Team,
                 Banner,
                 Stats,
-                TabCards
+                TabCards,
               ],
               required: true,
               admin: {

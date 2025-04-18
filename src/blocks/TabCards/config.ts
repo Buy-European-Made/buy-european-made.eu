@@ -25,9 +25,9 @@ export const TabCards: Block = {
       },
     },
     {
-      name: "columns",
-      type: "array",
-      fields:[ 
+      name: 'columns',
+      type: 'array',
+      fields: [
         {
           name: 'title',
           type: 'text',
@@ -40,14 +40,14 @@ export const TabCards: Block = {
             features: ({ rootFeatures }) => {
               return [
                 ...rootFeatures,
-                HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', "h5", "p"] }),
+                HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'p'] }),
                 FixedToolbarFeature(),
                 InlineToolbarFeature(),
               ]
             },
           }),
         },
-      ]
+      ],
     },
   ],
 }

@@ -28,7 +28,7 @@ const config = {
     'border-eu-yellow',
     'border-eu-blue',
     'eu-yellow',
-    'eu-blue'
+    'eu-blue',
   ],
   theme: {
     container: {

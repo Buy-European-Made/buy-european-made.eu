@@ -25,7 +25,7 @@ const blockComponents = {
   // TODO: remove the whole block component if not used
   banner: BannerBlock,
   stats: StatsBlock,
-  tabCards: TabCards
+  tabCards: TabCards,
 }
 
 export const RenderBlocks: React.FC<{

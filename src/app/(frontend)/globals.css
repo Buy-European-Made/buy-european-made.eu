@@ -102,7 +102,6 @@ html[data-theme='light'] {
   opacity: initial;
 }
 
-
 /* global for tabCard scroll */
 .tab-container::-webkit-scrollbar {
   height: 4px;
