@@ -25,6 +25,10 @@ const config = {
     'bg-success/30',
     'border-warning',
     'bg-warning/30',
+    'border-eu-yellow',
+    'border-eu-blue',
+    'eu-yellow',
+    'eu-blue',
   ],
   theme: {
     container: {
@@ -56,6 +60,8 @@ const config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        'eu-yellow': '#FFCC00',
+        'eu-blue': '#003399',
         accent: {
           DEFAULT: 'hsl(var(--accent))',
           foreground: 'hsl(var(--accent-foreground))',
