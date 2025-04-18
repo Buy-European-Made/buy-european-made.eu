@@ -811,27 +811,25 @@ export interface StatsBlock {
  */
 export interface TabCards {
   color?: ('eu-yellow' | 'eu-blue') | null;
-  columns?:
-    | {
-        title?: string | null;
-        text?: {
-          root: {
-            type: string;
-            children: {
-              type: string;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
+  tabs: {
+    title: string;
+    text: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
           [k: string]: unknown;
-        } | null;
-        id?: string | null;
-      }[]
-    | null;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'tabCards';
@@ -1452,7 +1450,7 @@ export interface StatsBlockSelect<T extends boolean = true> {
  */
 export interface TabCardsSelect<T extends boolean = true> {
   color?: T;
-  columns?:
+  tabs?:
     | T
     | {
         title?: T;

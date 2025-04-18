@@ -25,22 +25,24 @@ export const TabCards: Block = {
       },
     },
     {
-      name: 'columns',
+      name: 'tabs',
       type: 'array',
+      required: true,
       fields: [
         {
           name: 'title',
           type: 'text',
+          required: true,
         },
         {
           name: 'text',
           type: 'richText',
-          maxLength: 20,
+          required: true,
           editor: lexicalEditor({
             features: ({ rootFeatures }) => {
               return [
                 ...rootFeatures,
-                HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5', 'p'] }),
+                HeadingFeature({ enabledHeadingSizes: ['h2', 'h3', 'h4', 'h5'] }),
                 FixedToolbarFeature(),
                 InlineToolbarFeature(),
               ]
