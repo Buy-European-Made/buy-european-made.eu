@@ -26,7 +26,7 @@ const blockComponents = {
   // TODO: remove the whole block component if not used
   banner: BannerBlock,
   stats: StatsBlock,
-  highlightBlock: HighlightBlock
+  highlightBlock: HighlightBlock,
   tabCards: TabCards,
 }
 

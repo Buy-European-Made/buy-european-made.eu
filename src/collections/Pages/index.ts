@@ -93,7 +93,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Team,
                 Banner,
                 Stats,
-                HighlightBlock
+                HighlightBlock,
                 TabCards,
               ],
               required: true,

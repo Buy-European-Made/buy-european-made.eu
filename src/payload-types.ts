@@ -54,6 +54,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -557,6 +558,7 @@ export interface Form {
             label?: string | null;
             width?: number | null;
             defaultValue?: string | null;
+            placeholder?: string | null;
             options?:
               | {
                   label: string;
@@ -811,36 +813,6 @@ export interface StatsBlock {
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "highlightBlock".
- * via the `definition` "TabCards".
- */
-export interface TabCards {
-  color?: ('eu-yellow' | 'eu-blue') | null;
-  tabs: {
-    title: string;
-    text: {
-      root: {
-        type: string;
-        children: {
-          type: string;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    };
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'tabCards';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
  */
 export interface HighlightBlock {
   title: string;
@@ -875,10 +847,10 @@ export interface HighlightBlock {
  */
 export interface EuProduct {
   id: number;
-  name?: string | null;
+  name: string;
   description?: string | null;
   producedBy?: (number | null) | Brand;
-  link?: string | null;
+  link: string;
   logo?: (number | null) | Media;
   categories?: (number | Category)[] | null;
   subcategories?: (number | Subcategory)[] | null;
@@ -1036,6 +1008,35 @@ export interface Article {
   slugLock?: boolean | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards".
+ */
+export interface TabCards {
+  color?: ('eu-yellow' | 'eu-blue') | null;
+  tabs: {
+    title: string;
+    text: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tabCards';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1524,6 +1525,13 @@ export interface HighlightBlockSelect<T extends boolean = true> {
     | T
     | {
         articles?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TabCards_select".
  */
 export interface TabCardsSelect<T extends boolean = true> {
@@ -1863,6 +1871,7 @@ export interface FormsSelect<T extends boolean = true> {
               label?: T;
               width?: T;
               defaultValue?: T;
+              placeholder?: T;
               options?:
                 | T
                 | {
