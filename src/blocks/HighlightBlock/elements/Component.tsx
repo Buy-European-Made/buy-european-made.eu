@@ -104,7 +104,7 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
                     </CardDescription>
                   }
                   <Button asChild className='text-white p-0' variant={'link'}>
-                    <Link target='_blank' href='' className='text-black'>More Details</Link>
+                    <Link target='_blank' href={element.link} className='text-black'>More Details</Link>
 
                   </Button>
                 </CardContent>
