@@ -29,7 +29,7 @@ export default async function Product({ params: paramsPromise }: Args) {
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
       <ProductCard product={product} />
-    </div >
+    </div>
   )
 }
 

@@ -13,6 +13,7 @@ import { Team } from '@/blocks/Team/config'
 import { Banner } from '@/blocks/Banner/config'
 import { Stats } from '@/blocks/Stats/config'
 import { HighlightBlock } from '@/blocks/HighlightBlock/config'
+import { TabCards } from '../../blocks/TabCards/config'
 
 import { hero } from '@/heros/config'
 import { slugField } from '@/fields/slug'
@@ -93,6 +94,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Banner,
                 Stats,
                 HighlightBlock
+                TabCards,
               ],
               required: true,
               admin: {

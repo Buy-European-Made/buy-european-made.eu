@@ -1,4 +1,3 @@
-
 import type { CollectionConfig } from 'payload'
 
 import { anyone } from '@/access/anyone'
@@ -28,13 +27,13 @@ export const Subcategories: CollectionConfig = {
       type: 'relationship',
       relationTo: 'categories',
       required: true,
-      hasMany: true
+      hasMany: true,
     },
     {
       name: 'products',
       type: 'join',
       collection: 'eu-products',
-      on: 'subcategories'
+      on: 'subcategories',
     },
     ...slugField('name'),
   ],

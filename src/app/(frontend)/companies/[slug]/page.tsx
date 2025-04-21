@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next'
 import { PayloadRedirects } from '@/components/PayloadRedirects'
 import configPromise from '@payload-config'
@@ -33,13 +32,13 @@ export default async function CompanyPage({ params: paramsPromise }: Args) {
     <article className="pt-16 pb-16">
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
-      {ownedBrands?.map(b => {
+      {ownedBrands?.map((b) => {
         return <p key={b.id}>{b.name}</p>
       })}
-      {producedProducts?.map(p => {
+      {producedProducts?.map((p) => {
         return <p key={p.id}>{p.name}</p>
       })}
-    </article >
+    </article>
   )
 }
 
@@ -51,19 +50,24 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 function getProducedProducts(brands: Brand[]) {
-  return brands?.map((b: Brand) => {
-    return b?.produces?.docs?.filter((euProd): euProd is EuProduct => {
-      return typeof euProd !== 'number'
+  return (
+    brands?.map((b: Brand) => {
+      return (
+        b?.produces?.docs?.filter((euProd): euProd is EuProduct => {
+          return typeof euProd !== 'number'
+        }) || []
+      )
     }) || []
-  }) || []
+  )
 }
 
 function getBrands(company: Company) {
-  return company?.ownBrands?.filter((brand): brand is Brand => {
-    return typeof brand !== 'number'
-  }) || []
+  return (
+    company?.ownBrands?.filter((brand): brand is Brand => {
+      return typeof brand !== 'number'
+    }) || []
+  )
 }
-
 
 const queryCompanyByName = cache(async ({ slug }: { slug: string }) => {
   const { isEnabled: draft } = await draftMode()

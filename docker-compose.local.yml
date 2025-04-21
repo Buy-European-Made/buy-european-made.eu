@@ -1,4 +1,3 @@
-
 services:
   payload:
     networks:
@@ -6,14 +5,13 @@ services:
 
   postgres:
     ports:
-      - "5432:5432"
+      - '5432:5432'
     networks:
       - local
 
-
   cloudbeaver:
     image: dbeaver/cloudbeaver:latest
-    container_name: "cloudbeaver"
+    container_name: 'cloudbeaver'
     restart: always
     ports:
       - '8978:8978'
