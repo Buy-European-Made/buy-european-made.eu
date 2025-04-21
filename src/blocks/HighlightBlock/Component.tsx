@@ -36,7 +36,7 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
       }))
   }
 
-  if (collection === 'articles' && articlesArray) {
+  else if (collection === 'articles' && articlesArray) {
     const array = articlesArray.map(el => el.articles)
     inputElements = array.filter((el) => el !== null && typeof el === 'object').map(el => ({
       name: el.name,
@@ -46,7 +46,7 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
     }))
   }
 
-  if (collection === 'categories' && categoriesArray) {
+  else if (collection === 'categories' && categoriesArray) {
     const array = categoriesArray.map(el => el.categories)
     inputElements = array.filter(el => el !== null && typeof el === 'object').map(el => ({
       name: el.name,
