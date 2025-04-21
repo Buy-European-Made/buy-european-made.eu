@@ -90,12 +90,12 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
       >
         <CarouselContent>
           {array.map((element, index) => (
-            < CarouselItem key={index} className={`w-full ${cardsToDisplay}`} >
+            < CarouselItem key={index} className={`w-full ${cardsToDisplay} rounded-lg`} >
               <Card
                 className={`${selectedSize?.card} bg-cover bg-center relative w-full md:max-w-md lg:max-w-lg`}
                 style={{ backgroundImage: `url(${element.image})` }}
               >
-                <CardContent className="absolute inset-0 flex flex-col bg-black bg-opacity-70 text-white items-start justify-between p-4">
+                <CardContent className="absolute inset-0 flex flex-col bg-black bg-opacity-70 text-white items-start justify-between p-4 rounded-lg">
                   <H3 className='line-clamp-4'>{element.name}</H3>
                   {
                     (size == 'large' || size == 'xl') && element.summary &&
