@@ -1,5 +1,5 @@
 
-import { Article, EuProduct, HighlightBlock as HighlightBlockProps } from '@/payload-types'
+import { HighlightBlock as HighlightBlockProps } from '@/payload-types'
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -7,53 +7,63 @@ import { HighlightedElement, HighlightElementsComponent } from './elements/Compo
 
 type Props = HighlightBlockProps
 
+const getProductElements = async (productArray: any[]): Promise<HighlightedElement[]> => {
 
+  const ids = productArray?.map(product => {
+    if (product === null || product === undefined) return null
+    return typeof product === 'number' ? product : product.product
+  }).filter(el => typeof el === 'number')
+  const payload = await getPayload({ config })
+  const findResult = await payload.find({
+    collection: 'eu-products',
+    where: {
+      id: {
+        in: ids
+      }
+    }
+  })
+
+  return findResult.docs
+    .filter((el) => el !== null && typeof el === 'object')
+    .map((el) => ({
+      name: el.name,
+      image: typeof el.logo === 'object' && el.logo?.url ? el.logo?.url : undefined,
+      link: el.link,
+      summary: el.description ?? undefined
+    }))
+}
+
+const getCategoryElements = (categoriesArray: any[]): HighlightedElement[] => {
+  const array = categoriesArray.map((el: { categories: any }) => el.categories)
+  return array.filter((el: null) => el !== null && typeof el === 'object').map((el: { name: any }) => ({
+    name: el.name,
+    image: undefined,
+    summary: 'Category description',
+    link: 'https://www.google.com'
+  }))
+}
+
+const getArticlesElements = (articlesArray: any[]): HighlightedElement[] => {
+  const array = articlesArray.map(el => el.articles)
+  return array.filter((el) => el !== null && typeof el === 'object').map(el => ({
+    name: el.name,
+    summary: el.shortSummary,
+    image: typeof el.heroPicture === 'object' && el.heroPicture?.url ? el.heroPicture?.url : undefined,
+    link: el.link
+  }))
+}
 export const HighlightBlock: React.FC<Props> = async ({ title, collection, size, cardsToShow, productArray, categoriesArray, articlesArray }) => {
 
   let inputElements: HighlightedElement[] = []
+
   if (collection === 'eu-products' && productArray) {
-    const ids = productArray?.map(product => {
-      if (product === null || product === undefined) return null
-      return typeof product === 'number' ? product : product.product
-    }).filter(el => typeof el === 'number')
-    const payload = await getPayload({ config })
-    const findResult = await payload.find({
-      collection: collection,
-      where: {
-        id: {
-          in: ids
-        }
-      }
-    })
-
-    inputElements = findResult.docs
-      .filter((el): el is EuProduct => el !== null && typeof el === 'object')
-      .map((el) => ({
-        name: el.name,
-        image: typeof el.logo === 'object' && el.logo?.url ? el.logo?.url : undefined,
-        link: el.link,
-        summary: el.description ?? undefined
-      }))
+    inputElements = await getProductElements(productArray)
   }
-
   else if (collection === 'articles' && articlesArray) {
-    const array = articlesArray.map(el => el.articles)
-    inputElements = array.filter((el) => el !== null && typeof el === 'object').map(el => ({
-      name: el.name,
-      summary: el.shortSummary,
-      image: typeof el.heroPicture === 'object' && el.heroPicture?.url ? el.heroPicture?.url : undefined,
-      link: el.link
-    }))
+    inputElements = getArticlesElements(articlesArray)
   }
-
   else if (collection === 'categories' && categoriesArray) {
-    const array = categoriesArray.map(el => el.categories)
-    inputElements = array.filter(el => el !== null && typeof el === 'object').map(el => ({
-      name: el.name,
-      image: undefined,
-      summary: 'Category description',
-      link: 'https://www.google.com'
-    }))
+    inputElements = getCategoryElements(categoriesArray)
   }
 
   return (
