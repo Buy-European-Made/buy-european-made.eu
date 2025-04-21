@@ -27,7 +27,7 @@ of the carousel
 export type HighlightedElement = {
   name: string
   summary?: string
-  image: string
+  image?: string
   link: string
 }
 

@@ -1,5 +1,5 @@
 
-import { Category, EuProduct, HighlightBlock as HighlightBlockProps } from '@/payload-types'
+import { Article, EuProduct, HighlightBlock as HighlightBlockProps } from '@/payload-types'
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -25,28 +25,32 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
         }
       }
     })
+
     inputElements = findResult.docs
-      .filter((el): el is EuProduct => el.name != null && el.logo != null && el.logo.url !== null && el.link != null)
+      .filter((el): el is EuProduct => el !== null && typeof el === 'object')
       .map((el) => ({
         name: el.name,
-        image: typeof el.logo === 'number' ? null : el.logo?.url,
+        image: typeof el.logo === 'object' && el.logo?.url ? el.logo?.url : undefined,
         link: el.link,
-        summary: el.description
+        summary: el.description ?? undefined
       }))
   }
+
   if (collection === 'articles' && articlesArray) {
-    inputElements = articlesArray.filter((el) => typeof el !== 'number').map(el => ({
-      name: el.articles?.name ?? "Name not found",
-      summary: el.articles?.shortSummary,
-      image: typeof el.articles === 'number' ? null : el.articles?.heroPicture?.url,
-      link: el?.articles.link
+    const array = articlesArray.map(el => el.articles)
+    inputElements = array.filter((el) => el !== null && typeof el === 'object').map(el => ({
+      name: el.name,
+      summary: el.shortSummary,
+      image: typeof el.heroPicture === 'object' && el.heroPicture?.url ? el.heroPicture?.url : undefined,
+      link: el.link
     }))
   }
 
   if (collection === 'categories' && categoriesArray) {
-    inputElements = categoriesArray.map(el => ({
-      name: el.categories?.name ?? "Name not found",
-      image: null,
+    const array = categoriesArray.map(el => el.categories)
+    inputElements = array.filter(el => el !== null && typeof el === 'object').map(el => ({
+      name: el.name,
+      image: undefined,
       summary: 'Category description',
       link: 'https://www.google.com'
     }))

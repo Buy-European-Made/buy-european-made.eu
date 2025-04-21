@@ -55,7 +55,7 @@ export const HighlightBlock: Block = {
           name: 'productArray',
           label: 'Select Products',
           minRows: 3,
-          maxRows: 5,
+          maxRows: 8,
           admin: {
             condition: (_, siblingData) => siblingData.collection === 'eu-products',
           },
@@ -87,7 +87,6 @@ export const HighlightBlock: Block = {
             },
           ]
         },
-
         {
           type: 'array',
           name: 'articlesArray',
