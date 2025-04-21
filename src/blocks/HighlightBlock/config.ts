@@ -32,7 +32,19 @@ export const HighlightBlock: Block = {
       options: [
         { label: 'Medium', value: 'medium' },
         { label: 'Large', value: 'large' },
+        { label: 'Extra large', value: 'xl' },
       ]
+    },
+    {
+      name: 'cardsToShow',
+      type: 'radio',
+      label: 'Select how many cards you want to show on large screens',
+      required: true,
+      options: [
+        { label: '2', value: 'two' },
+        { label: '3', value: 'three' },
+      ],
+      defaultValue: 'three'
     },
     {
       type: 'collapsible',

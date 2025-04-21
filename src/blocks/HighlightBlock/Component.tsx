@@ -8,10 +8,8 @@ import { HighlightedElement, HighlightElementsComponent } from './elements/Compo
 type Props = HighlightBlockProps
 
 
-export const HighlightBlock: React.FC<Props> = async ({ title, collection, size, productArray, categoriesArray, articlesArray }) => {
-  // here I want to created a unified type like: HighlightedElement that contains name, image, link
-  // i can grab the info and map each type to the newly created  type
-  // this type then gets passed to the component which is going to be type agnostic
+export const HighlightBlock: React.FC<Props> = async ({ title, collection, size, cardsToShow, productArray, categoriesArray, articlesArray }) => {
+
   let inputElements: HighlightedElement[] = []
   if (collection === 'eu-products' && productArray) {
     const ids = productArray?.map(product => {
@@ -37,7 +35,6 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
       }))
   }
   if (collection === 'articles' && articlesArray) {
-    console.log(articlesArray)
     inputElements = articlesArray.filter((el) => typeof el !== 'number').map(el => ({
       name: el.articles?.name ?? "Name not found",
       summary: el.articles?.shortSummary,
@@ -47,7 +44,6 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
   }
 
   if (collection === 'categories' && categoriesArray) {
-    console.log(categoriesArray)
     inputElements = categoriesArray.map(el => ({
       name: el.categories?.name ?? "Name not found",
       image: null,
@@ -56,13 +52,11 @@ export const HighlightBlock: React.FC<Props> = async ({ title, collection, size,
     }))
   }
 
-  console.log(inputElements)
-
   return (
     <>
       {
         inputElements.length !== 0 &&
-        <HighlightElementsComponent title={title} array={inputElements} size={size} />
+        <HighlightElementsComponent title={title} array={inputElements} size={size} cardsToShow={cardsToShow} />
       }
     </>
   )

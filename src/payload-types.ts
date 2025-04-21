@@ -814,7 +814,8 @@ export interface StatsBlock {
 export interface HighlightBlock {
   title: string;
   collection: 'eu-products' | 'categories' | 'articles';
-  size: 'medium' | 'large';
+  size: 'medium' | 'large' | 'xl';
+  cardsToShow: 'two' | 'three';
   productArray?:
     | {
         product?: (number | null) | EuProduct;
@@ -1474,6 +1475,7 @@ export interface HighlightBlockSelect<T extends boolean = true> {
   title?: T;
   collection?: T;
   size?: T;
+  cardsToShow?: T;
   productArray?:
     | T
     | {
