@@ -5,7 +5,6 @@ started.
 
 <!--toc:start-->
 
-- [Contributing to the project](#contributing-to-the-project)
 - [Contributing guidelines](#contributing-guidelines)
 - [Base template](#base-template)
 - [Development environment](#development-environment)
@@ -20,8 +19,8 @@ started.
   - [Creating a collection](#creating-a-collection)
   - [Creating a block](#creating-a-block)
 - [Git-Hooks](#git-hooks)
-
-<!--toc:end-->
+  - [Troubleshhoting Husky errors](#troubleshhoting-husky-errors)
+  <!--toc:end-->
 
 # Contributing guidelines
 
@@ -157,3 +156,15 @@ The following hooks are available:
 - `pre-push`: Runs `pnpm lint` and `pnpm format:check` to check the code formatting and linting on all files.
 
 Skip the hooks by running `git commit --no-verify` or `git push --no-verify`.
+
+## Troubleshhoting Husky errors
+
+If Husly is complaining about "empty commits": this means you have made "code
+style" changes which were completely erased by the linting process, ultimately
+resulting in an empty commit.
+
+If Husky is complaining about file permissions. Try running the following in the root of your project:
+
+```sh
+sudo chown -R --reference=. .next .pnpm-store node_modules
+```
