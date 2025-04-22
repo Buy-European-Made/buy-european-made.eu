@@ -51,6 +51,7 @@ const getArticlesElements = (articlesArray: Article[]): HighlightedElement[] => 
     link: el.link,
   }))
 }
+
 export const HighlightBlock: React.FC<Props> = async ({
   title,
   collection,
