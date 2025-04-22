@@ -1,16 +1,11 @@
-"use client"
+'use client'
 import React from 'react'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  type CarouselApi
-} from "@/components/ui/carousel"
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
 
 import { Card, CardContent, CardDescription, CardFooter } from '@/components/ui/card'
 import { H3 } from '@/components/ui/typography'
-import { Button } from '@/components/ui/button';
-import { Link } from '@payloadcms/ui';
+import { Button } from '@/components/ui/button'
+import { Link } from '@payloadcms/ui'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 type Props = {
@@ -34,30 +29,35 @@ export type HighlightedElement = {
 type SizeClasses = {
   [key: string]: {
     overallSize: string
-    header: string,
+    header: string
     card: string
-  };
-};
+  }
+}
 
 const sizes: SizeClasses = {
   medium: {
     overallSize: 'w-1/2',
     header: 'max-h-8',
-    card: 'h-48'
+    card: 'h-48',
   },
   large: {
     overallSize: 'w-1/2',
     header: 'h-full',
-    card: 'min-h-72'
+    card: 'min-h-72',
   },
   xl: {
     overallSize: 'w-2/3',
     header: 'h-full',
-    card: 'min-h-96'
-  }
-};
+    card: 'min-h-96',
+  },
+}
 
-export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size, cardsToShow }) => {
+export const HighlightElementsComponent: React.FC<Props> = ({
+  title,
+  array,
+  size,
+  cardsToShow,
+}) => {
   const selectedSize = sizes[size]
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
@@ -67,7 +67,7 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
       return
     }
     setCurrent(api.selectedScrollSnap())
-    api.on("select", () => {
+    api.on('select', () => {
       setCurrent(api.selectedScrollSnap())
     })
   }, [api])
@@ -78,34 +78,34 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
   }
 
   return (
-    <div className='flex flex-col justify-center items-center w-full p-4'>
-      <H3 className='mb-2'>{title}</H3>
+    <div className="flex flex-col justify-center items-center w-full p-4">
+      <H3 className="mb-2">{title}</H3>
       <Carousel
         opts={{
           loop: true,
-          align: 'start'
+          align: 'start',
         }}
         setApi={setApi}
         className={`${selectedSize?.overallSize}`} // this changes the size of the entire component
       >
         <CarouselContent>
           {array.map((element, index) => (
-            < CarouselItem key={index} className={`w-full ${cardsToDisplay} rounded-lg`} >
+            <CarouselItem key={index} className={`w-full ${cardsToDisplay} rounded-lg`}>
               <Card
                 className={`${selectedSize?.card} bg-cover bg-center relative w-full`}
                 style={{ backgroundImage: `url(${element.image})` }}
               >
                 <CardContent className="absolute inset-0 flex flex-col bg-neutral-950 bg-opacity-70 text-white items-start justify-between p-4 rounded-lg">
-                  <H3 className='line-clamp-4'>{element.name}</H3>
-                  {
-                    (size == 'large' || size == 'xl') && element.summary &&
-                    <CardDescription className='text-white line-clamp-3'>
+                  <H3 className="line-clamp-4">{element.name}</H3>
+                  {(size == 'large' || size == 'xl') && element.summary && (
+                    <CardDescription className="text-white line-clamp-3">
                       {element.summary}
                     </CardDescription>
-                  }
-                  <Button asChild className='text-white p-0' variant={'link'}>
-                    <Link target='_blank' href={element.link} className='text-black'>More Details</Link>
-
+                  )}
+                  <Button asChild className="text-white p-0" variant={'link'}>
+                    <Link target="_blank" href={element.link} className="text-black">
+                      More Details
+                    </Link>
                   </Button>
                 </CardContent>
                 <CardFooter></CardFooter>
@@ -113,15 +113,23 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className='flex justify-start items-start gap-3 pt-2'>
-          <Button className='rounded-full w-10 p-1' variant='outline' onClick={() => api?.scrollTo(current - 1)}>
+        <div className="flex justify-start items-start gap-3 pt-2">
+          <Button
+            className="rounded-full w-10 p-1"
+            variant="outline"
+            onClick={() => api?.scrollTo(current - 1)}
+          >
             <ArrowLeft />
           </Button>
-          <Button className='rounded-full w-10 p-1' variant={'outline'} onClick={() => api?.scrollTo(current + 1)}>
+          <Button
+            className="rounded-full w-10 p-1"
+            variant={'outline'}
+            onClick={() => api?.scrollTo(current + 1)}
+          >
             <ArrowRight />
           </Button>
         </div>
       </Carousel>
-    </div >
+    </div>
   )
 }

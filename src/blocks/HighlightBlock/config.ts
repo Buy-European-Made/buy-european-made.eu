@@ -22,7 +22,7 @@ export const HighlightBlock: Block = {
         { label: 'European Products', value: 'eu-products' },
         { label: 'Category', value: 'categories' },
         { label: 'Articles', value: 'articles' },
-      ]
+      ],
     },
     {
       name: 'size',
@@ -33,7 +33,7 @@ export const HighlightBlock: Block = {
         { label: 'Medium', value: 'medium' },
         { label: 'Large', value: 'large' },
         { label: 'Extra large', value: 'xl' },
-      ]
+      ],
     },
     {
       name: 'cardsToShow',
@@ -44,7 +44,7 @@ export const HighlightBlock: Block = {
         { label: '2', value: 'two' },
         { label: '3', value: 'three' },
       ],
-      defaultValue: 'three'
+      defaultValue: 'three',
     },
     {
       type: 'collapsible',
@@ -60,14 +60,13 @@ export const HighlightBlock: Block = {
             condition: (_, siblingData) => siblingData.collection === 'eu-products',
           },
           fields: [
-
             {
               name: 'product',
               type: 'relationship',
               label: 'Pick product',
               relationTo: 'eu-products',
             },
-          ]
+          ],
         },
         {
           type: 'array',
@@ -85,7 +84,7 @@ export const HighlightBlock: Block = {
               label: 'Pick categories',
               relationTo: 'categories',
             },
-          ]
+          ],
         },
         {
           type: 'array',
@@ -103,10 +102,10 @@ export const HighlightBlock: Block = {
               label: 'Pick articles',
               relationTo: 'articles',
             },
-          ]
-        }
+          ],
+        },
       ],
     },
   ],
-  interfaceName: 'highlightBlock'
+  interfaceName: 'highlightBlock',
 }
