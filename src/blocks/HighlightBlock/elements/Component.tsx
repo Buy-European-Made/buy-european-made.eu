@@ -95,7 +95,7 @@ export const HighlightElementsComponent: React.FC<Props> = ({ title, array, size
                 className={`${selectedSize?.card} bg-cover bg-center relative w-full`}
                 style={{ backgroundImage: `url(${element.image})` }}
               >
-                <CardContent className="absolute inset-0 flex flex-col bg-stone-900 bg-opacity-70 text-white items-start justify-between p-4 rounded-lg">
+                <CardContent className="absolute inset-0 flex flex-col bg-neutral-950 bg-opacity-70 text-white items-start justify-between p-4 rounded-lg">
                   <H3 className='line-clamp-4'>{element.name}</H3>
                   {
                     (size == 'large' || size == 'xl') && element.summary &&
