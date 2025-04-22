@@ -2,21 +2,44 @@ import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-import { ProductCard } from './product/Component'
+import { loadSearchParams } from '@/app/(frontend)/searchParams'
+import type { SearchParams } from 'nuqs/server'
+import { ProductListClient } from './product/ProductList.client'
 
-export const ProductsListBlock: React.FC = async () => {
+export const ProductsListBlock: React.FC<{
+  searchParams: Promise<SearchParams>
+}> = async ({ searchParams }) => {
+  const { s } = await loadSearchParams(searchParams)
   const payload = await getPayload({ config })
-  const findResult = await payload.find({ collection: 'eu-products', limit: 100 })
 
-  if (findResult.docs.length > 0) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-3">
-        {findResult.docs.map((product) => {
-          return <ProductCard key={product.id} product={product} />
-        })}
-      </div>
-    )
+  let initialProducts
+  if (s) {
+    initialProducts = await payload.find({
+      collection: 'eu-products',
+      limit: 100,
+      where: {
+        or: [
+          {
+            name: {
+              contains: s,
+            },
+          },
+          {
+            description: {
+              contains: s,
+            },
+          },
+          {
+            'tags.name': {
+              contains: s,
+            },
+          },
+        ],
+      },
+    })
   } else {
-    return 'No products'
+    initialProducts = await payload.find({ collection: 'eu-products', limit: 100 })
   }
+
+  return <ProductListClient products={initialProducts.docs} />
 }

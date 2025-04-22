@@ -12,6 +12,7 @@ import { TeamBlock } from './Team/Component'
 import { BannerBlock } from './Banner/Component'
 import { StatsBlock } from './Stats/Component'
 import { TabCards } from './TabCards/Component'
+import { SearchParams } from 'nuqs/server'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -30,8 +31,9 @@ const blockComponents = {
 
 export const RenderBlocks: React.FC<{
   blocks: Page['layout'][0][]
+  searchParams: Promise<SearchParams>
 }> = (props) => {
-  const { blocks } = props
+  const { blocks, searchParams } = props
 
   const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
 
@@ -48,7 +50,7 @@ export const RenderBlocks: React.FC<{
               return (
                 <div className="my-16" key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
-                  <Block {...block} disableInnerContainer />
+                  <Block {...block} disableInnerContainer searchParams={searchParams} />
                 </div>
               )
             }

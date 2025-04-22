@@ -1,9 +1,12 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
+import { useQueryState } from 'nuqs'
 
 const SearchInput = () => {
-  const [_searchVal, setSearchVal] = useState('')
+  const [searchVal, setSearchVal] = useQueryState('s', {
+    throttleMs: 500,
+  })
 
   return (
     <form className="max-w-sm m-auto py-4">
@@ -33,6 +36,7 @@ const SearchInput = () => {
         </div>
         <input
           onChange={(e) => setSearchVal(e.target.value)}
+          value={searchVal ?? ''}
           type="search"
           id="search"
           className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50"

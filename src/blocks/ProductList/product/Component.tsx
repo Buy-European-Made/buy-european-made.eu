@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 
 import type { Category, Country, EuProduct, ReplacedProduct, Subcategory } from '@/payload-types'
@@ -13,7 +14,7 @@ interface ProductCardProps {
   product: EuProduct
 }
 
-export const ProductCard: React.FC<ProductCardProps> = async ({ product }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const hasCategory =
     product.categories !== null &&
     product.categories !== undefined &&
