@@ -1,4 +1,9 @@
-import { Article, Category, HighlightBlock as HighlightBlockProps } from '@/payload-types'
+import {
+  Article,
+  Category,
+  EuProduct,
+  HighlightBlock as HighlightBlockProps,
+} from '@/payload-types'
 import React from 'react'
 import { getPayload } from 'payload'
 import config from '@payload-config'
@@ -6,13 +11,15 @@ import { HighlightedElement, HighlightElementsComponent } from './elements/Compo
 
 type Props = HighlightBlockProps
 
-const getProductElements = async (productArray: any[]): Promise<HighlightedElement[]> => {
+const getProductElements = async (
+  productArray: { product?: EuProduct | null | undefined | number }[],
+): Promise<HighlightedElement[]> => {
   const ids = productArray
     ?.map((product) => {
-      if (product === null || product === undefined) return null
-      return typeof product === 'number' ? product : product.product
+      if (!product) return null
+      return typeof product.product === 'number' ? product.product : (product.product?.id ?? null)
     })
-    .filter((el) => typeof el === 'number')
+    .filter((el): el is number => typeof el === 'number')
   const payload = await getPayload({ config })
   const findResult = await payload.find({
     collection: 'eu-products',
@@ -38,7 +45,7 @@ const getCategoryElements = (categoriesArray: Category[]): HighlightedElement[] 
     name: el.name,
     image: undefined,
     summary: 'Category description',
-    link: 'https://www.google.com',
+    link: el.slug ?? '',
   }))
 }
 

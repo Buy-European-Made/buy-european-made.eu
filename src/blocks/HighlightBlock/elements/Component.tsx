@@ -1,12 +1,20 @@
 'use client'
 import React from 'react'
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from '@/components/ui/carousel'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from '@/components/ui/carousel'
 
 import { Card, CardContent, CardDescription, CardFooter } from '@/components/ui/card'
 import { H3 } from '@/components/ui/typography'
 import { Button } from '@/components/ui/button'
 import { Link } from '@payloadcms/ui'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { cn } from '@/utilities/ui'
 
 type Props = {
   title: string
@@ -41,7 +49,7 @@ const sizes: SizeClasses = {
     card: 'h-48',
   },
   large: {
-    overallSize: 'w-1/2',
+    overallSize: 'w-2/3',
     header: 'h-full',
     card: 'min-h-72',
   },
@@ -59,23 +67,6 @@ export const HighlightElementsComponent: React.FC<Props> = ({
   cardsToShow,
 }) => {
   const selectedSize = sizes[size]
-  const [api, setApi] = React.useState<CarouselApi>()
-  const [current, setCurrent] = React.useState(0)
-
-  React.useEffect(() => {
-    if (!api) {
-      return
-    }
-    setCurrent(api.selectedScrollSnap())
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap())
-    })
-  }, [api])
-
-  let cardsToDisplay = 'md:basis-1/3 lg:basis-1/3'
-  if (cardsToShow === 'two') {
-    cardsToDisplay = 'md:basis-1/2 lg:basis-1/2'
-  }
 
   return (
     <div className="flex flex-col justify-center items-center w-full p-4">
@@ -85,25 +76,31 @@ export const HighlightElementsComponent: React.FC<Props> = ({
           loop: true,
           align: 'start',
         }}
-        setApi={setApi}
         className={`${selectedSize?.overallSize}`} // this changes the size of the entire component
       >
         <CarouselContent>
           {array.map((element, index) => (
-            <CarouselItem key={index} className={`w-full ${cardsToDisplay} rounded-lg`}>
+            <CarouselItem
+              key={index}
+              // className={`w-full md:basis-1/2 ${cardsToDisplay} rounded-lg`}
+              className={cn('w-full md:basis-1/2 rounded-lg', {
+                'lg:basis-1/3': cardsToShow === 'three',
+                'lg:basis-1/2': cardsToShow === 'two',
+              })}
+            >
               <Card
                 className={`${selectedSize?.card} bg-cover bg-center relative w-full`}
                 style={{ backgroundImage: `url(${element.image})` }}
               >
-                <CardContent className="absolute inset-0 flex flex-col bg-neutral-950 bg-opacity-70 text-white items-start justify-between p-4 rounded-lg">
-                  <H3 className="line-clamp-4">{element.name}</H3>
+                <CardContent className="absolute inset-0 flex flex-col bg-neutral-950 bg-opacity-70 text-white items-start justify-between p-4 w-full rounded-lg">
+                  <H3 className="line-clamp-4 w-full break-words">{element.name}</H3>
                   {(size == 'large' || size == 'xl') && element.summary && (
                     <CardDescription className="text-white line-clamp-3">
                       {element.summary}
                     </CardDescription>
                   )}
                   <Button asChild className="text-white p-0" variant={'link'}>
-                    <Link target="_blank" href={element.link} className="text-black">
+                    <Link target="_blank" href={element.link} className="text-black items-center">
                       More Details
                     </Link>
                   </Button>
@@ -113,22 +110,8 @@ export const HighlightElementsComponent: React.FC<Props> = ({
             </CarouselItem>
           ))}
         </CarouselContent>
-        <div className="flex justify-start items-start gap-3 pt-2">
-          <Button
-            className="rounded-full w-10 p-1"
-            variant="outline"
-            onClick={() => api?.scrollTo(current - 1)}
-          >
-            <ArrowLeft />
-          </Button>
-          <Button
-            className="rounded-full w-10 p-1"
-            variant={'outline'}
-            onClick={() => api?.scrollTo(current + 1)}
-          >
-            <ArrowRight />
-          </Button>
-        </div>
+        <CarouselPrevious />
+        <CarouselNext />
       </Carousel>
     </div>
   )
