@@ -27,6 +27,7 @@ import {
 import { Team } from '@/blocks/Team/config'
 import { Banner } from '@/blocks/Banner/config'
 import { Stats } from '@/blocks/Stats/config'
+import { BentoGrid } from '@/blocks/BentoGrid/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -93,6 +94,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Banner,
                 Stats,
                 TabCards,
+                BentoGrid,
               ],
               required: true,
               admin: {

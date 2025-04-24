@@ -250,6 +250,7 @@ export interface Page {
     | BannerBlock
     | StatsBlock
     | TabCards
+    | BentoGrid
   )[];
   meta?: {
     title?: string | null;
@@ -836,6 +837,24 @@ export interface TabCards {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoGrid".
+ */
+export interface BentoGrid {
+  elements?:
+    | {
+        title?: string | null;
+        content?: string | null;
+        link?: string | null;
+        bgImage?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bentoGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "categories".
  */
 export interface Category {
@@ -1285,6 +1304,7 @@ export interface PagesSelect<T extends boolean = true> {
         banner?: T | BannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
         tabCards?: T | TabCardsSelect<T>;
+        bentoGrid?: T | BentoGridSelect<T>;
       };
   meta?:
     | T
@@ -1455,6 +1475,23 @@ export interface TabCardsSelect<T extends boolean = true> {
     | {
         title?: T;
         text?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoGrid_select".
+ */
+export interface BentoGridSelect<T extends boolean = true> {
+  elements?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        link?: T;
+        bgImage?: T;
         id?: T;
       };
   id?: T;

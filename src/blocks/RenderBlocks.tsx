@@ -12,6 +12,7 @@ import { TeamBlock } from './Team/Component'
 import { BannerBlock } from './Banner/Component'
 import { StatsBlock } from './Stats/Component'
 import { TabCards } from './TabCards/Component'
+import { BentoGrid } from './BentoGrid/Component'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -26,6 +27,7 @@ const blockComponents = {
   banner: BannerBlock,
   stats: StatsBlock,
   tabCards: TabCards,
+  bentoGrid: BentoGrid,
 }
 
 export const RenderBlocks: React.FC<{
