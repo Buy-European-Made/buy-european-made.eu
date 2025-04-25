@@ -80,6 +80,9 @@ export interface Config {
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
+    'crowdin-files': CrowdinFile;
+    'crowdin-collection-directories': CrowdinCollectionDirectory;
+    'crowdin-article-directories': CrowdinArticleDirectory;
     'payload-jobs': PayloadJob;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -118,6 +121,9 @@ export interface Config {
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
+    'crowdin-files': CrowdinFilesSelect<false> | CrowdinFilesSelect<true>;
+    'crowdin-collection-directories': CrowdinCollectionDirectoriesSelect<false> | CrowdinCollectionDirectoriesSelect<true>;
+    'crowdin-article-directories': CrowdinArticleDirectoriesSelect<false> | CrowdinArticleDirectoriesSelect<true>;
     'payload-jobs': PayloadJobsSelect<false> | PayloadJobsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -167,6 +173,7 @@ export interface Config {
   };
   jobs: {
     tasks: {
+      crowdinSyncTranslations: TaskCrowdinSyncTranslations;
       schedulePublish: TaskSchedulePublish;
       inline: {
         input: unknown;
@@ -1045,6 +1052,99 @@ export interface FormSubmission {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-files".
+ */
+export interface CrowdinFile {
+  id: number;
+  title?: string | null;
+  field?: string | null;
+  crowdinArticleDirectory?: (number | null) | CrowdinArticleDirectory;
+  reference?: {
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    projectId?: number | null;
+  };
+  originalId?: number | null;
+  directoryId?: number | null;
+  revisionId?: number | null;
+  name?: string | null;
+  type?: ('json' | 'html') | null;
+  path?: string | null;
+  /**
+   * The file data submitted to the Crowdin API
+   */
+  fileData?: {
+    json?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+    html?: string | null;
+    /**
+     * Copy Lexical field blocks as a translation source enabling a convenient method of merging block content on translation (i.e. merge non-translated fields like type=select).
+     */
+    sourceBlocks?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-article-directories".
+ */
+export interface CrowdinArticleDirectory {
+  id: number;
+  /**
+   * Select locales to exclude from translation synchronization.
+   */
+  excludeLocales?: ('de_DE' | 'fr_FR')[] | null;
+  name?: string | null;
+  crowdinCollectionDirectory?: (number | null) | CrowdinCollectionDirectory;
+  crowdinFiles?: (number | CrowdinFile)[] | null;
+  parent?: (number | null) | CrowdinArticleDirectory;
+  reference?: {
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    projectId?: number | null;
+  };
+  originalId?: number | null;
+  directoryId?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-collection-directories".
+ */
+export interface CrowdinCollectionDirectory {
+  id: number;
+  name?: string | null;
+  title?: string | null;
+  collectionSlug?: string | null;
+  reference?: {
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    projectId?: number | null;
+  };
+  originalId?: number | null;
+  directoryId?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
@@ -1095,7 +1195,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'schedulePublish';
+        taskSlug: 'inline' | 'crowdinSyncTranslations' | 'schedulePublish';
         taskID: string;
         input?:
           | {
@@ -1128,7 +1228,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'schedulePublish') | null;
+  taskSlug?: ('inline' | 'crowdinSyncTranslations' | 'schedulePublish') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -1197,6 +1297,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'form-submissions';
         value: number | FormSubmission;
+      } | null)
+    | ({
+        relationTo: 'crowdin-files';
+        value: number | CrowdinFile;
+      } | null)
+    | ({
+        relationTo: 'crowdin-collection-directories';
+        value: number | CrowdinCollectionDirectory;
+      } | null)
+    | ({
+        relationTo: 'crowdin-article-directories';
+        value: number | CrowdinArticleDirectory;
       } | null)
     | ({
         relationTo: 'payload-jobs';
@@ -1856,6 +1968,79 @@ export interface FormSubmissionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-files_select".
+ */
+export interface CrowdinFilesSelect<T extends boolean = true> {
+  title?: T;
+  field?: T;
+  crowdinArticleDirectory?: T;
+  reference?:
+    | T
+    | {
+        createdAt?: T;
+        updatedAt?: T;
+        projectId?: T;
+      };
+  originalId?: T;
+  directoryId?: T;
+  revisionId?: T;
+  name?: T;
+  type?: T;
+  path?: T;
+  fileData?:
+    | T
+    | {
+        json?: T;
+        html?: T;
+        sourceBlocks?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-collection-directories_select".
+ */
+export interface CrowdinCollectionDirectoriesSelect<T extends boolean = true> {
+  name?: T;
+  title?: T;
+  collectionSlug?: T;
+  reference?:
+    | T
+    | {
+        createdAt?: T;
+        updatedAt?: T;
+        projectId?: T;
+      };
+  originalId?: T;
+  directoryId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "crowdin-article-directories_select".
+ */
+export interface CrowdinArticleDirectoriesSelect<T extends boolean = true> {
+  excludeLocales?: T;
+  name?: T;
+  crowdinCollectionDirectory?: T;
+  crowdinFiles?: T;
+  parent?: T;
+  reference?:
+    | T
+    | {
+        createdAt?: T;
+        updatedAt?: T;
+        projectId?: T;
+      };
+  originalId?: T;
+  directoryId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-jobs_select".
  */
 export interface PayloadJobsSelect<T extends boolean = true> {
@@ -2010,6 +2195,29 @@ export interface FooterSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskCrowdinSyncTranslations".
+ */
+export interface TaskCrowdinSyncTranslations {
+  input: {
+    articleDirectoryId: string;
+    draft?: boolean | null;
+    excludeLocales?: ('de_DE' | 'fr_FR')[] | null;
+    dryRun?: boolean | null;
+  };
+  output: {
+    result?:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

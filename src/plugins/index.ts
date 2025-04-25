@@ -1,3 +1,4 @@
+import { crowdinSync } from 'payload-crowdin-sync'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
@@ -7,6 +8,8 @@ import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+
+import { EuProducts } from '@/collections/EuProducts'
 
 import { Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -79,4 +82,19 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
+  crowdinSync({
+    projectId: 323731,
+    token: process.env.CROWDIN_TOKEN!,
+    // organization: process.env.CROWDIN_ORGANIZATION_ID,
+    localeMap: {
+      de_DE: {
+        crowdinId: 'de',
+      },
+      fr_FR: {
+        crowdinId: 'fr',
+      },
+    },
+    sourceLocale: 'en',
+    collections: [EuProducts.slug],
+  }),
 ]
