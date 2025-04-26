@@ -29,7 +29,7 @@ export const EuProducts: CollectionConfig = {
             {
               name: 'name',
               type: 'text',
-              required: true
+              required: true,
               localized: true,
             },
             {
