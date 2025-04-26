@@ -5,10 +5,9 @@ export const BentoGrid: Block = {
   interfaceName: 'BentoGrid',
   fields: [
     {
-      name: 'elements',
-      type: 'array',
-      minRows: 5,
-      maxRows: 5,
+      type: 'collapsible',
+      label: 'Main element',
+      required: true,
       fields: [
         {
           name: 'title',
@@ -16,6 +15,28 @@ export const BentoGrid: Block = {
         },
         {
           name: 'content',
+          type: 'text',
+        },
+        {
+          name: 'link',
+          type: 'text',
+        },
+        {
+          name: 'bgImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Background Picture',
+        },
+      ],
+    },
+    {
+      name: 'elements',
+      type: 'array',
+      minRows: 4,
+      maxRows: 4,
+      fields: [
+        {
+          name: 'title',
           type: 'text',
         },
         {

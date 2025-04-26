@@ -54,6 +54,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -555,6 +556,7 @@ export interface Form {
             label?: string | null;
             width?: number | null;
             defaultValue?: string | null;
+            placeholder?: string | null;
             options?:
               | {
                   label: string;
@@ -840,10 +842,13 @@ export interface TabCards {
  * via the `definition` "BentoGrid".
  */
 export interface BentoGrid {
+  title?: string | null;
+  content?: string | null;
+  link?: string | null;
+  bgImage?: (number | null) | Media;
   elements?:
     | {
         title?: string | null;
-        content?: string | null;
         link?: string | null;
         bgImage?: (number | null) | Media;
         id?: string | null;
@@ -1485,11 +1490,14 @@ export interface TabCardsSelect<T extends boolean = true> {
  * via the `definition` "BentoGrid_select".
  */
 export interface BentoGridSelect<T extends boolean = true> {
+  title?: T;
+  content?: T;
+  link?: T;
+  bgImage?: T;
   elements?:
     | T
     | {
         title?: T;
-        content?: T;
         link?: T;
         bgImage?: T;
         id?: T;
@@ -1808,6 +1816,7 @@ export interface FormsSelect<T extends boolean = true> {
               label?: T;
               width?: T;
               defaultValue?: T;
+              placeholder?: T;
               options?:
                 | T
                 | {
