@@ -82,7 +82,6 @@ export const HighlightElementsComponent: React.FC<Props> = ({
           {array.map((element, index) => (
             <CarouselItem
               key={index}
-              // className={`w-full md:basis-1/2 ${cardsToDisplay} rounded-lg`}
               className={cn('w-full md:basis-1/2 rounded-lg', {
                 'lg:basis-1/3': cardsToShow === 'three',
                 'lg:basis-1/2': cardsToShow === 'two',
