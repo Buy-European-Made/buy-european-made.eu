@@ -3,6 +3,26 @@
 Here resides the v2 version of the [goeuropean.org](https://www.goeuropean.org)
 website.
 
+This project is built on top of the [PayloadCMS](https://payloadcms.com/) Javascript framework.
+This repository contains the "entire stack" so-to-speak.
+
+<!--toc:start-->
+
+- [Contributors](#contributors)
+- [Prerequisites](#prerequisites)
+  - [Docker dependencies](#docker-dependencies)
+  - [Local dependencies](#local-dependencies)
+  - [Services](#services)
+- [Build the application](#build-the-application)
+  - [Build with Docker](#build-with-docker)
+    - [Troubleshooting permission issues](#troubleshooting-permission-issues)
+  - [Build with Node](#build-with-node)
+- [Configuration](#configuration)
+- [Run the application](#run-the-application)
+  - [Run with Docker](#run-with-docker)
+  - [Run locally](#run-locally)
+  <!--toc:end-->
+
 # Contributors
 
 If you are a contributor, it's good that you familiarise yourself with the
@@ -10,38 +30,106 @@ README, and there are loads of useful information in the
 [CONTRIBUTING.md](./CONTRIBUTING.md) to setup your development environment for
 example.
 
+If you plan to buid and run the application in "production", please follow below.
+
 # Prerequisites
 
-## TODO software prerequisites
+Depending on the way you want to run the application, either directly on your
+machine or with Docker, you will need additional software and services.
 
-## TODO third party prerequisites
+## Docker dependencies
 
-# TODO Build
+The only thing you need to build and run the application with Docker is [Docker](https://docs.docker.com) itself.
 
-## TODO Build locally
+## Local dependencies
 
-## Build docker
+If you do not go with Docker, you will need:
 
-In order to build and run the project locally:
+- [NodeJS](https://nodejs.org/en/download) 18+.
+- [pnpm](https://pnpm.io/) (`npm i -g pnpm`).
 
-1. copy the content of the file `.env.example` to a new file called `.env`: `cp .env.example .env`
-2. build and run the docker containers: `docker compose up -d`
+## Services
 
-- if you want to inspect the internal DB run this command instead: `docker compose -f docker-compose.yml -f docker-compose.local.yml up -d`,
-  this will spin up also a _cloudBeaver_ instance.
+This application needs a [PostgreSQL](https://www.postgresql.org) database to store its data.
 
-### Connecting to the local DB
+# Build the application
 
-Once you build and start the application using `docker compose -f docker-compose.yml -f docker-compose.local.yml up -d`,
-connect to `localhost:8978` and create a new admin user (this is just a cloudBeaver user -- pick any username/password you like).
-After creating the user and logging in you can add the application database:
+To build the application, the PostgreSQL database must be running and reachable.
 
-- click on the `+` sign at the top-left of the screen
-- click on `find database`
-- type localhost in the input field and press enter, a database should now appear in the list
-- click on the database and configure it according to the values in the `.env` file, by default:
-  - database: cms
-  - user password: cms
-  - user name: cms
+## Build with Docker
 
-# TODO Configuration
+First thing first, you need to declare the `DATABASE_URI` environment variable
+in a `.env` file.
+
+If your DB is reachable at `db_host`:
+
+```sh
+echo 'DATABASE_URI=postgres://user:password@db_host:db_port/db_name' > .env
+docker buildx build --tag goeu:test .
+```
+
+If your DB is running on your local machine:
+
+```sh
+echo 'DATABASE_URI=postgres://user:password@db_host:db_port/db_name' > .env
+docker buildx build --network host --tag goeu:test .
+```
+
+e.g.
+
+```sh
+echo 'DATABASE_URI=postgres://myadmin:SomePassword@mypostgresdb.com:5432/goeuropean' > .env
+docker buildx build --network host --tag goeu:test .
+```
+
+e.g. If you followed the development environment instructions in the CONTRIBUTING:
+
+```sh
+docker buildx build --network host --tag goeu:test .
+```
+
+If everything went according to plan, you should now have a `goeu:test` Docker image on your machine.
+
+### Troubleshooting permission issues
+
+If you are having trouble with "Access denied" errors, this might be Docker's fault, us the following command from the projects' root to easily fix it:
+
+```sh
+sudo chown --reference . --recursive .
+```
+
+## Build with Node
+
+1. `pnpm install`
+1. ```sh
+   echo 'DATABASE_URI=postgres://user:password@db_host:db_port/db_name' > .env
+   pnpm build
+   ```
+
+TODO: where are the build files?
+
+# Configuration
+
+Once your application is built (either way), configuration is done with environment variables.
+
+- `DATABASE_URI`: Connection string to the PostgreSQL database.
+- `PAYLOAD_SECRET`: (string) Used to encrypt JWT tokens.
+- `NEXT_PUBLIC_SERVER_URL`: e.g. `http://localhost:3000`. Used to configure
+  [CORS](https://developer.mozilla.org/fr/docs/Web/HTTP/Guides/CORS), format
+  links and more. No trailing slash.
+- `CRON_SECRET`: (string) Secret used to authenticate cron jobs.
+- `PREVIEW_SECRET`: (string) Used to validate preview requests.
+
+# Run the application
+
+## Run with Docker
+
+You can define all of the [environment variables](#Configuration) in a `.env` file, and then:
+
+```sh
+docker run --env-file .env --publish 3000:3000 goeu:test
+```
+
+## Run locally
+
+TODO

@@ -29,10 +29,12 @@ export const EuProducts: CollectionConfig = {
             {
               name: 'name',
               type: 'text',
+              localized: true,
             },
             {
               name: 'description',
               type: 'text',
+              localized: true,
             },
             {
               name: 'producedBy',

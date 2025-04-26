@@ -17,10 +17,12 @@ export const ReplacedProducts: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      localized: true,
     },
     {
       name: 'description',
       type: 'text',
+      localized: true,
     },
     {
       name: 'tags',
