@@ -23,6 +23,7 @@ export const Countries: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      localized: true,
     },
     {
       name: 'producedProducts',
