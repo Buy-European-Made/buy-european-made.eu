@@ -1,9 +1,6 @@
 import type { BentoGrid as BentoGridProps } from 'src/payload-types'
 
 import React from 'react'
-import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
-import Link from 'next/link'
-import { cn } from '@/utilities/ui'
 import BentoElement from './elements/BentoElement'
 
 type Props = BentoGridProps
@@ -26,7 +23,12 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
               content={mainElements[0]?.content ?? ''}
               fontColor={mainElements[0]?.fontColor ?? ''}
               textWidth={mainElements[0]?.textWidth ?? ''}
-              bgImage={mainElements[0]?.bgImage?.url ?? ''}
+              bgImage={
+                mainElements[0]?.bgImage !== undefined &&
+                typeof mainElements[0]?.bgImage === 'object'
+                  ? (mainElements[0]?.bgImage?.url ?? '')
+                  : ''
+              }
             />
           </div>
 
@@ -39,7 +41,11 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
               title={elements[0]?.title ?? ''}
               fontColor={elements[0]?.fontColor ?? ''}
               textWidth={elements[0]?.textWidth ?? ''}
-              bgImage={elements[0]?.bgImage?.url ?? ''}
+              bgImage={
+                elements[0]?.bgImage !== undefined && typeof elements[0]?.bgImage === 'object'
+                  ? (elements[0]?.bgImage?.url ?? '')
+                  : ''
+              }
             />
           </div>
 
@@ -51,9 +57,14 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
             <BentoElement
               title={mainElements[1]?.title ?? ''}
               content={mainElements[1]?.content ?? ''}
-              bgImage={mainElements[1]?.bgImage?.url ?? ''}
               fontColor={mainElements[1]?.fontColor ?? ''}
               textWidth={mainElements[1]?.textWidth ?? ''}
+              bgImage={
+                mainElements[1]?.bgImage !== undefined &&
+                typeof mainElements[1]?.bgImage === 'object'
+                  ? (mainElements[1]?.bgImage?.url ?? '')
+                  : ''
+              }
             />
           </div>
 
@@ -64,9 +75,13 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
           >
             <BentoElement
               title={elements[1]?.title ?? ''}
-              bgImage={elements[1]?.bgImage?.url ?? ''}
               fontColor={elements[1]?.fontColor ?? ''}
               textWidth={elements[1]?.textWidth ?? ''}
+              bgImage={
+                elements[1]?.bgImage !== undefined && typeof elements[1]?.bgImage === 'object'
+                  ? (elements[1]?.bgImage?.url ?? '')
+                  : ''
+              }
             />
           </div>
 
@@ -77,9 +92,13 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
           >
             <BentoElement
               title={elements[2]?.title ?? ''}
-              bgImage={elements[2]?.bgImage?.url ?? ''}
               fontColor={elements[2]?.fontColor ?? ''}
               textWidth={elements[2]?.textWidth ?? ''}
+              bgImage={
+                elements[2]?.bgImage !== undefined && typeof elements[2]?.bgImage === 'object'
+                  ? (elements[2]?.bgImage?.url ?? '')
+                  : ''
+              }
             />
           </div>
         </div>
