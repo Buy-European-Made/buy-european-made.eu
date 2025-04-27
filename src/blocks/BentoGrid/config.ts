@@ -10,30 +10,71 @@ export const BentoGrid: Block = {
       required: true,
       fields: [
         {
-          name: 'title',
+          name: 'mainTitle',
           type: 'text',
         },
         {
-          name: 'content',
+          name: 'mainContent',
           type: 'text',
         },
         {
-          name: 'link',
+          name: 'mainLink',
           type: 'text',
         },
         {
-          name: 'bgImage',
+          name: 'mainBgImage',
           type: 'upload',
           relationTo: 'media',
           label: 'Background Picture',
+        },
+        {
+          name: 'mainFontColor',
+          type: 'radio',
+          options: [
+            { label: 'white', value: 'white' },
+            { label: 'black', value: 'black' },
+          ],
+        },
+      ],
+    },
+    {
+      type: 'collapsible',
+      label: 'Second main element',
+      required: true,
+      fields: [
+        {
+          name: 'secondMaintitle',
+          type: 'text',
+        },
+        {
+          name: 'secondMainContent',
+          type: 'text',
+        },
+        {
+          name: 'secondMainLink',
+          type: 'text',
+        },
+        {
+          name: 'secondMainBgImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Background Picture',
+        },
+        {
+          name: 'secondMainFontColor',
+          type: 'radio',
+          options: [
+            { label: 'white', value: 'white' },
+            { label: 'black', value: 'black' },
+          ],
         },
       ],
     },
     {
       name: 'elements',
       type: 'array',
-      minRows: 4,
-      maxRows: 4,
+      minRows: 3,
+      maxRows: 3,
       fields: [
         {
           name: 'title',
@@ -49,11 +90,19 @@ export const BentoGrid: Block = {
           relationTo: 'media',
           label: 'Background Picture',
         },
+        {
+          name: 'fontColor',
+          type: 'radio',
+          options: [
+            { label: 'white', value: 'white' },
+            { label: 'black', value: 'black' },
+          ],
+        },
       ],
     },
   ],
   labels: {
     plural: 'Bento Grid',
-    singular: 'Bento Grids',
+    singular: 'Bento Grid',
   },
 }

@@ -842,15 +842,22 @@ export interface TabCards {
  * via the `definition` "BentoGrid".
  */
 export interface BentoGrid {
-  title?: string | null;
-  content?: string | null;
-  link?: string | null;
-  bgImage?: (number | null) | Media;
+  mainTitle?: string | null;
+  mainContent?: string | null;
+  mainLink?: string | null;
+  mainBgImage?: (number | null) | Media;
+  mainFontColor?: ('white' | 'black') | null;
+  secondMaintitle?: string | null;
+  secondMainContent?: string | null;
+  secondMainLink?: string | null;
+  secondMainBgImage?: (number | null) | Media;
+  secondMainFontColor?: ('white' | 'black') | null;
   elements?:
     | {
         title?: string | null;
         link?: string | null;
         bgImage?: (number | null) | Media;
+        fontColor?: ('white' | 'black') | null;
         id?: string | null;
       }[]
     | null;
@@ -1490,16 +1497,23 @@ export interface TabCardsSelect<T extends boolean = true> {
  * via the `definition` "BentoGrid_select".
  */
 export interface BentoGridSelect<T extends boolean = true> {
-  title?: T;
-  content?: T;
-  link?: T;
-  bgImage?: T;
+  mainTitle?: T;
+  mainContent?: T;
+  mainLink?: T;
+  mainBgImage?: T;
+  mainFontColor?: T;
+  secondMaintitle?: T;
+  secondMainContent?: T;
+  secondMainLink?: T;
+  secondMainBgImage?: T;
+  secondMainFontColor?: T;
   elements?:
     | T
     | {
         title?: T;
         link?: T;
         bgImage?: T;
+        fontColor?: T;
         id?: T;
       };
   id?: T;
