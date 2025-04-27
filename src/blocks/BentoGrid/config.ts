@@ -27,6 +27,7 @@ export const BentoGrid: Block = {
         {
           name: 'link',
           type: 'text',
+          maxLength: 100,
         },
         {
           name: 'bgImage',
@@ -49,6 +50,7 @@ export const BentoGrid: Block = {
         {
           name: 'textWidth',
           type: 'radio',
+          label: 'Select text size on medium and large devices (on small is always 100%).',
           options: [
             { label: '50%', value: 'half' },
             { label: '100%', value: 'full' },
@@ -96,6 +98,7 @@ export const BentoGrid: Block = {
         {
           name: 'textWidth',
           type: 'radio',
+          label: 'Select text size on medium and large devices (on small is always 100%).',
           options: [
             { label: '50%', value: 'half' },
             { label: '100%', value: 'full' },

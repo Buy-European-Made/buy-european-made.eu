@@ -14,7 +14,7 @@ export const BentoGrid: React.FC<Props> = ({ mainElements, elements }) => {
       <div id="outerContainer" className="flex items-center justify-center w-full">
         <div
           id="grid"
-          className="grid grid-cols-2 md:grid-cols-3 grid-rows-7 md:grid-rows-3 gap-4 p-4 lg:w-2/3 h-[90vh]"
+          className="grid grid-cols-2 md:grid-cols-3 grid-rows-7 md:grid-rows-3 gap-4 p-4 lg:w-3/4 h-[90vh]"
         >
           <div
             className={
