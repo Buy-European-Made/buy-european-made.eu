@@ -842,25 +842,23 @@ export interface TabCards {
  * via the `definition` "BentoGrid".
  */
 export interface BentoGrid {
-  mainTitle?: string | null;
-  mainContent?: string | null;
-  mainLink?: string | null;
-  mainBgImage?: (number | null) | Media;
-  mainFontColor?: ('white' | 'black') | null;
-  secondMaintitle?: string | null;
-  secondMainContent?: string | null;
-  secondMainLink?: string | null;
-  secondMainBgImage?: (number | null) | Media;
-  secondMainFontColor?: ('white' | 'black') | null;
-  elements?:
-    | {
-        title?: string | null;
-        link?: string | null;
-        bgImage?: (number | null) | Media;
-        fontColor?: ('white' | 'black') | null;
-        id?: string | null;
-      }[]
-    | null;
+  mainElements: {
+    title?: string | null;
+    content?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
+  elements: {
+    title?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
   blockType: 'bentoGrid';
@@ -1497,16 +1495,17 @@ export interface TabCardsSelect<T extends boolean = true> {
  * via the `definition` "BentoGrid_select".
  */
 export interface BentoGridSelect<T extends boolean = true> {
-  mainTitle?: T;
-  mainContent?: T;
-  mainLink?: T;
-  mainBgImage?: T;
-  mainFontColor?: T;
-  secondMaintitle?: T;
-  secondMainContent?: T;
-  secondMainLink?: T;
-  secondMainBgImage?: T;
-  secondMainFontColor?: T;
+  mainElements?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        link?: T;
+        bgImage?: T;
+        fontColor?: T;
+        textWidth?: T;
+        id?: T;
+      };
   elements?:
     | T
     | {
@@ -1514,6 +1513,7 @@ export interface BentoGridSelect<T extends boolean = true> {
         link?: T;
         bgImage?: T;
         fontColor?: T;
+        textWidth?: T;
         id?: T;
       };
   id?: T;
