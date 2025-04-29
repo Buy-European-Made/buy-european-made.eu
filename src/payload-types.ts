@@ -54,6 +54,7 @@ export type SupportedTimezones =
   | 'Asia/Singapore'
   | 'Asia/Tokyo'
   | 'Asia/Seoul'
+  | 'Australia/Brisbane'
   | 'Australia/Sydney'
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
@@ -561,6 +562,7 @@ export interface Form {
             label?: string | null;
             width?: number | null;
             defaultValue?: string | null;
+            placeholder?: string | null;
             options?:
               | {
                   label: string;
@@ -855,15 +857,15 @@ export interface Category {
   };
   slug?: string | null;
   slugLock?: boolean | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  /**
+   * Sync translations for this locale from Crowdin on save draft (stores translations as drafts) or publish (publishes translations).
+   */
+  syncTranslations?: boolean | null;
+  /**
+   * Sync all translations from Crowdin on save draft (stores translations as drafts) or publish (publishes translations).
+   */
+  syncAllTranslations?: boolean | null;
+  crowdinArticleDirectory?: (number | null) | CrowdinArticleDirectory;
   updatedAt: string;
   createdAt: string;
 }
@@ -904,6 +906,15 @@ export interface EuProduct {
   availableIn?: (number | Country)[] | null;
   slug?: string | null;
   slugLock?: boolean | null;
+  /**
+   * Sync translations for this locale from Crowdin on save draft (stores translations as drafts) or publish (publishes translations).
+   */
+  syncTranslations?: boolean | null;
+  /**
+   * Sync all translations from Crowdin on save draft (stores translations as drafts) or publish (publishes translations).
+   */
+  syncAllTranslations?: boolean | null;
+  crowdinArticleDirectory?: (number | null) | CrowdinArticleDirectory;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -996,57 +1007,44 @@ export interface Country {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
+ * via the `definition` "crowdin-article-directories".
  */
-export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  password?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "redirects".
- */
-export interface Redirect {
+export interface CrowdinArticleDirectory {
   id: number;
   /**
-   * You will need to rebuild the website when changing this field.
+   * Select locales to exclude from translation synchronization.
    */
-  from: string;
-  to?: {
-    type?: ('reference' | 'custom') | null;
-    reference?: {
-      relationTo: 'pages';
-      value: number | Page;
-    } | null;
-    url?: string | null;
+  excludeLocales?: ('de_DE' | 'fr_FR')[] | null;
+  name?: string | null;
+  crowdinCollectionDirectory?: (number | null) | CrowdinCollectionDirectory;
+  crowdinFiles?: (number | CrowdinFile)[] | null;
+  parent?: (number | null) | CrowdinArticleDirectory;
+  reference?: {
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    projectId?: number | null;
   };
+  originalId?: number | null;
+  directoryId?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "form-submissions".
+ * via the `definition` "crowdin-collection-directories".
  */
-export interface FormSubmission {
+export interface CrowdinCollectionDirectory {
   id: number;
-  form: number | Form;
-  submissionData?:
-    | {
-        field: string;
-        value: string;
-        id?: string | null;
-      }[]
-    | null;
+  name?: string | null;
+  title?: string | null;
+  collectionSlug?: string | null;
+  reference?: {
+    createdAt?: string | null;
+    updatedAt?: string | null;
+    projectId?: number | null;
+  };
+  originalId?: number | null;
+  directoryId?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1102,44 +1100,57 @@ export interface CrowdinFile {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "crowdin-article-directories".
+ * via the `definition` "users".
  */
-export interface CrowdinArticleDirectory {
+export interface User {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "redirects".
+ */
+export interface Redirect {
   id: number;
   /**
-   * Select locales to exclude from translation synchronization.
+   * You will need to rebuild the website when changing this field.
    */
-  excludeLocales?: ('de_DE' | 'fr_FR')[] | null;
-  name?: string | null;
-  crowdinCollectionDirectory?: (number | null) | CrowdinCollectionDirectory;
-  crowdinFiles?: (number | CrowdinFile)[] | null;
-  parent?: (number | null) | CrowdinArticleDirectory;
-  reference?: {
-    createdAt?: string | null;
-    updatedAt?: string | null;
-    projectId?: number | null;
+  from: string;
+  to?: {
+    type?: ('reference' | 'custom') | null;
+    reference?: {
+      relationTo: 'pages';
+      value: number | Page;
+    } | null;
+    url?: string | null;
   };
-  originalId?: number | null;
-  directoryId?: number | null;
   updatedAt: string;
   createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "crowdin-collection-directories".
+ * via the `definition` "form-submissions".
  */
-export interface CrowdinCollectionDirectory {
+export interface FormSubmission {
   id: number;
-  name?: string | null;
-  title?: string | null;
-  collectionSlug?: string | null;
-  reference?: {
-    createdAt?: string | null;
-    updatedAt?: string | null;
-    projectId?: number | null;
-  };
-  originalId?: number | null;
-  directoryId?: number | null;
+  form: number | Form;
+  submissionData?:
+    | {
+        field: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1674,15 +1685,9 @@ export interface CategoriesSelect<T extends boolean = true> {
   subcategories?: T;
   slug?: T;
   slugLock?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
+  syncTranslations?: T;
+  syncAllTranslations?: T;
+  crowdinArticleDirectory?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1744,6 +1749,9 @@ export interface EuProductsSelect<T extends boolean = true> {
   availableIn?: T;
   slug?: T;
   slugLock?: T;
+  syncTranslations?: T;
+  syncAllTranslations?: T;
+  crowdinArticleDirectory?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1883,6 +1891,7 @@ export interface FormsSelect<T extends boolean = true> {
               label?: T;
               width?: T;
               defaultValue?: T;
+              placeholder?: T;
               options?:
                 | T
                 | {

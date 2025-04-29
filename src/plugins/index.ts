@@ -1,7 +1,7 @@
 import { crowdinSync } from 'payload-crowdin-sync'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
-import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
+// import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { Plugin } from 'payload'
@@ -10,6 +10,7 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 
 import { EuProducts } from '@/collections/EuProducts'
+import { Categories } from '@/collections/Categories'
 
 import { Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -47,10 +48,10 @@ export const plugins: Plugin[] = [
       },
     },
   }),
-  nestedDocsPlugin({
-    collections: ['categories'],
-    generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
-  }),
+  // nestedDocsPlugin({
+  //   collections: ['categories'],
+  //   generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
+  // }),
   seoPlugin({
     generateTitle,
     generateURL,
@@ -83,9 +84,9 @@ export const plugins: Plugin[] = [
   }),
   payloadCloudPlugin(),
   crowdinSync({
-    projectId: 323731,
-    token: process.env.CROWDIN_TOKEN!,
-    // organization: process.env.CROWDIN_ORGANIZATION_ID,
+    projectId: parseInt(process.env.CROWDIN_PROJECT_ID!),
+    token: process.env.CROWDIN_TOKEN || '',
+    organization: process.env.CROWDIN_ORGANIZATION_ID || '',
     localeMap: {
       de_DE: {
         crowdinId: 'de',
@@ -94,7 +95,7 @@ export const plugins: Plugin[] = [
         crowdinId: 'fr',
       },
     },
-    sourceLocale: 'en',
-    collections: [EuProducts.slug],
+    sourceLocale: 'en_GB',
+    collections: [EuProducts.slug, Categories.slug],
   }),
 ]
