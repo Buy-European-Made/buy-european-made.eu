@@ -29,6 +29,7 @@ export const EuProducts: CollectionConfig = {
             {
               name: 'name',
               type: 'text',
+              required: true,
               localized: true,
             },
             {
@@ -44,6 +45,7 @@ export const EuProducts: CollectionConfig = {
             {
               name: 'link',
               type: 'text',
+              required: true,
             },
             {
               name: 'logo',
