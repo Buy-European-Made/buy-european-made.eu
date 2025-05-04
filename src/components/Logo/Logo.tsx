@@ -3,6 +3,7 @@ import React from 'react'
 
 import Image from 'next/image'
 import logo from './go-eu-logo.png'
+import logoSvg from './goEuropeanLogo.svg'
 
 interface Props {
   className?: string
@@ -23,7 +24,7 @@ export const Logo = (props: Props) => {
       fetchPriority={priority}
       decoding="async"
       className={clsx('max-w-[9.375rem] w-full h-[60px]', className)}
-      src={logo}
+      src={logoSvg}
     />
   )
 }

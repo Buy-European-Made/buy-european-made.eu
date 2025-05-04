@@ -28,6 +28,10 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { Team } from '@/blocks/Team/config'
+import { Banner } from '@/blocks/Banner/config'
+import { Stats } from '@/blocks/Stats/config'
+import { BentoGrid } from '@/blocks/BentoGrid/config'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -95,6 +99,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Stats,
                 HighlightBlock,
                 TabCards,
+                BentoGrid,
               ],
               required: true,
               admin: {
