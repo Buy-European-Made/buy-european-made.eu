@@ -815,73 +815,6 @@ export interface StatsBlock {
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "highlightBlock".
  */
-export interface TabCards {
-  color?: ('eu-yellow' | 'eu-blue') | null;
-  tabs: {
-    title: string;
-    text: {
-      root: {
-        type: string;
-        children: {
-          type: string;
-          version: number;
-          [k: string]: unknown;
-        }[];
-        direction: ('ltr' | 'rtl') | null;
-        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-        indent: number;
-        version: number;
-      };
-      [k: string]: unknown;
-    };
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'tabCards';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "BentoGrid".
- */
-export interface BentoGrid {
-  mainElements: {
-    title?: string | null;
-    content?: string | null;
-    link?: string | null;
-    bgImage?: (number | null) | Media;
-    fontColor?: ('white' | 'black') | null;
-    textWidth?: ('half' | 'full') | null;
-    id?: string | null;
-  }[];
-  elements: {
-    title?: string | null;
-    link?: string | null;
-    bgImage?: (number | null) | Media;
-    fontColor?: ('white' | 'black') | null;
-    textWidth?: ('half' | 'full') | null;
-    id?: string | null;
-  }[];
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'bentoGrid';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "categories".
- */
-export interface Category {
-  id: number;
-  name: string;
-  subcategories?: {
-    docs?: (number | Subcategory)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  slug?: string | null;
-  slugLock?: boolean | null;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
 export interface HighlightBlock {
   title: string;
   collection: 'eu-products' | 'categories' | 'articles';
@@ -1105,6 +1038,32 @@ export interface TabCards {
   id?: string | null;
   blockName?: string | null;
   blockType: 'tabCards';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoGrid".
+ */
+export interface BentoGrid {
+  mainElements: {
+    title?: string | null;
+    content?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
+  elements: {
+    title?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bentoGrid';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
