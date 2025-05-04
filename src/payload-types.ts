@@ -78,6 +78,7 @@ export interface Config {
     companies: Company;
     brands: Brand;
     countries: Country;
+    articles: Article;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -116,6 +117,7 @@ export interface Config {
     companies: CompaniesSelect<false> | CompaniesSelect<true>;
     brands: BrandsSelect<false> | BrandsSelect<true>;
     countries: CountriesSelect<false> | CountriesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -250,6 +252,7 @@ export interface Page {
     | TeamBlock
     | BannerBlock
     | StatsBlock
+    | HighlightBlock
     | TabCards
     | BentoGrid
   )[];
@@ -810,7 +813,7 @@ export interface StatsBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TabCards".
+ * via the `definition` "highlightBlock".
  */
 export interface TabCards {
   color?: ('eu-yellow' | 'eu-blue') | null;
@@ -879,33 +882,32 @@ export interface Category {
   slugLock?: boolean | null;
   parent?: (number | null) | Category;
   breadcrumbs?:
+export interface HighlightBlock {
+  title: string;
+  collection: 'eu-products' | 'categories' | 'articles';
+  size: 'medium' | 'large' | 'xl';
+  cardsToShow: 'two' | 'three';
+  productArray?:
     | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
+        product?: (number | null) | EuProduct;
         id?: string | null;
       }[]
     | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "subcategories".
- */
-export interface Subcategory {
-  id: number;
-  name: string;
-  mainCategory: (number | Category)[];
-  products?: {
-    docs?: (number | EuProduct)[];
-    hasNextPage?: boolean;
-    totalDocs?: number;
-  };
-  slug?: string | null;
-  slugLock?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
+  categoriesArray?:
+    | {
+        categories?: (number | null) | Category;
+        id?: string | null;
+      }[]
+    | null;
+  articlesArray?:
+    | {
+        articles?: (number | null) | Article;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'highlightBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -913,10 +915,10 @@ export interface Subcategory {
  */
 export interface EuProduct {
   id: number;
-  name?: string | null;
+  name: string;
   description?: string | null;
   producedBy?: (number | null) | Brand;
-  link?: string | null;
+  link: string;
   logo?: (number | null) | Media;
   categories?: (number | Category)[] | null;
   subcategories?: (number | Subcategory)[] | null;
@@ -960,6 +962,50 @@ export interface Company {
   name: string;
   link?: string | null;
   ownBrands?: (number | Brand)[] | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  name: string;
+  subcategories?: {
+    docs?: (number | Subcategory)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  slug?: string | null;
+  slugLock?: boolean | null;
+  parent?: (number | null) | Category;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | Category;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subcategories".
+ */
+export interface Subcategory {
+  id: number;
+  name: string;
+  mainCategory: (number | Category)[];
+  products?: {
+    docs?: (number | EuProduct)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -1015,6 +1061,50 @@ export interface Country {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles".
+ */
+export interface Article {
+  id: number;
+  name: string;
+  shortSummary: string;
+  heroPicture?: (number | null) | Media;
+  link: string;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TabCards".
+ */
+export interface TabCards {
+  color?: ('eu-yellow' | 'eu-blue') | null;
+  tabs: {
+    title: string;
+    text: {
+      root: {
+        type: string;
+        children: {
+          type: string;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    };
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tabCards';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1216,6 +1306,10 @@ export interface PayloadLockedDocument {
         value: number | Country;
       } | null)
     | ({
+        relationTo: 'articles';
+        value: number | Article;
+      } | null)
+    | ({
         relationTo: 'redirects';
         value: number | Redirect;
       } | null)
@@ -1313,6 +1407,7 @@ export interface PagesSelect<T extends boolean = true> {
         team?: T | TeamBlockSelect<T>;
         banner?: T | BannerBlockSelect<T>;
         stats?: T | StatsBlockSelect<T>;
+        highlightBlock?: T | HighlightBlockSelect<T>;
         tabCards?: T | TabCardsSelect<T>;
         bentoGrid?: T | BentoGridSelect<T>;
       };
@@ -1469,6 +1564,36 @@ export interface StatsBlockSelect<T extends boolean = true> {
         suffix?: T;
         label?: T;
         description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "highlightBlock_select".
+ */
+export interface HighlightBlockSelect<T extends boolean = true> {
+  title?: T;
+  collection?: T;
+  size?: T;
+  cardsToShow?: T;
+  productArray?:
+    | T
+    | {
+        product?: T;
+        id?: T;
+      };
+  categoriesArray?:
+    | T
+    | {
+        categories?: T;
+        id?: T;
+      };
+  articlesArray?:
+    | T
+    | {
+        articles?: T;
         id?: T;
       };
   id?: T;
@@ -1748,6 +1873,20 @@ export interface CountriesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "articles_select".
+ */
+export interface ArticlesSelect<T extends boolean = true> {
+  name?: T;
+  shortSummary?: T;
+  heroPicture?: T;
+  link?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

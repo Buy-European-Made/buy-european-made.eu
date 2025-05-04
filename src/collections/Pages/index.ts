@@ -9,6 +9,10 @@ import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { ProductsListBlock } from '@/blocks/ProductList/config'
 import { FAQ } from '../../blocks/FAQ/config'
+import { Team } from '@/blocks/Team/config'
+import { Banner } from '@/blocks/Banner/config'
+import { Stats } from '@/blocks/Stats/config'
+import { HighlightBlock } from '@/blocks/HighlightBlock/config'
 import { TabCards } from '../../blocks/TabCards/config'
 
 import { hero } from '@/heros/config'
@@ -93,6 +97,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 Team,
                 Banner,
                 Stats,
+                HighlightBlock,
                 TabCards,
                 BentoGrid,
               ],

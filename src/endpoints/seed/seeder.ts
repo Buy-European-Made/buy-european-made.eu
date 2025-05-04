@@ -315,6 +315,7 @@ async function seedEuProducts(
 ) {
   console.log('...creating eu-products...')
   const prodPromises = dbData.map((product: ImportProduct) => {
+
     //logo
     const logoIndex: number | undefined = logoMap.get(product.logo)
 
@@ -361,7 +362,7 @@ async function seedEuProducts(
     return payload.create({
       collection: 'eu-products',
       data: {
-        name: product.name,
+        name: String(product.name),
         categories: categoryIds,
         subcategories: subcategoryIds,
         producedIn: producedIn,

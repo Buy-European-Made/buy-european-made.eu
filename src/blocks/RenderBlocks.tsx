@@ -11,6 +11,7 @@ import { FAQBlock } from './FAQ/Component'
 import { TeamBlock } from './Team/Component'
 import { BannerBlock } from './Banner/Component'
 import { StatsBlock } from './Stats/Component'
+import { HighlightBlock } from './HighlightBlock/Component'
 import { TabCards } from './TabCards/Component'
 import { BentoGrid } from './BentoGrid/Component'
 
@@ -26,6 +27,7 @@ const blockComponents = {
   // TODO: remove the whole block component if not used
   banner: BannerBlock,
   stats: StatsBlock,
+  highlightBlock: HighlightBlock,
   tabCards: TabCards,
   bentoGrid: BentoGrid,
 }
