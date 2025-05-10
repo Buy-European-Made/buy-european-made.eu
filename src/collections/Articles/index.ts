@@ -1,5 +1,3 @@
-
-
 import type { CollectionConfig } from 'payload'
 
 import { anyone } from '@/access/anyone'
@@ -38,7 +36,7 @@ export const Articles: CollectionConfig = {
     {
       name: 'link',
       type: 'text',
-      required: true
+      required: true,
     },
     ...slugField('name'),
   ],
