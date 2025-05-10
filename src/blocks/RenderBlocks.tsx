@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import type { Page } from '@/payload-types'
+import type { Country, CountryPage, Page } from '@/payload-types'
 
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
@@ -13,6 +13,8 @@ import { BannerBlock } from './Banner/Component'
 import { StatsBlock } from './Stats/Component'
 import { HighlightBlock } from './HighlightBlock/Component'
 import { TabCards } from './TabCards/Component'
+
+import { CountryDescriptionBlock } from './CountryDescriptionBlock/Component'
 
 // key has to be same as the slug name
 const blockComponents = {
@@ -51,6 +53,46 @@ export const RenderBlocks: React.FC<{
                 <div className="my-16" key={index}>
                   {/* @ts-expect-error there may be some mismatch between the expected types here */}
                   <Block {...block} disableInnerContainer />
+                </div>
+              )
+            }
+          }
+          return null
+        })}
+      </Fragment>
+    )
+  }
+
+  return null
+}
+
+const countryBlockComponents = {
+  ...blockComponents,
+  countryDescription: CountryDescriptionBlock,
+}
+
+export const RenderCountryBlocks: React.FC<{
+  blocks: CountryPage['layout'][0][]
+  country: Country
+}> = (props) => {
+  const { blocks, country } = props
+
+  const hasBlocks = blocks && Array.isArray(blocks) && blocks.length > 0
+
+  if (hasBlocks) {
+    return (
+      <Fragment>
+        {blocks.map((block, index) => {
+          const { blockType } = block
+
+          if (blockType && blockType in countryBlockComponents) {
+            const Block = countryBlockComponents[blockType]
+
+            if (Block) {
+              return (
+                <div className="my-16" key={index}>
+                  {/* @ts-expect-error there may be some mismatch between the expected types here */}
+                  <Block {...block} country={country} disableInnerContainer />
                 </div>
               )
             }
