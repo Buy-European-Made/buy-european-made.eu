@@ -315,7 +315,6 @@ async function seedEuProducts(
 ) {
   console.log('...creating eu-products...')
   const prodPromises = dbData.map((product: ImportProduct) => {
-
     //logo
     const logoIndex: number | undefined = logoMap.get(product.logo)
 
