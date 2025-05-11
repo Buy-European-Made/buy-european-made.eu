@@ -254,6 +254,7 @@ export interface Page {
     | StatsBlock
     | HighlightBlock
     | TabCards
+    | BentoGrid
   )[];
   meta?: {
     title?: string | null;
@@ -1040,6 +1041,32 @@ export interface TabCards {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoGrid".
+ */
+export interface BentoGrid {
+  mainElements: {
+    title?: string | null;
+    content?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
+  elements: {
+    title?: string | null;
+    link?: string | null;
+    bgImage?: (number | null) | Media;
+    fontColor?: ('white' | 'black') | null;
+    textWidth?: ('half' | 'full') | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bentoGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
@@ -1341,6 +1368,7 @@ export interface PagesSelect<T extends boolean = true> {
         stats?: T | StatsBlockSelect<T>;
         highlightBlock?: T | HighlightBlockSelect<T>;
         tabCards?: T | TabCardsSelect<T>;
+        bentoGrid?: T | BentoGridSelect<T>;
       };
   meta?:
     | T
@@ -1541,6 +1569,35 @@ export interface TabCardsSelect<T extends boolean = true> {
     | {
         title?: T;
         text?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BentoGrid_select".
+ */
+export interface BentoGridSelect<T extends boolean = true> {
+  mainElements?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        link?: T;
+        bgImage?: T;
+        fontColor?: T;
+        textWidth?: T;
+        id?: T;
+      };
+  elements?:
+    | T
+    | {
+        title?: T;
+        link?: T;
+        bgImage?: T;
+        fontColor?: T;
+        textWidth?: T;
         id?: T;
       };
   id?: T;
