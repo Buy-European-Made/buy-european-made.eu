@@ -8,6 +8,8 @@ import { generateMeta } from '@/utilities/generateMeta'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 import { Country, EuProduct } from '@/payload-types'
 
+import { CountryPage } from '@/Globals/CountryPage/Component'
+
 type Args = {
   params: Promise<{
     slug?: string
@@ -30,8 +32,11 @@ export default async function Product({ params: paramsPromise }: Args) {
     <article className="pt-16 pb-16">
       <PayloadRedirects disableNotFound url={url} />
       {draft && <LivePreviewListener />}
+      <label>Country page</label>
+      {<CountryPage country={country} />}
+      <label>Produces products</label>
       {producedProducts?.map((product) => {
-        return <span key={product}>{product}</span>
+        return <span key={product}>{product},</span>
       })}
     </article>
   )
